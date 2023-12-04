@@ -1,136 +1,117 @@
-import React, { useEffect, useRef } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, Pressable, Animated, Easing } from 'react-native';
-import Header from './component/Header';
-import Footer from './component/Footer';
-import Services from './component/Services';
-import About from './component/About';
-import Menu from './component/Menu';
-import Testimonial from './component/Testimonial';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeSreen from './pages/Home';
+import SearchScreen from './pages/Search';
+import Notification from './pages/Notification';
+import Setting from './pages/Setting';
+import Category from './pages/Category';
+import Signup from './pages/Signup';
+import { TouchableOpacity, View, Animated, Dimensions } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { useRef } from 'react';
 
 function App(): JSX.Element {
-  const spinValue = useRef(new Animated.Value(0)).current;
+  const Tabs = createBottomTabNavigator();
 
-  useEffect(() => {
-    Animated.loop(
-      Animated.timing(
-        spinValue,
-        {
-          toValue: 1,
-          duration: 20000,
-          easing: Easing.linear,
-          useNativeDriver: true
-        }
-      )
-    ).start();
-  }, [spinValue])
+  const tabOffsetValue = useRef(new Animated.Value(0)).current;
 
-  const spin = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg']
-  })
+  function getWidth() {
+    let width = Dimensions.get("window").width
 
-  const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
-  const CircleImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700309376/UI/oh2rwdomomeno4sgguhf.png" }
+    width = width - 50
+
+    return width / 5
+  }
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-
-      <StatusBar />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
-
-        <Header />
-
-        <View style={styles.container}>
-
-          <ImageBackground source={BgImage} style={styles.bgimage} />
-
-          <View style={styles.overlay}>
-
-            <View style={{ top: 200, paddingHorizontal: 35, alignItems: "center" }}>
-
-              <Text style={styles.textInsideOverlay}>Hello!</Text>
-              <Text style={styles.textInsideOverlay}>This Is EatCom</Text>
-              <Text style={styles.textInsideOverlay2}>We hope you will have a great experience using our services. Have a good day!</Text>
-              <Pressable style={styles.bookATable}><Text style={styles.bookATableWord}>Book a table</Text></Pressable>
-
-              <View style={styles.CircleImage}>
-                <Animated.Image style={{ transform: [{ rotate: spin }], width: 300, height: 300 }} source={CircleImage} />
-              </View>
-
+    <NavigationContainer>
+      <Tabs.Navigator initialRouteName='Home' screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { backgroundColor: "#fff", position: "absolute", height: 60, borderTopLeftRadius: 10, borderTopRightRadius: 10, shadowColor: "#000", shadowOpacity: 0.06, shadowOffset: { width: 10, height: 10 }, paddingHorizontal: 10 } }}>
+        <Tabs.Screen name='Signup' component={Signup} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='Home' component={HomeSreen} options={{
+          tabBarIcon: ({ focused }) => (
+            <View>
+              <Icon name='home' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
             </View>
-
-
-          </View>
-
-          <Services />
-
-          <About />
-
-          <Menu />
-
-          <Testimonial />
-
-        </View>
-
-        <Footer />
-
-      </ScrollView>
-
-    </SafeAreaView>
+          )
+        }} listeners={({ navigation, route }) => ({
+          focus: e => {
+            Animated.spring(tabOffsetValue, {
+              toValue: 0,
+              useNativeDriver: true
+            }).start();
+          }
+        })}></Tabs.Screen>
+        <Tabs.Screen name='Notification' component={Notification} options={{
+          tabBarIcon: ({ focused }) => (
+            <View>
+              <Icon name='bell' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
+            </View>
+          )
+        }} listeners={({ navigation, route }) => ({
+          focus: e => {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth() * 1.06,
+              useNativeDriver: true
+            }).start();
+          }
+        })}></Tabs.Screen>
+        <Tabs.Screen name='Category' component={Category} options={{
+          tabBarIcon: ({ focused }) => (
+            <View style={{ width: 50, height: 50, backgroundColor: "#FEA116", borderRadius: 50, alignItems: "center", justifyContent: "center", marginBottom: 55 }}>
+              <Icon name='list-ul' size={20} color={"#fff"}></Icon>
+            </View>
+          )
+        }} listeners={({ navigation, route }) => ({
+          focus: e => {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth() * -500,
+              useNativeDriver: true
+            }).start();
+          }
+        })}></Tabs.Screen>
+        <Tabs.Screen name='Search' component={SearchScreen} options={{
+          tabBarIcon: ({ focused }) => (
+            <View>
+              <Icon name='search' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
+            </View>
+          )
+        }} listeners={({ navigation, route }) => ({
+          focus: e => {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth() * 3.2,
+              useNativeDriver: true
+            }).start();
+          }
+        })}></Tabs.Screen>
+        <Tabs.Screen name='Setting' component={Setting} options={{
+          tabBarIcon: ({ focused }) => (
+            <View>
+              <Icon name='user-alt' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
+            </View>
+          )
+        }} listeners={({ navigation, route }) => ({
+          focus: e => {
+            Animated.spring(tabOffsetValue, {
+              toValue: getWidth() * 4.3,
+              useNativeDriver: true
+            }).start();
+          }
+        })}></Tabs.Screen>
+      </Tabs.Navigator>
+      <Animated.View style={{
+        width: getWidth() - 20,
+        height: 2,
+        backgroundColor: "#FEA116",
+        position: "absolute",
+        bottom: 58,
+        left: 25,
+        borderRadius: 50,
+        transform: [{
+          translateX: tabOffsetValue
+        }]
+      }} />
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  bgimage: {
-    flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-    resizeMode: "cover",
-    backgroundColor: "black",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: -1
-  },
-
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(15, 23, 43, .9)',
-  },
-
-  textInsideOverlay: {
-    color: "#fff",
-    fontSize: 25,
-    fontWeight: "bold"
-  },
-
-  textInsideOverlay2: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 16,
-  },
-
-  bookATable: {
-    alignItems: "center",
-    marginTop: 15,
-    width: 110,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    backgroundColor: "#FEA116"
-  },
-
-  bookATableWord: {
-    color: "#fff",
-    fontWeight: "bold"
-  },
-
-  CircleImage: {
-    marginTop: 30
-  }
-});
 
 export default App;

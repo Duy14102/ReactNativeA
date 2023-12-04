@@ -57,6 +57,7 @@ export default function Footer() {
                 />
                 <Text style={{ textAlign: "center", paddingTop: 15, color: "#fff" }}>© EatCom, All Right Reserved.</Text>
             </View>
+            <View style={{ backgroundColor: "#fff", height: 60 }}></View>
         </View>
     )
 }
