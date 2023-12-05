@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, Pressable, Animated, Easing } from 'react-native';
 import Header from '../component/Header';
 import Footer from '../component/Footer';
@@ -6,9 +6,61 @@ import Services from '../component/Services';
 import About from '../component/About';
 import Menu from '../component/Menu';
 import Testimonial from '../component/Testimonial';
+import axios from 'axios';
+import HTMLReactParser from 'html-react-parser';
+import Cookies from 'universal-cookie'
 
 function Home(): JSX.Element {
+    var word1 = null
+    var word2 = null
+    var word3 = null
+    const [styleA, setStyleA] = useState()
+    const [styleB, setStyleB] = useState()
+    const [text, setText] = useState<any>()
     const spinValue = useRef(new Animated.Value(0)).current;
+    const cookies = new Cookies()
+    cookies.remove("TOKEN", { path: '/' });
+
+    useEffect(() => {
+        const configuration = {
+            method: "get",
+            url: "http://localhost:3000/GetHeroUI",// Change Localhost to ur IP to connect with server
+            params: {
+                name: "oh2rwdomomeno4sgguhf"
+            }
+        }
+        axios(configuration)
+            .then((res) => {
+                setStyleA(res.data.data)
+            }).catch((err) => {
+                console.log(err);
+            })
+
+        const configuration2 = {
+            method: "get",
+            url: "http://localhost:3000/GetHeroUI",// Change Localhost to ur IP to connect with server
+            params: {
+                name: "e4onxrx7hmgzmrbel9jk"
+            }
+        }
+        axios(configuration2)
+            .then((res) => {
+                setStyleB(res.data.data)
+            }).catch((err) => {
+                console.log(err);
+            })
+
+        const configuration3 = {
+            method: "get",
+            url: "http://localhost:3000/GetHeroText",// Change Localhost to ur IP to connect with server
+        }
+        axios(configuration3)
+            .then((res) => {
+                setText(res.data.data)
+            }).catch((err) => {
+                console.log(err);
+            })
+    }, [])
 
     useEffect(() => {
         Animated.loop(
@@ -29,8 +81,16 @@ function Home(): JSX.Element {
         outputRange: ['0deg', '360deg']
     })
 
-    const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
-    const CircleImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700309376/UI/oh2rwdomomeno4sgguhf.png" }
+    if (text?.up) {
+        word1 = HTMLReactParser(text?.up)
+    }
+    if (text?.middle) {
+        word2 = HTMLReactParser(text?.middle)
+    }
+    if (text?.down) {
+        word3 = HTMLReactParser(text?.down)
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
 
@@ -41,19 +101,23 @@ function Home(): JSX.Element {
 
                 <View style={styles.container}>
 
-                    <ImageBackground source={BgImage} style={styles.bgimage} />
+                    {styleB ? (
+                        <ImageBackground source={{ uri: styleB }} style={styles.bgimage} />
+                    ) : null}
 
                     <View style={styles.overlay}>
 
                         <View style={{ top: 200, paddingHorizontal: 35, alignItems: "center" }}>
 
-                            <Text style={styles.textInsideOverlay}>Hello!</Text>
-                            <Text style={styles.textInsideOverlay}>This Is EatCom</Text>
-                            <Text style={styles.textInsideOverlay2}>We hope you will have a great experience using our services. Have a good day!</Text>
+                            <Text style={styles.textInsideOverlay}>{word1}</Text>
+                            <Text style={styles.textInsideOverlay}>{word2}</Text>
+                            <Text style={styles.textInsideOverlay2}>{word3}</Text>
                             <Pressable style={styles.bookATable}><Text style={styles.bookATableWord}>Book a table</Text></Pressable>
 
                             <View style={styles.CircleImage}>
-                                <Animated.Image style={{ transform: [{ rotate: spin }], width: 300, height: 300 }} source={CircleImage} />
+                                {styleA ? (
+                                    <Animated.Image style={{ transform: [{ rotate: spin }], width: 300, height: 300 }} source={{ uri: styleA }} />
+                                ) : null}
                             </View>
 
                         </View>

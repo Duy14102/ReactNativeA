@@ -1,28 +1,82 @@
 import { View, Text, Image, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import HTMLReactParser from 'html-react-parser';
 
 function About() {
-    const image1 = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307518/UI/k9axej6qza2mzsp8lwvj.webp" }
-    const image2 = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700309635/UI/ixdn78iskyewdqszx4rf.webp" }
-    const image3 = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/ucvurntwkq3pgbvq8scl.webp" }
-    const image4 = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/irnkhvizbt88rhedgys2.webp" }
+    var word1 = null
+    var word2 = null
+    var word3 = null
+    const [getLaid, setGetLaid] = useState<any>()
+    useEffect(() => {
+        const configuration = {
+            method: "get",
+            url: "http://localhost:3000/GetAllAbout"// Change Localhost to ur IP to connect with server
+        }
+        axios(configuration)
+            .then((res) => {
+                setGetLaid(res.data.data)
+            }).catch((err) => {
+                console.log(err);
+            })
+    }, [])
+
+    if (getLaid?.word.up) {
+        word1 = HTMLReactParser(getLaid?.word.up)
+    }
+    if (getLaid?.word.middle) {
+        word2 = HTMLReactParser(getLaid?.word.middle)
+    }
+    if (getLaid?.word.down) {
+        word3 = HTMLReactParser(getLaid?.word.down)
+    }
+
     return (
         <View style={aboutStyle.about}>
             <View style={{ marginBottom: 65 }}>
                 <View style={aboutStyle.flexImg}>
                     <View style={aboutStyle.imageBig}>
-                        <Image source={image1} style={aboutStyle.imagE}></Image>
+                        {getLaid?.image.map((i: any) => {
+                            if (i.name === "k9axej6qza2mzsp8lwvj") {
+                                return (
+                                    <Image key={i.name} source={{ uri: i.url }} style={aboutStyle.imagE}></Image>
+                                )
+                            }
+                            return null
+                        })}
                     </View>
                     <View style={[aboutStyle.imageSmall, { marginTop: "10.8%" }]}>
-                        <Image source={image2} style={aboutStyle.imagE2}></Image>
+                        {getLaid?.image.map((i: any) => {
+                            if (i.name === "ixdn78iskyewdqszx4rf") {
+                                return (
+                                    <Image key={i.name} source={{ uri: i.url }} style={aboutStyle.imagE2}></Image>
+                                )
+                            }
+                            return null
+                        })}
                     </View>
                 </View>
                 <View style={[aboutStyle.flexImg, { marginTop: 10 }]}>
                     <View style={[aboutStyle.imageSmall, { alignItems: "flex-end" }]}>
-                        <Image source={image3} style={aboutStyle.imagE2}></Image>
+                        {getLaid?.image.map((i: any) => {
+                            if (i.name === "ucvurntwkq3pgbvq8scl") {
+                                return (
+                                    <Image key={i.name} source={{ uri: i.url }} style={aboutStyle.imagE2}></Image>
+                                )
+                            }
+                            return null
+                        })}
                     </View>
                     <View style={aboutStyle.imageBig}>
-                        <Image source={image4} style={aboutStyle.imagE}></Image>
+                        {getLaid?.image.map((i: any) => {
+                            if (i.name === "irnkhvizbt88rhedgys2") {
+                                return (
+                                    <Image key={i.name} source={{ uri: i.url }} style={aboutStyle.imagE}></Image>
+                                )
+                            }
+                            return null
+                        })}
                     </View>
                 </View>
                 <View style={aboutStyle.aboutUs}>
@@ -30,9 +84,9 @@ function About() {
                     <Text style={aboutStyle.headUp}>━━</Text>
                 </View>
                 <Text style={aboutStyle.welcomeText}>Welcome to <Icon name='utensils' style={{ fontSize: 22, color: "#FEA116" }}></Icon><Text style={{ color: "#FEA116" }}>EatCom</Text> restaurant</Text>
-                <Text style={aboutStyle.textAbout}>We started from a small cart with a variety of rice dishes. Time passed and gradually more people got to know us and the name EatCom was born.</Text>
-                <Text style={aboutStyle.textAbout}>We always feel lucky to have received support from everyone, EatCom always brings diners perfect rice dishes from delicious to clean and beautiful.Thank you for trusting and using our services</Text>
-                <Text style={aboutStyle.textAbout}>Enjoy your dishes, if something happens please report right away. And once again thank you!</Text>
+                <Text style={aboutStyle.textAbout}>{word1}</Text>
+                <Text style={aboutStyle.textAbout}>{word2}</Text>
+                <Text style={aboutStyle.textAbout}>{word3}</Text>
             </View>
         </View>
     )

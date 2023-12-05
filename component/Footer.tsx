@@ -1,8 +1,31 @@
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import axios from 'axios';
+import HTMLReactParser from "html-react-parser";
 
 export default function Footer() {
     const word = ">"
+    const [address, setAddress] = useState()
+    const [phone, setPhone] = useState()
+    const [email, setEmail] = useState()
+    const [time, setTime] = useState()
+
+    useEffect(() => {
+        const configuration = {
+            method: "get",
+            url: "http://localhost:3000/GetTheFooter"// Change Localhost to ur IP to connect with server
+        }
+        axios(configuration)
+            .then((res) => {
+                setAddress(res.data.data.word.up)
+                setPhone(res.data.data.word.middle)
+                setEmail(res.data.data.word.down)
+                setTime(res.data.data.word.time)
+            }).catch((err) => {
+                console.log(err);
+            })
+    }, [])
     return (
         <View style={footerStyle.footer}>
             <View style={footerStyle.insideFooter}>
@@ -26,7 +49,7 @@ export default function Footer() {
                 </View>
                 <View style={footerStyle.category}>
                     <Text style={{ color: "#fff", fontWeight: "bold" }}>All week</Text>
-                    <Text style={{ color: "#fff" }}>08AM - 22PM</Text>
+                    <Text style={{ color: "#fff" }}>{HTMLReactParser(`${time}`)}</Text>
                 </View>
                 <View style={footerStyle.aboutUs}>
                     <Text style={footerStyle.headUp}>Contact</Text>
@@ -35,15 +58,15 @@ export default function Footer() {
                 <View style={footerStyle.category}>
                     <View style={footerStyle.contact}>
                         <Icon style={footerStyle.textContact} name='map-marker-alt'></Icon>
-                        <Text style={footerStyle.textContact}>VTC Academy, Hanoi, Vietnam</Text>
+                        <Text style={footerStyle.textContact}>{HTMLReactParser(`${address}`)}</Text>
                     </View>
                     <View style={footerStyle.contact}>
                         <Icon style={footerStyle.textContact} name='phone-alt'></Icon>
-                        <Text style={footerStyle.textContact}>+123 456 789</Text>
+                        <Text style={footerStyle.textContact}>{HTMLReactParser(`${phone}`)}</Text>
                     </View>
                     <View style={footerStyle.contact}>
                         <Icon style={footerStyle.textContact} name='envelope'></Icon>
-                        <Text style={footerStyle.textContact}>Freefire@gmail.com</Text>
+                        <Text style={footerStyle.textContact}>{HTMLReactParser(`${email}`)}</Text>
                     </View>
                 </View>
                 <View
@@ -57,7 +80,7 @@ export default function Footer() {
                 />
                 <Text style={{ textAlign: "center", paddingTop: 15, color: "#fff" }}>© EatCom, All Right Reserved.</Text>
             </View>
-            <View style={{ backgroundColor: "#fff", height: 60 }}></View>
+            <View style={{ backgroundColor: "transparent", height: 60 }}></View>
         </View>
     )
 }

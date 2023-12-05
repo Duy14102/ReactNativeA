@@ -6,7 +6,7 @@ import Notification from './pages/Notification';
 import Setting from './pages/Setting';
 import Category from './pages/Category';
 import Signup from './pages/Signup';
-import { TouchableOpacity, View, Animated, Dimensions } from 'react-native';
+import { View, Animated, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useRef } from 'react';
 
