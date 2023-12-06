@@ -26,7 +26,7 @@ function Setting({ navigation }: { navigation: any }) {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/Login", // Change Localhost to ur IP to connect with server
+            url: "http://192.168.1.217:3000/Login", // Change localhost to ur IP to connect with server
             data: {
                 email: username,
                 password: password,

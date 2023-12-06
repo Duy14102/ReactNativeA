@@ -12,7 +12,7 @@ function About() {
     useEffect(() => {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetAllAbout"// Change Localhost to ur IP to connect with server
+            url: "http://192.168.1.217:3000/GetAllAbout"
         }
         axios(configuration)
             .then((res) => {

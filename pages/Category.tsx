@@ -2,12 +2,81 @@ import { ScrollView, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpaci
 import RNPickerSelect from 'react-native-picker-select';
 import Header from "../component/Header"
 import Footer from "../component/Footer"
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import axios from 'axios';
 
-function Category() {
-    const [category, setCategory] = useState("")
-    const [filter, setFilter] = useState("")
-    const image = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700311264/Menu/6558b0e0f09a9e28ebb5b475.jpg" }
+function Category({ navigation }: { navigation: any }) {
+    const [category, setCategory] = useState([])
+    const [cate, setCate] = useState("Meat")
+    const [fil, setFil] = useState("nto")
+    const [Count, setCount] = useState([]);
+    const [pageCount, setPageCount] = useState(6);
+    const currentPage = useRef<any>();
+    const limit = 8
+
+    useEffect(() => {
+        currentPage.current = 1;
+        getPagination()
+    }, [cate, fil])
+
+    /*      Pagination     */
+    function HandlePageClick(e: any) {
+        currentPage.current = e + 1
+        getPagination();
+    }
+
+    function getPagination() {
+        const configuration = {
+            method: "get",
+            url: "http://192.168.1.217:3000/GetCategoryMenu",
+            params: {
+                category: cate,
+                page: currentPage.current,
+                limit: limit,
+                filter: fil
+            }
+        };
+        axios(configuration)
+            .then((result: any) => {
+                setCategory(result.data.results.result);
+                setCount(result.data.results.total)
+                setPageCount(result.data.results.pageCount)
+            })
+            .catch((error: any) => {
+                console.log(error);
+            });
+    }
+
+    function pagePrev() {
+        if (currentPage.current <= 1) {
+            return false
+        }
+        currentPage.current = currentPage.current - 1
+        getPagination()
+    }
+    function pageNext() {
+        if (currentPage.current >= pageCount) {
+            return false
+        }
+        currentPage.current = currentPage.current + 1
+        getPagination()
+    }
+
+    const pageButton = (count: any) => {
+        return Array.from(Array(count), (e, i) => {
+            return (
+                <TouchableOpacity key={i} style={i + 1 === currentPage.current ? cateStyle.buttonPaginate : cateStyle.buttonPaginate2} onPress={() => HandlePageClick(i)}>
+                    <Text style={i + 1 === currentPage.current ? cateStyle.textButtonPaginate : cateStyle.textButtonPaginate2}>{i + 1}</Text>
+                </TouchableOpacity>
+            )
+        })
+    }
+
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    });
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
@@ -17,8 +86,8 @@ function Category() {
                     <View style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row" }}>
                         <View style={{ borderWidth: 1, borderColor: "gray", width: "45%" }}>
                             <RNPickerSelect
-                                placeholder={{ label: category !== "" ? category : "Category", value: null }}
-                                onValueChange={(e) => setCategory(e)}
+                                placeholder={{}}
+                                onValueChange={(e) => setCate(e)}
                                 items={[
                                     { label: "Meat", value: "Meat" },
                                     { label: "Vegetables", value: "Vegetables" },
@@ -28,8 +97,8 @@ function Category() {
                         </View>
                         <View style={{ borderWidth: 1, borderColor: "gray", width: "45%" }}>
                             <RNPickerSelect
-                                placeholder={{ label: filter !== "" ? filter : "Filter", value: null }}
-                                onValueChange={(e) => setFilter(e)}
+                                placeholder={{}}
+                                onValueChange={(e) => setFil(e)}
                                 items={[
                                     { label: "New to old", value: "nto" },
                                     { label: "Old to new", value: "otn" },
@@ -49,40 +118,38 @@ function Category() {
                             paddingVertical: 10
                         }}
                     />
+                    <Text style={{ textAlign: "center", paddingTop: 12, fontSize: 16, color: "#0F172B" }}>Display all {Count} results</Text>
                     <View style={{ paddingVertical: 20, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
-                        <View style={cateStyle.card}>
-                            <Image source={image} style={{ width: "100%", height: 120 }} />
-                            <View style={{ alignItems: "center", paddingVertical: 10, display: "flex", flexDirection: "column", gap: 5 }}>
-                                <Text style={{ color: "#0F172B", fontSize: 15 }}>Meat</Text>
-                                <Text style={{ fontWeight: "bold", color: "#0F172B", fontSize: 15 }}>Omelet</Text>
-                                <Text style={{ color: "#0F172B", fontSize: 18 }}>10.000d</Text>
-                            </View>
-                            <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 5 }}>
-                                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Add to cart</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={cateStyle.card}>
-                            <Image source={image} style={{ width: "100%", height: 120 }} />
-                            <View style={{ alignItems: "center", paddingVertical: 10, display: "flex", flexDirection: "column", gap: 5 }}>
-                                <Text style={{ color: "#0F172B", fontSize: 15 }}>Meat</Text>
-                                <Text style={{ fontWeight: "bold", color: "#0F172B", fontSize: 15 }}>Omelet</Text>
-                                <Text style={{ color: "#0F172B", fontSize: 18 }}>10.000d</Text>
-                            </View>
-                            <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 5 }}>
-                                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Add to cart</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={cateStyle.card}>
-                            <Image source={image} style={{ width: "100%", height: 120 }} />
-                            <View style={{ alignItems: "center", paddingVertical: 10, display: "flex", flexDirection: "column", gap: 5 }}>
-                                <Text style={{ color: "#0F172B", fontSize: 15 }}>Meat</Text>
-                                <Text style={{ fontWeight: "bold", color: "#0F172B", fontSize: 15 }}>Omelet</Text>
-                                <Text style={{ color: "#0F172B", fontSize: 18 }}>10.000d</Text>
-                            </View>
-                            <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 5 }}>
-                                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Add to cart</Text>
-                            </TouchableOpacity>
-                        </View>
+                        {category.map((i: any) => {
+                            return (
+                                <View key={i._id} style={cateStyle.card}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('DetailPage', { name: i.foodname, category: i.foodcategory })}>
+                                        <Image source={{ uri: i.foodimage }} style={{ width: "100%", height: 120 }} />
+                                    </TouchableOpacity>
+                                    <View style={{ alignItems: "center", paddingVertical: 10, display: "flex", flexDirection: "column", gap: 5 }}>
+                                        <TouchableOpacity>
+                                            <Text style={{ color: "#0F172B", fontSize: 15 }}>{i.foodcategory}</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => navigation.navigate('DetailPage', { name: i.foodname, category: i.foodcategory })}>
+                                            <Text style={{ fontWeight: "bold", color: "#0F172B", fontSize: 15 }}>{i.foodname}</Text>
+                                        </TouchableOpacity>
+                                        <Text style={{ color: "#0F172B", fontSize: 18 }}>{VND.format(i.foodprice)}</Text>
+                                    </View>
+                                    <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 5 }}>
+                                        <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Add to cart</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )
+                        })}
+                    </View>
+                    <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 }}>
+                        <TouchableOpacity style={cateStyle.buttonPaginate} onPress={() => pagePrev()}>
+                            <Text style={cateStyle.textButtonPaginate}>{"< Prev"}</Text>
+                        </TouchableOpacity>
+                        {pageButton(pageCount)}
+                        <TouchableOpacity style={cateStyle.buttonPaginate} onPress={() => pageNext()}>
+                            <Text style={cateStyle.textButtonPaginate}>{"Next >"}</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <Footer />
@@ -98,5 +165,29 @@ const cateStyle = StyleSheet.create({
         overflow: "hidden",
         backgroundColor: "#F9F9F9"
     },
+
+    buttonPaginate: {
+        backgroundColor: "#FEA116",
+        paddingHorizontal: 10,
+        paddingVertical: 5
+    },
+
+    textButtonPaginate: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 15
+    },
+
+    buttonPaginate2: {
+        backgroundColor: "#FFFFFF",
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
+
+    textButtonPaginate2: {
+        color: "#0F172B",
+        fontWeight: "bold",
+        fontSize: 15
+    }
 })
 export default Category
