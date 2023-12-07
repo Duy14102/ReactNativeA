@@ -8,7 +8,6 @@ import Menu from '../component/Menu';
 import Testimonial from '../component/Testimonial';
 import axios from 'axios';
 import HTMLReactParser from 'html-react-parser';
-import Cookies from 'universal-cookie'
 
 function Home(): JSX.Element {
     var word1 = null
@@ -18,13 +17,11 @@ function Home(): JSX.Element {
     const [styleB, setStyleB] = useState()
     const [text, setText] = useState<any>()
     const spinValue = useRef(new Animated.Value(0)).current;
-    const cookies = new Cookies()
-    cookies.remove("TOKEN", { path: '/' });
 
     useEffect(() => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.217:3000/GetHeroUI",// Change localhost to ur IP to connect with server
+            url: "http://localhost:3000/GetHeroUI",
             params: {
                 name: "oh2rwdomomeno4sgguhf"
             }
@@ -38,7 +35,7 @@ function Home(): JSX.Element {
 
         const configuration2 = {
             method: "get",
-            url: "http://192.168.1.217:3000/GetHeroUI",// Change localhost to ur IP to connect with server
+            url: "http://localhost:3000/GetHeroUI",
             params: {
                 name: "e4onxrx7hmgzmrbel9jk"
             }
@@ -52,7 +49,7 @@ function Home(): JSX.Element {
 
         const configuration3 = {
             method: "get",
-            url: "http://192.168.1.217:3000/GetHeroText",// Change localhost to ur IP to connect with server
+            url: "http://localhost:3000/GetHeroText",
         }
         axios(configuration3)
             .then((res) => {

@@ -28,7 +28,7 @@ function Category({ navigation }: { navigation: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.217:3000/GetCategoryMenu",
+            url: "http://localhost:3000/GetCategoryMenu",
             params: {
                 category: cate,
                 page: currentPage.current,
@@ -143,12 +143,12 @@ function Category({ navigation }: { navigation: any }) {
                         })}
                     </View>
                     <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 }}>
-                        <TouchableOpacity style={cateStyle.buttonPaginate} onPress={() => pagePrev()}>
-                            <Text style={cateStyle.textButtonPaginate}>{"< Prev"}</Text>
+                        <TouchableOpacity style={currentPage.current === 1 ? cateStyle.prevNotActive : cateStyle.buttonPaginate3} onPress={() => pagePrev()}>
+                            <Text style={currentPage.current === 1 ? cateStyle.textPrevNotActive : cateStyle.textPrevActive}>{"< Prev"}</Text>
                         </TouchableOpacity>
                         {pageButton(pageCount)}
-                        <TouchableOpacity style={cateStyle.buttonPaginate} onPress={() => pageNext()}>
-                            <Text style={cateStyle.textButtonPaginate}>{"Next >"}</Text>
+                        <TouchableOpacity style={currentPage.current >= pageCount ? cateStyle.prevNotActive : cateStyle.buttonPaginate3} onPress={() => pageNext()}>
+                            <Text style={currentPage.current >= pageCount ? cateStyle.textPrevNotActive : cateStyle.textPrevActive}>{"Next >"}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -163,13 +163,34 @@ const cateStyle = StyleSheet.create({
         width: "47%",
         borderRadius: 8,
         overflow: "hidden",
-        backgroundColor: "#F9F9F9"
+        backgroundColor: "#FFFFFF"
     },
 
     buttonPaginate: {
         backgroundColor: "#FEA116",
         paddingHorizontal: 10,
-        paddingVertical: 5
+        paddingVertical: 5,
+        borderWidth: 1,
+        borderColor: "#FEA116"
+    },
+
+    prevNotActive: {
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderWidth: 1,
+        borderColor: "gray",
+    },
+
+    textPrevNotActive: {
+        color: "gray",
+        fontWeight: "bold",
+        fontSize: 15
+    },
+
+    textPrevActive: {
+        color: "#FEA116",
+        fontWeight: "bold",
+        fontSize: 15
     },
 
     textButtonPaginate: {
@@ -182,12 +203,22 @@ const cateStyle = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         paddingHorizontal: 10,
         paddingVertical: 5,
+        borderWidth: 1,
+        borderColor: "gray"
     },
 
     textButtonPaginate2: {
         color: "#0F172B",
         fontWeight: "bold",
         fontSize: 15
-    }
+    },
+
+    buttonPaginate3: {
+        backgroundColor: "#FFFFFF",
+        borderWidth: 1,
+        borderColor: "gray",
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
 })
 export default Category

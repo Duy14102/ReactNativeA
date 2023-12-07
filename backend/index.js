@@ -1204,7 +1204,7 @@ app.get("/GetThisMenu", async (req, res) => {
 //Get Carousel Detail Page
 app.get("/GetSimilarP", async (req, res) => {
     try {
-        const getIt = await getThisMenu.find({ foodcategory: req.query.Name }).limit(5);
+        const getIt = await getThisMenu.find({ foodcategory: req.query.cate, foodname: { $ne: req.query.name } }).limit(5);
         res.send({ data: getIt })
     } catch (e) {
         console.log(e);
