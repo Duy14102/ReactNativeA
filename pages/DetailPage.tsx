@@ -242,8 +242,8 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
                                                 <Text style={detailStyle.logintoR}>to review this item!</Text>
                                             </View>
                                         )}
-                                        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                                            <View style={{ display: "flex", flexDirection: "row", paddingTop: 10 }}>
+                                        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 10 }}>
+                                            <View style={{ display: "flex", flexDirection: "row" }}>
                                                 <Text style={{ fontSize: 15, fontWeight: "bold" }}>Review : </Text>
                                                 {i.review?.length === 0 ? (
                                                     <Text style={detailStyle.logintoR}>There's no review yet! </Text>
@@ -252,8 +252,8 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
                                                 )}
                                             </View>
                                             {candecode ? (
-                                                <TouchableOpacity style={{ width: 20, height: 10 }}>
-                                                    <Icon name="edit" style={{ width: "100%", height: "100%" }} />
+                                                <TouchableOpacity>
+                                                    <Icon name="edit" style={{ fontSize: 18 }} />
                                                 </TouchableOpacity>
                                             ) : null}
                                         </View>

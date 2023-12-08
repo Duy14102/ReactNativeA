@@ -1,13 +1,19 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
 export default function Header() {
+    const navigation = useNavigation<any>()
     return (
         <View style={headerStyle.header}>
+            <Text style={{ color: "transparent" }}>12</Text>
             <View style={headerStyle.textLogo}>
                 <Icon style={headerStyle.textDisplay} name="utensils" />
-                <Text style={headerStyle.textDisplay}>EatCom</Text>
+                <Text style={[headerStyle.textDisplay, { fontWeight: "bold" }]}>EatCom</Text>
             </View>
+            <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
+                <Icon name='bell' size={22} color={"#FEA116"} />
+            </TouchableOpacity>
         </View>
     )
 }
@@ -15,7 +21,7 @@ export default function Header() {
 const headerStyle = StyleSheet.create({
     header: {
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
         paddingLeft: 15,
         paddingRight: 15,

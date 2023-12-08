@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Dimensions, ImageBackground, TouchableOpacity, Image, ActivityIndicator } from "react-native"
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Dimensions, ImageBackground, TouchableOpacity, Image, ActivityIndicator, RefreshControl } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
 import { useState, useEffect } from "react"
@@ -17,8 +17,17 @@ function Setting({ navigation }: { navigation: any }) {
     const [seePassword, setSeePassword] = useState(false)
     const [islogin, setIsLogin] = useState(false)
     const [islogout, setIsLogout] = useState(false)
+    const [refresh, setFresh] = useState(false)
     const [user, setUser] = useState<any>()
     var emailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            getData()
+            setFresh(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         getData()
@@ -114,12 +123,12 @@ function Setting({ navigation }: { navigation: any }) {
     const imgUser = "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header />
                 <View style={settingStyle.container}>
                     {candecode ? (
                         <View style={{ padding: 15 }}>
-                            <View style={settingStyle.coverIt}>
+                            <TouchableOpacity style={settingStyle.coverIt}>
                                 <View style={{ flexDirection: "row", gap: 10 }}>
                                     {user?.userimage ? (
                                         <Image source={{ uri: user?.userimage }} />
@@ -131,10 +140,8 @@ function Setting({ navigation }: { navigation: any }) {
                                         <Text style={{ fontSize: 15 }}>{user?.phonenumber}</Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity>
-                                    <Icon name="edit" style={{ fontSize: 20 }} />
-                                </TouchableOpacity>
-                            </View>
+                                <Icon name="edit" style={{ fontSize: 20 }} />
+                            </TouchableOpacity>
                             <View style={{ marginVertical: 20 }}>
                                 <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Order management</Text>
                                 <View style={settingStyle.coverIt2}>
@@ -155,16 +162,33 @@ function Setting({ navigation }: { navigation: any }) {
                                             paddingVertical: 10
                                         }}
                                     />
-                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5 }}>
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <Icon name="history" color={"#0F172B"} size={18} />
                                             <Text style={{ fontSize: 15 }}>Cart history</Text>
                                         </View>
                                         <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
                                     </TouchableOpacity>
+                                    <View
+                                        style={{
+                                            borderBottomColor: 'gray',
+                                            borderBottomWidth: 1,
+                                            opacity: 0.5,
+                                            left: 5,
+                                            right: 5,
+                                            paddingVertical: 10
+                                        }}
+                                    />
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="search" color={"#0F172B"} size={18} />
+                                            <Text style={{ fontSize: 15 }}>Find order</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
-                            <View style={{ marginVertical: 10 }}>
+                            <View style={{ marginVertical: 15 }}>
                                 <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Booking management</Text>
                                 <View style={settingStyle.coverIt2}>
                                     <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }}>
@@ -188,6 +212,35 @@ function Setting({ navigation }: { navigation: any }) {
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <Icon name="history" color={"#0F172B"} size={18} />
                                             <Text style={{ fontSize: 15 }}>Booking history</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <View style={{ marginVertical: 15 }}>
+                                <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Other</Text>
+                                <View style={settingStyle.coverIt2}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="user-shield" color={"#0F172B"} size={18} />
+                                            <Text style={{ fontSize: 15 }}>Privacy and terms</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
+                                    <View
+                                        style={{
+                                            borderBottomColor: 'gray',
+                                            borderBottomWidth: 1,
+                                            opacity: 0.5,
+                                            left: 5,
+                                            right: 5,
+                                            paddingVertical: 10
+                                        }}
+                                    />
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="phone" style={settingStyle.Sicon} />
+                                            <Text style={{ fontSize: 15 }}>Contact for help</Text>
                                         </View>
                                         <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
                                     </TouchableOpacity>
@@ -358,6 +411,12 @@ const settingStyle = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         padding: 15,
         borderRadius: 5,
+    },
+
+    Sicon: {
+        color: "#0F172B",
+        fontSize: 18,
+        transform: "scaleX(-1)"
     }
 })
 export default Setting

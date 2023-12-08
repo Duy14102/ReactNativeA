@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, Pressable, Animated, Easing } from 'react-native';
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, Pressable, Animated, Easing, ActivityIndicator } from 'react-native';
 import Header from '../component/Header';
 import Footer from '../component/Footer';
 import Services from '../component/Services';
@@ -15,6 +15,8 @@ function Home(): JSX.Element {
     var word3 = null
     const [styleA, setStyleA] = useState()
     const [styleB, setStyleB] = useState()
+    const [load1, setload1] = useState(false)
+    const [load2, setload2] = useState(false)
     const [text, setText] = useState<any>()
     const spinValue = useRef(new Animated.Value(0)).current;
 
@@ -26,10 +28,13 @@ function Home(): JSX.Element {
                 name: "oh2rwdomomeno4sgguhf"
             }
         }
+        setload1(true)
         axios(configuration)
             .then((res) => {
+                setload1(false)
                 setStyleA(res.data.data)
             }).catch((err) => {
+                setload1(false)
                 console.log(err);
             })
 
@@ -40,10 +45,13 @@ function Home(): JSX.Element {
                 name: "e4onxrx7hmgzmrbel9jk"
             }
         }
+        setload2(true)
         axios(configuration2)
             .then((res) => {
+                setload2(false)
                 setStyleB(res.data.data)
             }).catch((err) => {
+                setload2(false)
                 console.log(err);
             })
 
@@ -97,6 +105,11 @@ function Home(): JSX.Element {
                 <Header />
 
                 <View style={styles.container}>
+                    {load1 ? (
+                        <View style={styles.bgimage}>
+                            <ActivityIndicator size="large" style={{ top: "10%" }} color={"#FEA116"} />
+                        </View>
+                    ) : null}
                     {styleB ? (
                         <ImageBackground source={{ uri: styleB }} style={styles.bgimage} />
                     ) : null}
@@ -111,6 +124,9 @@ function Home(): JSX.Element {
                             <Pressable style={styles.bookATable}><Text style={styles.bookATableWord}>Book a table</Text></Pressable>
 
                             <View style={styles.CircleImage}>
+                                {load2 ? (
+                                    <ActivityIndicator size="large" style={{ top: "10%" }} color={"#FEA116"} />
+                                ) : null}
                                 {styleA ? (
                                     <Animated.Image style={{ transform: [{ rotate: spin }], width: 300, height: 300 }} source={{ uri: styleA }} />
                                 ) : null}
