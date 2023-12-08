@@ -54,7 +54,7 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
     function GetDetail() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetDetailMenu",
+            url: "http://192.168.1.217:3000/GetDetailMenu",
             params: {
                 foodid: name
             }
@@ -70,7 +70,7 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
     function GetSimilar() {
         const configuration2 = {
             method: "get",
-            url: "http://localhost:3000/GetSimilarP",
+            url: "http://192.168.1.217:3000/GetSimilarP",
             params: {
                 cate: category,
                 name: name

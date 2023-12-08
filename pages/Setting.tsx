@@ -10,12 +10,14 @@ import { decode } from "base-64";
 global.atob = decode
 
 function Setting({ navigation }: { navigation: any }) {
-    const [candecode, setCandecode] = useState(null)
+    const [candecode, setCandecode] = useState<any>(null)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [testEmail, setTestEmail] = useState(false)
     const [seePassword, setSeePassword] = useState(false)
     const [islogin, setIsLogin] = useState(false)
+    const [islogout, setIsLogout] = useState(false)
+    const [user, setUser] = useState<any>()
     var emailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
     useEffect(() => {
@@ -36,6 +38,24 @@ function Setting({ navigation }: { navigation: any }) {
     };
 
     useEffect(() => {
+        if (candecode) {
+            const configuration = {
+                method: "get",
+                url: "http://192.168.1.217:3000/GetDetailUser",
+                params: {
+                    userid: candecode.userId
+                },
+            }
+            axios(configuration)
+                .then((res) => {
+                    setUser(res.data.data)
+                }).catch((er) => {
+                    console.log(er);
+                })
+        }
+    }, [candecode])
+
+    useEffect(() => {
         if (username !== "") {
             if (!emailTest.test(username)) {
                 setTestEmail(true)
@@ -48,7 +68,7 @@ function Setting({ navigation }: { navigation: any }) {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/Login",
+            url: "http://192.168.1.217:3000/Login",
             data: {
                 email: username,
                 password: password,
@@ -74,27 +94,117 @@ function Setting({ navigation }: { navigation: any }) {
     }
 
     const logoutThis = async () => {
+        setIsLogout(true)
         try {
             await AsyncStorage.clear();
-            setCandecode(null)
+            setTimeout(() => {
+                setIsLogout(false)
+                setCandecode(null)
+            }, 1000)
         } catch (e) {
+            setTimeout(() => {
+                setIsLogout(false)
+            }, 1000)
             console.log(e);
         }
     }
 
     const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
     const google = { uri: "https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" }
+    const imgUser = "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
                 <Header />
                 <View style={settingStyle.container}>
                     {candecode ? (
-                        <>
-                            <TouchableOpacity onPress={() => logoutThis()}>
-                                <Text>Logout</Text>
-                            </TouchableOpacity>
-                        </>
+                        <View style={{ padding: 15 }}>
+                            <View style={settingStyle.coverIt}>
+                                <View style={{ flexDirection: "row", gap: 10 }}>
+                                    {user?.userimage ? (
+                                        <Image source={{ uri: user?.userimage }} />
+                                    ) : (
+                                        <Image source={{ uri: imgUser }} height={50} width={50} borderRadius={50} />
+                                    )}
+                                    <View>
+                                        <Text style={{ fontSize: 15, fontWeight: "bold" }}>{user?.fullname}</Text>
+                                        <Text style={{ fontSize: 15 }}>{user?.phonenumber}</Text>
+                                    </View>
+                                </View>
+                                <TouchableOpacity>
+                                    <Icon name="edit" style={{ fontSize: 20 }} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ marginVertical: 20 }}>
+                                <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Order management</Text>
+                                <View style={settingStyle.coverIt2}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="shopping-cart" color={"#0F172B"} size={18} />
+                                            <Text style={{ fontSize: 15 }}>Active cart</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
+                                    <View
+                                        style={{
+                                            borderBottomColor: 'gray',
+                                            borderBottomWidth: 1,
+                                            opacity: 0.5,
+                                            left: 5,
+                                            right: 5,
+                                            paddingVertical: 10
+                                        }}
+                                    />
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="history" color={"#0F172B"} size={18} />
+                                            <Text style={{ fontSize: 15 }}>Cart history</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <View style={{ marginVertical: 10 }}>
+                                <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Booking management</Text>
+                                <View style={settingStyle.coverIt2}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="calendar-alt" color={"#0F172B"} size={18} />
+                                            <Text style={{ fontSize: 15 }}>Active booking</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
+                                    <View
+                                        style={{
+                                            borderBottomColor: 'gray',
+                                            borderBottomWidth: 1,
+                                            opacity: 0.5,
+                                            left: 5,
+                                            right: 5,
+                                            paddingVertical: 10
+                                        }}
+                                    />
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="history" color={"#0F172B"} size={18} />
+                                            <Text style={{ fontSize: 15 }}>Booking history</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <View style={{ marginVertical: 15 }}>
+                                <View style={settingStyle.coverIt2}>
+                                    <TouchableOpacity style={{ alignItems: "center" }} onPress={() => logoutThis()}>
+                                        {islogout ? (
+                                            <ActivityIndicator size={21} color={"#FEA116"} />
+                                        ) : (
+                                            <Text style={{ fontSize: 15, fontWeight: "bold" }}>Logout</Text>
+                                        )}
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
                     ) : (
                         <>
                             <ImageBackground source={BgImage} style={settingStyle.bgimage} />
@@ -129,7 +239,7 @@ function Setting({ navigation }: { navigation: any }) {
                                         </TouchableOpacity>
                                         <TouchableOpacity style={settingStyle.loginButton} onPress={() => handleSubmit()}>
                                             {islogin ? (
-                                                <ActivityIndicator size="large" color={"#fff"} />
+                                                <ActivityIndicator size={21} color={"#fff"} />
                                             ) : (
                                                 <Text style={{ color: "#fff", fontSize: 15, fontWeight: "bold" }}>Login</Text>
                                             )}
@@ -217,6 +327,37 @@ const settingStyle = StyleSheet.create({
         backgroundColor: "#FEA116",
         paddingVertical: 12,
         borderRadius: 10
+    },
+
+    coverIt: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        backgroundColor: "#FFFFFF",
+        padding: 15,
+        borderRadius: 5,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center"
+    },
+
+    coverIt2: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        backgroundColor: "#FFFFFF",
+        padding: 15,
+        borderRadius: 5,
     }
 })
 export default Setting

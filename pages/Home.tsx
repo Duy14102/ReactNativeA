@@ -21,7 +21,7 @@ function Home(): JSX.Element {
     useEffect(() => {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetHeroUI",
+            url: "http://192.168.1.217:3000/GetHeroUI",
             params: {
                 name: "oh2rwdomomeno4sgguhf"
             }
@@ -35,7 +35,7 @@ function Home(): JSX.Element {
 
         const configuration2 = {
             method: "get",
-            url: "http://localhost:3000/GetHeroUI",
+            url: "http://192.168.1.217:3000/GetHeroUI",
             params: {
                 name: "e4onxrx7hmgzmrbel9jk"
             }
@@ -49,7 +49,7 @@ function Home(): JSX.Element {
 
         const configuration3 = {
             method: "get",
-            url: "http://localhost:3000/GetHeroText",
+            url: "http://192.168.1.217:3000/GetHeroText",
         }
         axios(configuration3)
             .then((res) => {

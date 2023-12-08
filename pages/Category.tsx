@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from "react-native"
+import { ScrollView, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ActivityIndicator } from "react-native"
 import RNPickerSelect from 'react-native-picker-select';
 import Header from "../component/Header"
 import Footer from "../component/Footer"
@@ -10,6 +10,7 @@ function Category({ navigation }: { navigation: any }) {
     const [cate, setCate] = useState("Meat")
     const [fil, setFil] = useState("nto")
     const [Count, setCount] = useState([]);
+    const [load, setLoad] = useState(false)
     const [pageCount, setPageCount] = useState(6);
     const currentPage = useRef<any>();
     const limit = 8
@@ -28,7 +29,7 @@ function Category({ navigation }: { navigation: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetCategoryMenu",
+            url: "http://192.168.1.217:3000/GetCategoryMenu",
             params: {
                 category: cate,
                 page: currentPage.current,
@@ -36,13 +37,16 @@ function Category({ navigation }: { navigation: any }) {
                 filter: fil
             }
         };
+        setLoad(true)
         axios(configuration)
             .then((result: any) => {
+                setLoad(false)
                 setCategory(result.data.results.result);
                 setCount(result.data.results.total)
                 setPageCount(result.data.results.pageCount)
             })
             .catch((error: any) => {
+                setLoad(false)
                 console.log(error);
             });
     }
@@ -119,6 +123,9 @@ function Category({ navigation }: { navigation: any }) {
                         }}
                     />
                     <Text style={{ textAlign: "center", paddingTop: 12, fontSize: 16, color: "#0F172B" }}>Display all {Count} results</Text>
+                    {load ? (
+                        <ActivityIndicator size="large" color={"#FEA116"} />
+                    ) : null}
                     <View style={{ paddingVertical: 20, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
                         {category.map((i: any) => {
                             return (
