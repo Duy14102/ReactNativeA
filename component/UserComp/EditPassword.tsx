@@ -1,12 +1,12 @@
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity } from "react-native";
-import Header from "../component/Header";
-import Footer from "../component/Footer";
+import { SafeAreaView, ScrollView, View, Text } from "react-native"
+import Header from "../Header"
+import Footer from "../Footer"
 
-function Cart() {
+function EditPassword() {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
-                <Header type={null} />
+                <Header type={"Yes"} />
                 <View style={{ flex: 1 }}>
 
                 </View>
@@ -15,5 +15,4 @@ function Cart() {
         </SafeAreaView>
     )
 }
-
-export default Cart
+export default EditPassword

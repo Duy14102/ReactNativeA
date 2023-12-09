@@ -8,7 +8,7 @@ function Notification({ navigation }: { navigation: any }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
-                <Header />
+                <Header type={"Yes"} />
                 <View style={{ flex: 1 }}>
                     <ImageBackground source={BgImage} style={NotiStyle.bgimage} />
                     <View style={NotiStyle.overlay}>

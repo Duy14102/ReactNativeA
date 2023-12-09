@@ -8,6 +8,12 @@ import Category from './pages/Category';
 import Signup from './pages/Signup';
 import DetailPage from './pages/DetailPage';
 import Cart from './pages/Cart';
+import PrivacyAndTerm from './pages/PrivacyAndTerm';
+import Contact from './pages/Contact';
+import WriteReview from './component/WriteReview';
+import UserDetail from './component/UserDetail';
+import EditAddress from './component/UserComp/EditAddress';
+import EditPassword from './component/UserComp/EditPassword';
 import { View, Animated, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useRef } from 'react';
@@ -26,10 +32,16 @@ function App(): JSX.Element {
   }
   return (
     <NavigationContainer>
-      <Tabs.Navigator initialRouteName='Home' screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { backgroundColor: "#fff", position: "absolute", height: 60, borderTopLeftRadius: 10, borderTopRightRadius: 10, shadowColor: "#000", shadowOpacity: 0.06, shadowOffset: { width: 10, height: 10 }, paddingHorizontal: 10 } }}>
+      <Tabs.Navigator backBehavior='history' initialRouteName='Home' screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { backgroundColor: "#fff", position: "absolute", height: 60, borderTopLeftRadius: 10, borderTopRightRadius: 10, shadowColor: "#000", shadowOpacity: 0.06, shadowOffset: { width: 10, height: 10 }, paddingHorizontal: 10 } }}>
         <Tabs.Screen name='Signup' component={Signup} options={{ tabBarButton: () => null }} />
         <Tabs.Screen name='DetailPage' component={DetailPage} options={{ tabBarButton: () => null }} />
         <Tabs.Screen name='Notification' component={Notification} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='WriteReview' component={WriteReview} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='PnT' component={PrivacyAndTerm} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='Contact' component={Contact} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='UserDetail' component={UserDetail} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='EditAddress' component={EditAddress} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='EditPassword' component={EditPassword} options={{ tabBarButton: () => null }} />
         <Tabs.Screen name='Home' component={HomeSreen} options={{
           tabBarIcon: ({ focused }) => (
             <View>

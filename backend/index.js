@@ -1185,6 +1185,54 @@ app.post("/UpdateUser", async (req, res) => {
     }
 })
 
+//Update User Password
+app.post("/UpdateUserDetailNative", async (req, res) => {
+    try {
+        const { base64 } = req.body;
+        if (base64) {
+            await cloudinary.uploader.destroy(`Avatar/${req.body.updateid}`).then(() => {
+                cloudinary.uploader.upload(base64,
+                    { public_id: req.body.updateid, folder: "Avatar" }).then((result) => {
+                        getUserD.updateOne({ _id: req.body.updateid },
+                            {
+                                email: req.body.updateemail,
+                                fullname: req.body.updatefullname,
+                                phonenumber: req.body.updatephone,
+                                userimage: result.url
+                            }
+                        ).then(() => {
+                            getThisMenu.updateOne({ "review.id": req.body.updateid }, {
+                                $set: {
+                                    "review.$.image": result.url
+                                }
+                            }).then(() => {
+                                res.send({ data: "succeed" })
+                            }).catch((er) => {
+                                res.status(500).send(er)
+                            })
+                        }).catch((err) => {
+                            res.status(500).send(err)
+                        })
+                    }).catch((erro) => { res.status(500).send(erro) });
+            }).catch((erri) => { res.status(500).send(erri) })
+        } else {
+            getUserD.updateOne({ _id: req.body.updateid },
+                {
+                    email: req.body.updateemail,
+                    fullname: req.body.updatefullname,
+                    phonenumber: req.body.updatephone,
+                }
+            ).then(() => {
+                res.send({ data: "succeed" })
+            }).catch((err) => {
+                res.status(500).send(err)
+            })
+        }
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 //Get Item Menu by Name
 app.get("/GetThisMenu", async (req, res) => {
     try {
@@ -2891,7 +2939,7 @@ app.post('/VnpayCheckout', function (req, res, next) {
     let tmnCode = process.env.REACT_APP_vnpaytmnCode;
     let secretKey = process.env.REACT_APP_vnpaysecretKey;
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    let returnUrl = 'http://192.168.1.217:3001/OrderComplete';
+    let returnUrl = 'http://192.168.1.216:3001/OrderComplete';
     let orderId = req.body.orderId;
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;

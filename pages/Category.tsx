@@ -29,7 +29,7 @@ function Category({ navigation }: { navigation: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.217:3000/GetCategoryMenu",
+            url: "http://192.168.1.216:3000/GetCategoryMenu",
             params: {
                 category: cate,
                 page: currentPage.current,
@@ -84,7 +84,7 @@ function Category({ navigation }: { navigation: any }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
-                <Header />
+                <Header type={null} />
                 <View style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 15 }}>
                     <Text style={{ paddingVertical: 15, color: "#0F172B", fontSize: 23, fontWeight: "bold", textAlign: "center" }}>Pick your favorites</Text>
                     <View style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row" }}>

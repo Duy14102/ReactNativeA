@@ -54,7 +54,7 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
     function GetDetail() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.217:3000/GetDetailMenu",
+            url: "http://192.168.1.216:3000/GetDetailMenu",
             params: {
                 foodid: name
             }
@@ -70,7 +70,7 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
     function GetSimilar() {
         const configuration2 = {
             method: "get",
-            url: "http://192.168.1.217:3000/GetSimilarP",
+            url: "http://192.168.1.216:3000/GetSimilarP",
             params: {
                 cate: category,
                 name: name
@@ -187,11 +187,8 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView ref={scrollViewRef} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
-                <Header />
+                <Header type={"Yes"} />
                 <View style={{ flex: 1, paddingVertical: 15 }}>
-                    <TouchableOpacity style={{ paddingLeft: 15 }}>
-                        <Text style={{ fontSize: 17, color: "#0F172B" }} onPress={() => navigation.navigate('Category')}>{"< Back"}</Text>
-                    </TouchableOpacity>
                     {Object.values(detail).map((i: any) => {
                         return (
                             <View key={i._id} style={{ paddingVertical: 15 }}>
@@ -252,51 +249,55 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
                                                 )}
                                             </View>
                                             {candecode ? (
-                                                <TouchableOpacity>
+                                                <TouchableOpacity onPress={() => navigation.navigate('WriteReview', { item: i, candecode: candecode })}>
                                                     <Icon name="edit" style={{ fontSize: 18 }} />
                                                 </TouchableOpacity>
                                             ) : null}
                                         </View>
-                                        <View style={{ display: "flex", flexDirection: "column", gap: 20, marginVertical: 15, padding: 7, backgroundColor: "#FFFFFF" }}>
-                                            {wowreview.map((k: any) => {
-                                                return (
-                                                    <View key={k.id}>
-                                                        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 5 }}>
-                                                            {k.image ? (
-                                                                <Image source={{ uri: k.image }} width={50} height={50} />
-                                                            ) : (
-                                                                <Image source={{ uri: imgUser }} width={50} height={50} />
-                                                            )}
-                                                            <View>
-                                                                <Text>{rating(k.star)}</Text>
-                                                                <View style={{ flexDirection: "row", gap: 5 }}>
-                                                                    <Text style={{ fontWeight: "bold" }}>{k.name}</Text>
-                                                                    <Text>-</Text>
-                                                                    <Text>{k.date}</Text>
+                                        {wowreview.length > 0 ? (
+                                            <View style={{ display: "flex", flexDirection: "column", gap: 20, marginVertical: 15, padding: 7, backgroundColor: "#FFFFFF" }}>
+                                                {wowreview.map((k: any) => {
+                                                    return (
+                                                        <View key={k.id}>
+                                                            <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 5 }}>
+                                                                {k.image ? (
+                                                                    <Image source={{ uri: k.image }} width={50} height={50} />
+                                                                ) : (
+                                                                    <Image source={{ uri: imgUser }} width={50} height={50} />
+                                                                )}
+                                                                <View>
+                                                                    <Text>{rating(k.star)}</Text>
+                                                                    <View style={{ flexDirection: "row", gap: 5 }}>
+                                                                        <Text style={{ fontWeight: "bold" }}>{k.name}</Text>
+                                                                        <Text>-</Text>
+                                                                        <Text>{k.date}</Text>
+                                                                    </View>
+                                                                    <Text>{k.message}</Text>
                                                                 </View>
-                                                                <Text>{k.message}</Text>
                                                             </View>
+                                                            <View
+                                                                style={{
+                                                                    borderBottomColor: 'gray',
+                                                                    borderBottomWidth: 0.8,
+                                                                    paddingTop: 20
+                                                                }}
+                                                            />
                                                         </View>
-                                                        <View
-                                                            style={{
-                                                                borderBottomColor: 'gray',
-                                                                borderBottomWidth: 0.8,
-                                                                paddingTop: 20
-                                                            }}
-                                                        />
-                                                    </View>
-                                                )
-                                            })}
-                                        </View>
-                                        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 }}>
-                                            <TouchableOpacity style={currentPage.current === 1 ? detailStyle.prevNotActive : detailStyle.buttonPaginate3} onPress={() => pagePrev(i)}>
-                                                <Text style={currentPage.current === 1 ? detailStyle.textPrevNotActive : detailStyle.textPrevActive}>{"< Prev"}</Text>
-                                            </TouchableOpacity>
-                                            {pageButton(pageCount, i)}
-                                            <TouchableOpacity style={currentPage.current >= pageCount ? detailStyle.prevNotActive : detailStyle.buttonPaginate3} onPress={() => pageNext(i)}>
-                                                <Text style={currentPage.current >= pageCount ? detailStyle.textPrevNotActive : detailStyle.textPrevActive}>{"Next >"}</Text>
-                                            </TouchableOpacity>
-                                        </View>
+                                                    )
+                                                })}
+                                            </View>
+                                        ) : null}
+                                        {i.review?.length > 5 ? (
+                                            <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 }}>
+                                                <TouchableOpacity style={currentPage.current === 1 ? detailStyle.prevNotActive : detailStyle.buttonPaginate3} onPress={() => pagePrev(i)}>
+                                                    <Text style={currentPage.current === 1 ? detailStyle.textPrevNotActive : detailStyle.textPrevActive}>{"< Prev"}</Text>
+                                                </TouchableOpacity>
+                                                {pageButton(pageCount, i)}
+                                                <TouchableOpacity style={currentPage.current >= pageCount ? detailStyle.prevNotActive : detailStyle.buttonPaginate3} onPress={() => pageNext(i)}>
+                                                    <Text style={currentPage.current >= pageCount ? detailStyle.textPrevNotActive : detailStyle.textPrevActive}>{"Next >"}</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        ) : null}
                                     </View>
                                     <View
                                         style={{

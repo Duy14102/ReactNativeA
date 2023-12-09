@@ -11,7 +11,7 @@ function Search() {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
-                <Header />
+                <Header type={null} />
                 <View style={{ flex: 1 }}>
                     <ImageBackground source={BgImage} style={searchStyle.bgimage} />
                     <View style={searchStyle.overlay}>

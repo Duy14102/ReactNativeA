@@ -50,7 +50,7 @@ function Setting({ navigation }: { navigation: any }) {
         if (candecode) {
             const configuration = {
                 method: "get",
-                url: "http://192.168.1.217:3000/GetDetailUser",
+                url: "http://192.168.1.216:3000/GetDetailUser",
                 params: {
                     userid: candecode.userId
                 },
@@ -77,7 +77,7 @@ function Setting({ navigation }: { navigation: any }) {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.217:3000/Login",
+            url: "http://192.168.1.216:3000/Login",
             data: {
                 email: username,
                 password: password,
@@ -124,11 +124,11 @@ function Setting({ navigation }: { navigation: any }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
-                <Header />
+                <Header type={null} />
                 <View style={settingStyle.container}>
                     {candecode ? (
                         <View style={{ padding: 15 }}>
-                            <TouchableOpacity style={settingStyle.coverIt}>
+                            <TouchableOpacity style={settingStyle.coverIt} onPress={() => navigation.navigate('UserDetail', { candecode: candecode })}>
                                 <View style={{ flexDirection: "row", gap: 10 }}>
                                     {user?.userimage ? (
                                         <Image source={{ uri: user?.userimage }} />
@@ -220,7 +220,7 @@ function Setting({ navigation }: { navigation: any }) {
                             <View style={{ marginVertical: 15 }}>
                                 <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Other</Text>
                                 <View style={settingStyle.coverIt2}>
-                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }} onPress={() => navigation.navigate('PnT')}>
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <Icon name="user-shield" color={"#0F172B"} size={18} />
                                             <Text style={{ fontSize: 15 }}>Privacy and terms</Text>
@@ -237,9 +237,9 @@ function Setting({ navigation }: { navigation: any }) {
                                             paddingVertical: 10
                                         }}
                                     />
-                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }} onPress={() => navigation.navigate('Contact', { candecode: candecode })}>
                                         <View style={{ flexDirection: "row", gap: 10 }}>
-                                            <Icon name="phone" style={settingStyle.Sicon} />
+                                            <Icon name="phone" color={"#0F172B"} size={18} style={{ transform: [{ scaleX: -1 }] }} />
                                             <Text style={{ fontSize: 15 }}>Contact for help</Text>
                                         </View>
                                         <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
@@ -411,12 +411,6 @@ const settingStyle = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         padding: 15,
         borderRadius: 5,
-    },
-
-    Sicon: {
-        color: "#0F172B",
-        fontSize: 18,
-        transform: "scaleX(-1)"
     }
 })
 export default Setting

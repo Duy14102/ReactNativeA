@@ -70,7 +70,7 @@ function Signup({ navigation }: { navigation: any }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
-                <Header />
+                <Header type={"Yes"} />
                 <View style={settingStyle.container}>
                     <ImageBackground source={BgImage} style={settingStyle.bgimage} />
                     <View style={settingStyle.borderLog}>
