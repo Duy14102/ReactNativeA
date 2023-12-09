@@ -50,7 +50,7 @@ function Setting({ navigation }: { navigation: any }) {
         if (candecode) {
             const configuration = {
                 method: "get",
-                url: "http://192.168.1.216:3000/GetDetailUser",
+                url: "http://localhost:3000/GetDetailUser",
                 params: {
                     userid: candecode.userId
                 },
@@ -77,7 +77,7 @@ function Setting({ navigation }: { navigation: any }) {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/Login",
+            url: "http://localhost:3000/Login",
             data: {
                 email: username,
                 password: password,
@@ -131,7 +131,7 @@ function Setting({ navigation }: { navigation: any }) {
                             <TouchableOpacity style={settingStyle.coverIt} onPress={() => navigation.navigate('UserDetail', { candecode: candecode })}>
                                 <View style={{ flexDirection: "row", gap: 10 }}>
                                     {user?.userimage ? (
-                                        <Image source={{ uri: user?.userimage }} />
+                                        <Image source={{ uri: user?.userimage }} height={50} width={50} borderRadius={50}/>
                                     ) : (
                                         <Image source={{ uri: imgUser }} height={50} width={50} borderRadius={50} />
                                     )}

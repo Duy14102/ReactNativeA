@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from "react-native"
+import { SafeAreaView, ScrollView, View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native"
 import Header from "./Header"
 import Footer from "./Footer"
 import { useEffect, useState } from "react"
@@ -13,10 +13,13 @@ function UserDetail({ route }: { route: any }) {
     const [test, setTest] = useState(false)
     const [editIn4, setEditIn4] = useState(false)
     const [chooseImg, setChooseImg] = useState(false)
+    const [success, setSuccess] = useState(false)
+    const [reload, setReload] = useState(false)
+    const [load, setLoad] = useState(false)
     const navigation = useNavigation<any>()
-    const [updateimage, setUpdateImage] = useState<any>()
-    const [updatefullname, setUpdateFullname] = useState()
-    const [updatephone, setUpdatePhone] = useState()
+    const [updateimage, setUpdateImage] = useState<any>("")
+    const [updatefullname, setUpdateFullname] = useState("")
+    const [updatephone, setUpdatePhone] = useState("")
 
     useEffect(() => {
         if (candecode.userRole !== 1.5) {
@@ -24,10 +27,19 @@ function UserDetail({ route }: { route: any }) {
         }
     }, [candecode])
 
+    useEffect(() => {
+        if (reload) {
+            setUpdateFullname("")
+            setUpdatePhone("")
+            setUpdateImage("")
+            setReload(false)
+        }
+    }, [reload])
+
     function proUser() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetDetailUser",
+            url: "http://localhost:3000/GetDetailUser",
             params: {
                 userid: candecode.userId
             }
@@ -40,67 +52,64 @@ function UserDetail({ route }: { route: any }) {
             })
     }
 
-    function convertToBase64(e: any) {
-        var reader = new FileReader();
-        reader.readAsDataURL(e.target.files[0]);
-        reader.onload = () => {
-            setUpdateImage(reader.result);
-        };
-        reader.onerror = error => {
-            console.log(error);
+    const updateUser = (id: any, nameHH: any, numberHH: any) => {
+        var updateN = updatefullname
+        var updateP = updatephone
+        if (updatefullname === "") {
+            updateN = nameHH
         }
-    }
-
-    const updateUser = (id: any) => {
-        // prevent the form from refreshing the whole page
+        if (updatephone === "") {
+            updateP = numberHH
+        }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/UpdateUserDetailNative",
+            url: "http://localhost:3000/UpdateUserDetailNative",
             data: {
                 updateid: id,
-                updatefullname,
-                updatephone,
+                updatefullname: updateN,
+                updatephone: updateP,
                 base64: updateimage
             },
         };
-
+        setLoad(true)
         axios(configuration)
             .then(() => {
-
+                setLoad(false)
+                setSuccess(true)
+                setReload(true)
+                setEditIn4(false)
+                proUser()
+                setTimeout(() => {
+                    setSuccess(false)
+                }, 3000)
             })
             .catch((e) => {
+                setLoad(false)
                 console.log(e);
             });
     }
 
     const openImagePicker = () => {
         launchImageLibrary({ mediaType: "photo", includeBase64: true }, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.errorCode = "camera_unavailable") {
-                console.log(response.errorMessage + "cam");
-            } else if (response.errorCode = "permission") {
-                console.log(response.errorMessage + "per");
-            } else if (response.errorCode = "others") {
-                console.log(response.errorMessage + "othe");
-            } else if (response.assets) {
-                console.log(response.assets);  
+            if (response.assets) {
+                response.assets?.map((i) => {
+                    const imagesss = `data:${i.type};base64,${i.base64}`;
+                    setUpdateImage(imagesss)
+                })
+            } else {
+                console.log("Bug");
             }
         });
     };
 
     const handleCameraLaunch = () => {
         launchCamera({ mediaType: "photo", includeBase64: true }, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled camera');
-            } else if (response.errorCode = "camera_unavailable") {
-                console.log(response.errorMessage + "cam");
-            } else if (response.errorCode = "permission") {
-                console.log(response.errorMessage + "permission");
-            } else if (response.errorCode = "others") {
-                console.log(response.errorMessage + "others");
-            } else if (response.assets) {
-                console.log(response.assets[0]);
+            if (response.assets) {
+                response.assets?.map((i) => {
+                    setUpdateImage(i.base64)
+                })
+            } else {
+                console.log("Bug");
             }
         });
     }
@@ -118,9 +127,15 @@ function UserDetail({ route }: { route: any }) {
                                 {chooseImg ? (
                                     <TouchableOpacity style={{ width: 100, height: 100, padding: 10, backgroundColor: "#FFFFFF", borderRadius: 50 }} onPress={() => setChooseImg(false)}>
                                         {getUser.userimage ? (
-                                            <Image source={{ uri: getUser.userimage }} height={50} width={50} />
+                                            <Image source={{ uri: getUser.userimage }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
                                         ) : (
-                                            <Image source={{ uri: imgUser }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                            <>
+                                                {updateimage ? (
+                                                    <Image source={{ uri: updateimage }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                                ) : (
+                                                    <Image source={{ uri: imgUser }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                                )}
+                                            </>
                                         )}
                                         <Icon name="ban" size={20} style={{ position: "absolute", bottom: 5, right: 0, zIndex: 1 }} solid />
                                         <TouchableOpacity style={{ position: "absolute", top: 10, right: -110, zIndex: 1, flexDirection: "row", alignItems: "center", gap: 5, backgroundColor: "#FFFFFF", paddingVertical: 5, paddingHorizontal: 13, width: 100 }} onPress={() => openImagePicker()}>
@@ -135,9 +150,15 @@ function UserDetail({ route }: { route: any }) {
                                 ) : (
                                     <TouchableOpacity style={{ width: 100, height: 100, padding: 10, backgroundColor: "#FFFFFF", borderRadius: 50 }} onPress={() => setChooseImg(true)}>
                                         {getUser.userimage ? (
-                                            <Image source={{ uri: getUser.userimage }} height={50} width={50} />
+                                            <Image source={{ uri: getUser.userimage }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
                                         ) : (
-                                            <Image source={{ uri: imgUser }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                            <>
+                                                {updateimage ? (
+                                                    <Image source={{ uri: updateimage }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                                ) : (
+                                                    <Image source={{ uri: imgUser }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                                )}
+                                            </>
                                         )}
                                         <Icon name="edit" size={20} style={{ position: "absolute", bottom: 5, right: 0, zIndex: 1 }} solid />
                                     </TouchableOpacity>
@@ -146,7 +167,7 @@ function UserDetail({ route }: { route: any }) {
                         ) : (
                             <View style={{ width: 100, height: 100, padding: 10, backgroundColor: "#FFFFFF", borderRadius: 50 }}>
                                 {getUser.userimage ? (
-                                    <Image source={{ uri: getUser.userimage }} height={50} width={50} />
+                                    <Image source={{ uri: getUser.userimage }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
                                 ) : (
                                     <Image source={{ uri: imgUser }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
                                 )}
@@ -160,18 +181,24 @@ function UserDetail({ route }: { route: any }) {
                         </View>
                         <View>
                             <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Fullname</Text>
-                            <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.fullname} />
+                            <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.fullname} onChangeText={setUpdateFullname} />
                         </View>
                         <View>
                             <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Phone number</Text>
-                            <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.phonenumber} />
+                            <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.phonenumber} onChangeText={setUpdatePhone} />
                         </View>
+                        {load ? (
+                            <ActivityIndicator size={21} color={"#FEA116"} />
+                        ) : null}
+                        {success ? (
+                            <Text style={{ fontSize: 15, color: "#03ba5f", textAlign: "center" }}>✅ Submit succeeded!</Text>
+                        ) : null}
                         {editIn4 ? (
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", }}>
-                                <TouchableOpacity style={{ paddingVertical: 7, paddingHorizontal: 15, backgroundColor: "#FEA116" }}>
+                                <TouchableOpacity style={{ paddingVertical: 7, paddingHorizontal: 15, backgroundColor: "#FEA116" }} onPress={() => updateUser(candecode.userId, getUser.fullname, getUser.phonenumber)}>
                                     <Text style={{ fontWeight: "bold", fontSize: 15, color: "#fff" }}>Confirm</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{ paddingVertical: 7, paddingHorizontal: 15, backgroundColor: "lightgray" }} onPress={() => setEditIn4(false)}>
+                                <TouchableOpacity style={{ paddingVertical: 7, paddingHorizontal: 15, backgroundColor: "lightgray" }} onPress={() => { setEditIn4(false); setReload(true) }}>
                                     <Text style={{ fontWeight: "bold", fontSize: 15 }}>Cancel</Text>
                                 </TouchableOpacity>
                             </View>
