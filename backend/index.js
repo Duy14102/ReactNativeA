@@ -1186,6 +1186,39 @@ app.post("/UpdateUser", async (req, res) => {
 })
 
 //Update User Password
+app.post("/UpdatePasswordNative", (req, res) => {
+    try {
+        User.findOne({ _id: req.body.updateid }).then(async (user) => {
+            var hashed = ""
+            const compareOld = await bcrypt.compare(req.body.oldPassword, user.password)
+            if (!compareOld) {
+                return res.status(500).send()
+            }
+            if (req.body.updatepassword) {
+                const compare = await bcrypt.compare(req.body.updatepassword, user.password)
+                if (compare) {
+                    hashed = user.password
+                } else {
+                    hashed = await bcrypt.hash(req.body.updatepassword, 10)
+                }
+            } else {
+                hashed = user.password
+            }
+            getUserD.updateOne({ _id: req.body.updateid }, {
+                password: hashed
+            }).then(() => {
+                res.send({ data: "succeed" })
+            }).catch((err) => {
+                res.status(500).send(err)
+            })
+        })
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+
+//Update User Native
 app.post("/UpdateUserDetailNative", async (req, res) => {
     try {
         const { base64 } = req.body;
@@ -2939,7 +2972,7 @@ app.post('/VnpayCheckout', function (req, res, next) {
     let tmnCode = process.env.REACT_APP_vnpaytmnCode;
     let secretKey = process.env.REACT_APP_vnpaysecretKey;
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    let returnUrl = 'http://localhost:3001/OrderComplete';
+    let returnUrl = 'http://192.168.1.216:3001/OrderComplete';
     let orderId = req.body.orderId;
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;

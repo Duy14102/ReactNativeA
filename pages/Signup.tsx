@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Dimensions, ImageBackground, TouchableOpacity, Image } from "react-native"
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Dimensions, ImageBackground, TouchableOpacity } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
 import { useState, useEffect } from "react"

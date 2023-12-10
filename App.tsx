@@ -49,7 +49,7 @@ function App(): JSX.Element {
             </View>
           )
         }} listeners={({ navigation, route }) => ({
-          focus: e => {
+          focus: (e: any) => {
             Animated.spring(tabOffsetValue, {
               toValue: 0,
               useNativeDriver: true
@@ -63,7 +63,7 @@ function App(): JSX.Element {
             </View>
           )
         }} listeners={({ navigation, route }) => ({
-          focus: e => {
+          focus: (e: any) => {
             Animated.spring(tabOffsetValue, {
               toValue: getWidth() * 1.06,
               useNativeDriver: true
@@ -77,7 +77,7 @@ function App(): JSX.Element {
             </View>
           )
         }} listeners={({ navigation, route }) => ({
-          focus: e => {
+          focus: (e: any) => {
             Animated.spring(tabOffsetValue, {
               toValue: getWidth() * -500,
               useNativeDriver: true
@@ -91,7 +91,7 @@ function App(): JSX.Element {
             </View>
           )
         }} listeners={({ navigation, route }) => ({
-          focus: e => {
+          focus: (e: any) => {
             Animated.spring(tabOffsetValue, {
               toValue: getWidth() * 3.2,
               useNativeDriver: true
@@ -105,7 +105,7 @@ function App(): JSX.Element {
             </View>
           )
         }} listeners={({ navigation, route }) => ({
-          focus: e => {
+          focus: (e: any) => {
             Animated.spring(tabOffsetValue, {
               toValue: getWidth() * 4.3,
               useNativeDriver: true

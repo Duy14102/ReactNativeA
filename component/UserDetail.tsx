@@ -39,7 +39,7 @@ function UserDetail({ route }: { route: any }) {
     function proUser() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetDetailUser",
+            url: "http://192.168.1.216:3000/GetDetailUser",
             params: {
                 userid: candecode.userId
             }
@@ -63,7 +63,7 @@ function UserDetail({ route }: { route: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/UpdateUserDetailNative",
+            url: "http://192.168.1.216:3000/UpdateUserDetailNative",
             data: {
                 updateid: id,
                 updatefullname: updateN,
@@ -224,7 +224,7 @@ function UserDetail({ route }: { route: any }) {
                                     paddingVertical: 10
                                 }}
                             />
-                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5 }} onPress={() => navigation.navigate("EditPassword")}>
+                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5 }} onPress={() => navigation.navigate("EditPassword", { user: getUser })}>
                                 <View style={{ flexDirection: "row", gap: 10 }}>
                                     <Icon name="key" color={"#0F172B"} size={18} />
                                     <Text style={{ fontSize: 15 }}>Edit password</Text>
@@ -241,7 +241,7 @@ function UserDetail({ route }: { route: any }) {
                                     paddingVertical: 10
                                 }}
                             />
-                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }} onPress={() => navigation.navigate("EditAddress")}>
+                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }} onPress={() => navigation.navigate("EditAddress", { userid: getUser._id })}>
                                 <View style={{ flexDirection: "row", gap: 10 }}>
                                     <Icon name="map-marked-alt" color={"#0F172B"} size={18} />
                                     <Text style={{ fontSize: 15 }}>Edit address</Text>
