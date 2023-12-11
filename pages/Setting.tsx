@@ -50,7 +50,7 @@ function Setting({ navigation }: { navigation: any }) {
         if (candecode) {
             const configuration = {
                 method: "get",
-                url: "http://localhost:3000/GetDetailUser",
+                url: "http://192.168.1.216:3000/GetDetailUser",
                 params: {
                     userid: candecode.userId
                 },
@@ -77,7 +77,7 @@ function Setting({ navigation }: { navigation: any }) {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/Login",
+            url: "http://192.168.1.216:3000/Login",
             data: {
                 email: username,
                 password: password,
@@ -131,7 +131,7 @@ function Setting({ navigation }: { navigation: any }) {
                             <TouchableOpacity style={settingStyle.coverIt} onPress={() => navigation.navigate('UserDetail', { candecode: candecode })}>
                                 <View style={{ flexDirection: "row", gap: 10 }}>
                                     {user?.userimage ? (
-                                        <Image source={{ uri: user?.userimage }} height={50} width={50} borderRadius={50}/>
+                                        <Image source={{ uri: user?.userimage }} height={50} width={50} borderRadius={50} />
                                     ) : (
                                         <Image source={{ uri: imgUser }} height={50} width={50} borderRadius={50} />
                                     )}
@@ -145,10 +145,10 @@ function Setting({ navigation }: { navigation: any }) {
                             <View style={{ marginVertical: 20 }}>
                                 <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Order management</Text>
                                 <View style={settingStyle.coverIt2}>
-                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }} onPress={() => navigation.navigate("ActiveCart", { userid: candecode.userId })}>
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <Icon name="shopping-cart" color={"#0F172B"} size={18} />
-                                            <Text style={{ fontSize: 15 }}>Active cart</Text>
+                                            <Text style={{ fontSize: 15 }}>Active order</Text>
                                         </View>
                                         <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
                                     </TouchableOpacity>
@@ -162,10 +162,10 @@ function Setting({ navigation }: { navigation: any }) {
                                             paddingVertical: 10
                                         }}
                                     />
-                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5 }}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5 }} onPress={() => navigation.navigate("HistoryCart", { userid: candecode.userId })}>
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <Icon name="history" color={"#0F172B"} size={18} />
-                                            <Text style={{ fontSize: 15 }}>Cart history</Text>
+                                            <Text style={{ fontSize: 15 }}>Order history</Text>
                                         </View>
                                         <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
                                     </TouchableOpacity>
@@ -179,7 +179,7 @@ function Setting({ navigation }: { navigation: any }) {
                                             paddingVertical: 10
                                         }}
                                     />
-                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }} onPress={() => navigation.navigate("FindOrder", { userid: candecode.userId })}>
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <Icon name="search" color={"#0F172B"} size={18} />
                                             <Text style={{ fontSize: 15 }}>Find order</Text>

@@ -833,11 +833,75 @@ app.get("/GetThisOrder", async (req, res) => {
     }
 })
 
+//Get Order Native
+app.get("/GetThisOrderNative", async (req, res) => {
+    try {
+        const getIt = await getThisOrder.find({ _id: req.query.id, user: { $elemMatch: { id: req.query.userid } } })
+        res.send({ data: getIt });
+    } catch (e) {
+        res.status(500).send("Order id not exists!");
+    }
+})
+
 //Get Order UserPanel
 app.get("/GetOrderUserPanel", async (req, res) => {
     try {
-        const datad = await getThisOrder.find({ user: { $elemMatch: { id: req.query.id } } })
-        res.send({ data: datad })
+        const datad = await getThisOrder.find({ user: { $elemMatch: { id: req.query.id } }, status: { $in: [1, 2, 4] } })
+        const page = parseInt(req.query.page)
+        const limit = parseInt(req.query.limit)
+
+        const start = (page - 1) * limit
+        const end = page * limit
+
+        const results = {}
+        results.total = datad.length
+        results.pageCount = Math.ceil(datad.length / limit)
+
+        if (end < datad.length) {
+            results.next = {
+                page: page + 1
+            }
+        }
+        if (start > 0) {
+            results.prev = {
+                page: page - 1
+            }
+        }
+
+        results.result = datad.slice(start, end)
+        res.send({ results });
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+//Get Order History UserPanel
+app.get("/GetOrderHistoryUserPanel", async (req, res) => {
+    try {
+        const datad = await getThisOrder.find({ user: { $elemMatch: { id: req.query.id } }, status: { $in: [3, 5, 6] } })
+        const page = parseInt(req.query.page)
+        const limit = parseInt(req.query.limit)
+
+        const start = (page - 1) * limit
+        const end = page * limit
+
+        const results = {}
+        results.total = datad.length
+        results.pageCount = Math.ceil(datad.length / limit)
+
+        if (end < datad.length) {
+            results.next = {
+                page: page + 1
+            }
+        }
+        if (start > 0) {
+            results.prev = {
+                page: page - 1
+            }
+        }
+
+        results.result = datad.slice(start, end)
+        res.send({ results });
     } catch (e) {
         console.log(e);
     }
@@ -2972,7 +3036,7 @@ app.post('/VnpayCheckout', function (req, res, next) {
     let tmnCode = process.env.REACT_APP_vnpaytmnCode;
     let secretKey = process.env.REACT_APP_vnpaysecretKey;
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    let returnUrl = 'http://localhost:3001/OrderComplete';
+    let returnUrl = 'http://192.168.1.216:3001/OrderComplete';
     let orderId = req.body.orderId;
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;

@@ -20,7 +20,7 @@ function WriteReview({ route, navigation }: { route: any, navigation: any }) {
         if (candecode && candecode.userRole !== 1.5) {
             const configuration = {
                 method: "get",
-                url: "http://localhost:3000/GetDetailUser",
+                url: "http://192.168.1.216:3000/GetDetailUser",
                 params: {
                     userid: candecode.userId
                 }
@@ -73,7 +73,7 @@ function WriteReview({ route, navigation }: { route: any, navigation: any }) {
         const takeReview = { id: thisId, name: reviewName, star: reviewStar, message: reviewMessage, date: datetime, image: imgF }
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/AddReview",
+            url: "http://192.168.1.216:3000/AddReview",
             data: {
                 id: ids,
                 review: takeReview

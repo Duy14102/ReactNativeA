@@ -14,6 +14,11 @@ import WriteReview from './component/WriteReview';
 import UserDetail from './component/UserDetail';
 import EditAddress from './component/UserComp/EditAddress';
 import EditPassword from './component/UserComp/EditPassword';
+import ActiveCart from './component/UserComp/ActiveCart';
+import DetailCart from './component/UserComp/DetailCart';
+import WhyCancel from './component/UserComp/WhyCancel';
+import HistoryCart from './component/UserComp/HistoryCart';
+import FindOrder from './component/UserComp/FindOrder';
 import { View, Animated, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useRef } from 'react';
@@ -42,6 +47,11 @@ function App(): JSX.Element {
         <Tabs.Screen name='UserDetail' component={UserDetail} options={{ tabBarButton: () => null }} />
         <Tabs.Screen name='EditAddress' component={EditAddress} options={{ tabBarButton: () => null }} />
         <Tabs.Screen name='EditPassword' component={EditPassword} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='ActiveCart' component={ActiveCart} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='DetailCart' component={DetailCart} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='WhyCancel' component={WhyCancel} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='HistoryCart' component={HistoryCart} options={{ tabBarButton: () => null }} />
+        <Tabs.Screen name='FindOrder' component={FindOrder} options={{ tabBarButton: () => null }} />
         <Tabs.Screen name='Home' component={HomeSreen} options={{
           tabBarIcon: ({ focused }) => (
             <View>
