@@ -191,7 +191,7 @@ function Setting({ navigation }: { navigation: any }) {
                             <View style={{ marginVertical: 15 }}>
                                 <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Booking management</Text>
                                 <View style={settingStyle.coverIt2}>
-                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }} onPress={() => navigation.navigate("ActiveBooking", { userid: candecode.userId })}>
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <Icon name="calendar-alt" color={"#0F172B"} size={18} />
                                             <Text style={{ fontSize: 15 }}>Active booking</Text>
@@ -208,7 +208,7 @@ function Setting({ navigation }: { navigation: any }) {
                                             paddingVertical: 10
                                         }}
                                     />
-                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }} onPress={() => navigation.navigate("HistoryBooking", { userid: candecode.userId })}>
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <Icon name="history" color={"#0F172B"} size={18} />
                                             <Text style={{ fontSize: 15 }}>Booking history</Text>

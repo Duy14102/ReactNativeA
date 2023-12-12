@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Text, ImageBackground, TouchableOpacity, ScrollView, StyleSheet, Dimensions, TextInput, ActivityIndicator } from "react-native"
+import { SafeAreaView, View, Text, ImageBackground, TouchableOpacity, ScrollView, StyleSheet, Dimensions, TextInput, ActivityIndicator, RefreshControl } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
 import { useNavigation } from "@react-navigation/native"
@@ -12,10 +12,24 @@ function Contact({ route }: { route: any }) {
     const [warning1, setWarning1] = useState(false)
     const [warning2, setWarning2] = useState(false)
     const [success, setSuccess] = useState(false)
+    const [refresh, setFresh] = useState(false)
     const [load, setLoad] = useState(false)
     const [title, setTitle] = useState("")
     const [message, setMessage] = useState("")
     const { candecode } = route.params
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            setTitle("")
+            setMessage("")
+            setSuccess(false)
+            setWarning1(false)
+            setWarning2(false)
+            setLoad(false)
+            setFresh(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         if (success) {
@@ -60,7 +74,7 @@ function Contact({ route }: { route: any }) {
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1 }}>
                     <ImageBackground source={BgImage} style={contactStyle.bgimage} />

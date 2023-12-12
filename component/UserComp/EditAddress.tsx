@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator } from "react-native"
+import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, RefreshControl } from "react-native"
 import Header from "../Header"
 import Footer from "../Footer"
 import { useEffect, useState } from "react"
@@ -14,7 +14,20 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
     const [success2, setSuccess2] = useState(false)
     const [load1, setLoad1] = useState(false)
     const [load2, setLoad2] = useState(false)
+    const [refresh, setFresh] = useState(false)
     const [userBase, setUserBase] = useState<any>([])
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            setAddNew(false)
+            setNewAddress("")
+            setCheckNull(false)
+            getUser()
+            setSuccess(false)
+            setFresh(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         getUser()
@@ -107,7 +120,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1, padding: 15 }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Edit address</Text>

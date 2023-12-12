@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, Pressable, Animated, Easing, ActivityIndicator } from 'react-native';
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, Pressable, Animated, Easing, ActivityIndicator, RefreshControl } from 'react-native';
 import Header from '../component/Header';
 import Footer from '../component/Footer';
 import Services from '../component/Services';
@@ -17,10 +17,27 @@ function Home(): JSX.Element {
     const [styleB, setStyleB] = useState()
     const [load1, setload1] = useState(false)
     const [load2, setload2] = useState(false)
+    const [refresh, setFresh] = useState(false)
     const [text, setText] = useState<any>()
     const spinValue = useRef(new Animated.Value(0)).current;
 
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            HeroApi2()
+            HeroApi()
+            TextApi()
+            setFresh(false)
+        }, 1000)
+    }
+
     useEffect(() => {
+        HeroApi2()
+        HeroApi()
+        TextApi()
+    }, [])
+
+    function HeroApi2() {
         const configuration = {
             method: "get",
             url: "http://localhost:3000/GetHeroUI",
@@ -37,7 +54,9 @@ function Home(): JSX.Element {
                 setload1(false)
                 console.log(err);
             })
+    }
 
+    function HeroApi() {
         const configuration2 = {
             method: "get",
             url: "http://localhost:3000/GetHeroUI",
@@ -54,7 +73,9 @@ function Home(): JSX.Element {
                 setload2(false)
                 console.log(err);
             })
+    }
 
+    function TextApi() {
         const configuration3 = {
             method: "get",
             url: "http://localhost:3000/GetHeroText",
@@ -65,7 +86,7 @@ function Home(): JSX.Element {
             }).catch((err) => {
                 console.log(err);
             })
-    }, [])
+    }
 
     useEffect(() => {
         Animated.loop(
@@ -100,7 +121,7 @@ function Home(): JSX.Element {
         <SafeAreaView style={{ flex: 1 }}>
 
             <StatusBar />
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
 
                 <Header type={null} />
 

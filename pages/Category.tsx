@@ -1,5 +1,5 @@
-import { ScrollView, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ActivityIndicator } from "react-native"
-import RNPickerSelect from 'react-native-picker-select';
+import { ScrollView, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ActivityIndicator, RefreshControl } from "react-native"
+import { Picker } from '@react-native-picker/picker';
 import Header from "../component/Header"
 import Footer from "../component/Footer"
 import { useState, useRef, useEffect } from "react";
@@ -11,9 +11,18 @@ function Category({ navigation }: { navigation: any }) {
     const [fil, setFil] = useState("nto")
     const [Count, setCount] = useState([]);
     const [load, setLoad] = useState(false)
+    const [refresh, setFresh] = useState(false)
     const [pageCount, setPageCount] = useState(6);
     const currentPage = useRef<any>();
     const limit = 8
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            getPagination()
+            setFresh(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         currentPage.current = 1;
@@ -38,17 +47,19 @@ function Category({ navigation }: { navigation: any }) {
             }
         };
         setLoad(true)
-        axios(configuration)
-            .then((result: any) => {
-                setLoad(false)
-                setCategory(result.data.results.result);
-                setCount(result.data.results.total)
-                setPageCount(result.data.results.pageCount)
-            })
-            .catch((error: any) => {
-                setLoad(false)
-                console.log(error);
-            });
+        setTimeout(() => {
+            axios(configuration)
+                .then((result: any) => {
+                    setLoad(false)
+                    setCategory(result.data.results.result);
+                    setCount(result.data.results.total)
+                    setPageCount(result.data.results.pageCount)
+                })
+                .catch((error: any) => {
+                    setLoad(false)
+                    console.log(error);
+                });
+        }, 1000);
     }
 
     function pagePrev() {
@@ -80,37 +91,37 @@ function Category({ navigation }: { navigation: any }) {
         style: 'currency',
         currency: 'VND',
     });
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={null} />
                 <View style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 15 }}>
                     <Text style={{ paddingVertical: 15, color: "#0F172B", fontSize: 23, fontWeight: "bold", textAlign: "center" }}>Pick your favorites</Text>
                     <View style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row" }}>
                         <View style={{ borderWidth: 1, borderColor: "gray", width: "45%" }}>
-                            <RNPickerSelect
-                                placeholder={{}}
-                                onValueChange={(e) => setCate(e)}
-                                items={[
-                                    { label: "Meat", value: "Meat" },
-                                    { label: "Vegetables", value: "Vegetables" },
-                                    { label: "Drink", value: "Drink" }
-                                ]}
-                            />
+                            <Picker
+
+                                selectedValue={cate}
+                                onValueChange={(itemValue) =>
+                                    setCate(itemValue)
+                                }>
+                                <Picker.Item label="Meat" value="Meat" />
+                                <Picker.Item label="Vegetables" value="Vegetables" />
+                                <Picker.Item label="Drink" value="Drink" />
+                            </Picker>
                         </View>
                         <View style={{ borderWidth: 1, borderColor: "gray", width: "45%" }}>
-                            <RNPickerSelect
-                                placeholder={{}}
-                                onValueChange={(e) => setFil(e)}
-                                items={[
-                                    { label: "New to old", value: "nto" },
-                                    { label: "Old to new", value: "otn" },
-                                    { label: "High price first", value: "hpf" },
-                                    { label: "Low price first", value: "lpf" },
-                                    { label: "A to Z", value: "atz" }
-                                ]}
-                            />
+                            <Picker
+                                selectedValue={fil}
+                                onValueChange={(itemValue) =>
+                                    setFil(itemValue)
+                                }>
+                                <Picker.Item label="New to old" value="nto" />
+                                <Picker.Item label="Old to new" value="otn" />
+                                <Picker.Item label="High price first" value="hpf" />
+                                <Picker.Item label="Low price first" value="lpf" />
+                                <Picker.Item label="A to Z" value="atz" />
+                            </Picker>
                         </View>
                     </View>
                     <View
@@ -170,7 +181,7 @@ const cateStyle = StyleSheet.create({
         width: "47%",
         borderRadius: 8,
         overflow: "hidden",
-        backgroundColor: "#FFFFFF"
+        backgroundColor: "#FFFFFF",
     },
 
     buttonPaginate: {
@@ -227,5 +238,10 @@ const cateStyle = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
     },
+
+    makeBlur: {
+        opacity: 0.5,
+        backgroundColor: "black"
+    }
 })
 export default Category

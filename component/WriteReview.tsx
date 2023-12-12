@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, TextInput, ActivityIndicator, Image } from "react-native"
+import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, TextInput, ActivityIndicator, Image, RefreshControl } from "react-native"
 import Header from "./Header"
 import Footer from "./Footer"
 import axios from "axios"
@@ -14,7 +14,18 @@ function WriteReview({ route, navigation }: { route: any, navigation: any }) {
     const [getUserW, setGetUserW] = useState([])
     const [imgF, setImgF] = useState("")
     const [exists, setExists] = useState(false)
+    const [refresh, setFresh] = useState(false);
     const { item, candecode } = route.params;
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            setReviewMessage("")
+            setReviewStar(0)
+            setCheckStar(false)
+            setFresh(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         if (candecode && candecode.userRole !== 1.5) {
@@ -101,7 +112,7 @@ function WriteReview({ route, navigation }: { route: any, navigation: any }) {
     const rating = (stars: any) => '★★★★★☆☆☆☆☆'.slice(5 - stars, 10 - stars);
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1, padding: 15 }}>
                     <Text style={{ textAlign: "center", fontSize: 20, fontWeight: "bold", color: "#0F172B", paddingTop: 10 }}>Review {item.foodname}</Text>

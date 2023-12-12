@@ -1840,6 +1840,38 @@ app.get("/GetTokenBooking", async (req, res) => {
     }
 })
 
+//Get token History Booking
+app.get("/GetTokenBookingHistory", async (req, res) => {
+    try {
+        const getIt = await GetBooking.find({ "customer.id": req.query.id, status: { $in: [3, 4, 5] } });
+        const page = parseInt(req.query.page)
+        const limit = parseInt(req.query.limit)
+
+        const start = (page - 1) * limit
+        const end = page * limit
+
+        const results = {}
+        results.total = getIt.length
+        results.pageCount = Math.ceil(getIt.length / limit)
+
+        if (end < getIt.length) {
+            results.next = {
+                page: page + 1
+            }
+        }
+        if (start > 0) {
+            results.prev = {
+                page: page - 1
+            }
+        }
+
+        results.result = getIt.slice(start, end)
+        res.send({ results });
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 //Search Booking 4 Admin
 app.get("/SearchAllBooking", async (req, res) => {
     try {
@@ -2168,6 +2200,16 @@ app.get("/GetHistoryTable", async (req, res) => {
     }
 })
 
+//Find table history 4 booking Native
+app.get("/GetHistoryTableNativeBooking", async (req, res) => {
+    try {
+        const getIt = await GetTableHistory.findOne({ customerid: req.query.id });
+        res.send({ getIt });
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 //Add item to table
 app.post("/AddItemToTable", async (req, res) => {
     const findDup = await GetTable.findOne({ _id: req.body.tableid, tableitems: { $elemMatch: { "item.foodname": req.body.foodname } } })
@@ -2222,6 +2264,16 @@ app.post("/AddItemToTable", async (req, res) => {
                     console.log(er);
                 })
         }
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+// Get Table Native Booking
+app.get("/GetTableNativeBooking", async (req, res) => {
+    try {
+        const getIt = await GetTable.findOne({ customerid: req.query.id })
+        res.send({ getIt })
     } catch (e) {
         console.log(e);
     }

@@ -1,15 +1,23 @@
-import { SafeAreaView, View, Text, ImageBackground, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from "react-native"
+import { SafeAreaView, View, Text, ImageBackground, TouchableOpacity, ScrollView, StyleSheet, Dimensions, RefreshControl } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
 import { useNavigation } from "@react-navigation/native"
+import { useState } from "react"
 
 function PrivacyAndTerm() {
     const navigation = useNavigation<any>()
     const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
     const keyword = "/"
+    const [refresh, setFresh] = useState(false)
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            setFresh(false)
+        }, 1000)
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1 }}>
                     <ImageBackground source={BgImage} style={PnT.bgimage} />

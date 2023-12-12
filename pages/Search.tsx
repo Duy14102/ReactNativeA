@@ -1,16 +1,25 @@
-import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, StyleSheet, TextInput, ImageBackground, Dimensions } from "react-native"
+import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, StyleSheet, TextInput, ImageBackground, Dimensions, RefreshControl } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from "@react-navigation/native"
+import { useState } from "react"
 
 function Search() {
+    const [refresh, setFresh] = useState(false);
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+
+            setFresh(false)
+        }, 1000)
+    }
     const navigation = useNavigation<any>()
     const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
     const keyword = "/"
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={null} />
                 <View style={{ flex: 1 }}>
                     <ImageBackground source={BgImage} style={searchStyle.bgimage} />

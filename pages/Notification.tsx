@@ -1,13 +1,22 @@
-import { SafeAreaView, StyleSheet, View, ScrollView, Text, ImageBackground, Dimensions, TouchableOpacity } from "react-native"
+import { SafeAreaView, StyleSheet, View, ScrollView, Text, ImageBackground, Dimensions, TouchableOpacity, RefreshControl } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
+import { useState } from "react"
 
 function Notification({ navigation }: { navigation: any }) {
+    const [refresh, setFresh] = useState(false);
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+
+            setFresh(false)
+        }, 1000)
+    }
     const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
     const keyword = "/"
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1 }}>
                     <ImageBackground source={BgImage} style={NotiStyle.bgimage} />

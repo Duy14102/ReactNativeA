@@ -3,7 +3,7 @@ import Header from "../component/Header";
 import Footer from "../component/Footer";
 import { useState } from "react";
 
-function Cart() {
+function DefaultPages() {
     const [refresh, setFresh] = useState(false);
     const pulldown = () => {
         setFresh(true)
@@ -25,4 +25,4 @@ function Cart() {
     )
 }
 
-export default Cart
+export default DefaultPages

@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator } from "react-native"
+import { SafeAreaView, View, Text, ScrollView, TextInput, TouchableOpacity, ActivityIndicator, RefreshControl } from "react-native"
 import Header from "../Header"
 import Footer from "../Footer"
 import axios from "axios"
@@ -8,7 +8,19 @@ function WhyCancel({ route, navigation }: { route: any, navigation: any }) {
     const { id, userid } = route.params
     const [DenyReason, setDenyReason] = useState("")
     const [check, setCheck] = useState(false)
+    const [refresh, setFresh] = useState(false);
     const [load, setLoad] = useState(false)
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            setDenyReason("")
+            setCheck(false)
+            setLoad(false)
+            setFresh(false)
+        }, 1000)
+    }
+
     const denyOrder = () => {
         const configuration = {
             method: "post",
@@ -37,7 +49,7 @@ function WhyCancel({ route, navigation }: { route: any, navigation: any }) {
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1, padding: 15 }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Cancel Order</Text>

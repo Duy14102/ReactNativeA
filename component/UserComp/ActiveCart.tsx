@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, StyleSheet, Image } from "react-native"
+import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, StyleSheet, Image, RefreshControl } from "react-native"
 import Header from "../Header"
 import Footer from "../Footer"
 import axios from "axios";
@@ -7,9 +7,18 @@ import { useState, useEffect, useRef } from "react";
 function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
     const { userid } = route.params
     const [order, setOrder] = useState<any>([])
+    const [refresh, setFresh] = useState(false);
     const [pageCount, setPageCount] = useState(6);
     const currentPage = useRef<any>();
     const limit = 8
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            getPagination()
+            setFresh(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         currentPage.current = 1;
@@ -74,7 +83,7 @@ function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
     var total2 = 0
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1, paddingVertical: 15 }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Active order</Text>

@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Dimensions, ImageBackground, TouchableOpacity } from "react-native"
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Dimensions, ImageBackground, TouchableOpacity, RefreshControl } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
 import { useState, useEffect } from "react"
@@ -8,6 +8,7 @@ function Signup({ navigation }: { navigation: any }) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPass, setConfirmPass] = useState("")
+    const [fullname, setFullname] = useState("")
     const [phone, setPhone] = useState("")
     const [seePassword, setSeePassword] = useState(false)
     const [seePassword2, setSeePassword2] = useState(false)
@@ -16,11 +17,26 @@ function Signup({ navigation }: { navigation: any }) {
     const [testConfirm, setTestConfirm] = useState(false)
     const [testPasswordUpper, setTestPasswordUpper] = useState(false)
     const [testPasswordDigit, setPasswordDigit] = useState(false)
+    const [refresh, setFresh] = useState(false);
     const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
     var emailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     var checkUpperCase = RegExp("(.*[A-Z].*)")
     var checkDigit = RegExp("(.*[0-9].*)")
     var checkPhone = /((09|03|07|08|05)+([0-9]{8})\b)/g
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            setUsername("")
+            setPassword("")
+            setConfirmPass("")
+            setPhone("")
+            setFullname("")
+            setSeePassword(false)
+            setSeePassword2(false)
+            setFresh(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         if (username !== "") {
@@ -69,7 +85,7 @@ function Signup({ navigation }: { navigation: any }) {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={settingStyle.container}>
                     <ImageBackground source={BgImage} style={settingStyle.bgimage} />
@@ -78,7 +94,7 @@ function Signup({ navigation }: { navigation: any }) {
                             <Text style={settingStyle.loginText}>Signup</Text>
                             <View style={settingStyle.fatherInput}>
                                 <Text style={settingStyle.mochText}>Email</Text>
-                                <TextInput style={settingStyle.input} onChange={(e) => setUsername(e.nativeEvent.text)} />
+                                <TextInput style={settingStyle.input} onChange={(e) => setUsername(e.nativeEvent.text)} value={username} />
                                 {username !== "" ? (
                                     testEmail ? (
                                         <Text style={{ paddingLeft: 10, color: "red" }}>Email is invalid!</Text>
@@ -86,7 +102,7 @@ function Signup({ navigation }: { navigation: any }) {
                                 ) : null}
                                 <Text style={[settingStyle.mochText, { paddingTop: 15 }]}>Password</Text>
                                 <View style={{ backgroundColor: "rgb(243 244 246)", borderRadius: 10, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                    <TextInput style={{ width: "90%" }} secureTextEntry={seePassword ? false : true} onChange={(e) => setPassword(e.nativeEvent.text)} />
+                                    <TextInput style={{ width: "90%" }} secureTextEntry={seePassword ? false : true} value={password} onChange={(e) => setPassword(e.nativeEvent.text)} />
                                     {seePassword ? (
                                         <TouchableOpacity style={{ width: "10%" }} onPress={() => setSeePassword(false)}>
                                             <Icon name="eye-slash" style={{ width: "100%", fontSize: 18 }} />
@@ -109,7 +125,7 @@ function Signup({ navigation }: { navigation: any }) {
                                 ) : null}
                                 <Text style={[settingStyle.mochText, { paddingTop: 15 }]}>Confirm password</Text>
                                 <View style={{ backgroundColor: "rgb(243 244 246)", borderRadius: 10, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                    <TextInput style={{ width: "90%" }} secureTextEntry={seePassword2 ? false : true} onChange={(e) => setConfirmPass(e.nativeEvent.text)} />
+                                    <TextInput style={{ width: "90%" }} secureTextEntry={seePassword2 ? false : true} value={confirmPass} onChange={(e) => setConfirmPass(e.nativeEvent.text)} />
                                     {seePassword2 ? (
                                         <TouchableOpacity style={{ width: "10%" }} onPress={() => setSeePassword2(false)}>
                                             <Icon name="eye-slash" style={{ width: "100%", fontSize: 18 }} />
@@ -126,10 +142,10 @@ function Signup({ navigation }: { navigation: any }) {
                                     ) : null
                                 ) : null}
                                 <Text style={[settingStyle.mochText, { paddingTop: 15 }]}>Full name</Text>
-                                <TextInput style={settingStyle.input} />
+                                <TextInput style={settingStyle.input} onChange={(e) => setFullname(e.nativeEvent.text)} value={fullname} />
                                 <View style={{ marginBottom: 30 }}>
                                     <Text style={[settingStyle.mochText, { paddingTop: 15 }]}>Phone number</Text>
-                                    <TextInput style={settingStyle.input} onChange={(e) => setPhone(e.nativeEvent.text)} />
+                                    <TextInput style={settingStyle.input} onChange={(e) => setPhone(e.nativeEvent.text)} value={phone} />
                                     {phone !== "" ? (
                                         testPhone ? (
                                             <Text style={{ paddingLeft: 10, color: "red" }}>Phone number is invalid!</Text>

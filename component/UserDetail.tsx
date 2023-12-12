@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native"
+import { SafeAreaView, ScrollView, View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, RefreshControl } from "react-native"
 import Header from "./Header"
 import Footer from "./Footer"
 import { useEffect, useState } from "react"
@@ -16,10 +16,19 @@ function UserDetail({ route }: { route: any }) {
     const [success, setSuccess] = useState(false)
     const [reload, setReload] = useState(false)
     const [load, setLoad] = useState(false)
+    const [refresh, setFresh] = useState(false)
     const navigation = useNavigation<any>()
     const [updateimage, setUpdateImage] = useState<any>("")
     const [updatefullname, setUpdateFullname] = useState("")
     const [updatephone, setUpdatePhone] = useState("")
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            setReload(true)
+            setFresh(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         if (candecode.userRole !== 1.5) {
@@ -32,6 +41,9 @@ function UserDetail({ route }: { route: any }) {
             setUpdateFullname("")
             setUpdatePhone("")
             setUpdateImage("")
+            proUser()
+            setSuccess(false)
+            setEditIn4(false)
             setReload(false)
         }
     }, [reload])
@@ -77,8 +89,6 @@ function UserDetail({ route }: { route: any }) {
                 setLoad(false)
                 setSuccess(true)
                 setReload(true)
-                setEditIn4(false)
-                proUser()
                 setTimeout(() => {
                     setSuccess(false)
                 }, 3000)
@@ -118,7 +128,7 @@ function UserDetail({ route }: { route: any }) {
     const imgUser = "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1 }}>
                     <View style={{ alignItems: "center", paddingVertical: 15 }}>

@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, ActivityIndicator } from "react-native"
+import { SafeAreaView, ScrollView, View, Text, TextInput, TouchableOpacity, ActivityIndicator, RefreshControl } from "react-native"
 import Header from "../Header"
 import Footer from "../Footer"
 import { useState, useEffect } from "react"
@@ -15,9 +15,24 @@ function EditPassword({ route, navigation }: { route: any, navigation: any }) {
     const [checkNew, setCheckNew] = useState(false)
     const [checkDup, setCheckDup] = useState(false)
     const [checkUp, setCheckUp] = useState(false)
+    const [refresh, setFresh] = useState(false)
     const [checkDig, setCheckDig] = useState(false)
     var checkUpperCase = RegExp("(.*[A-Z].*)")
     var checkDigit = RegExp("(.*[0-9].*)")
+
+    const pulldown = () => {
+        setFresh(true)
+        setTimeout(() => {
+            setOldPassword("")
+            setNewPassword("")
+            setOldW(false)
+            setCheckOld(false)
+            setCheckNew(false)
+            setCheckDup(false)
+            setSuccess(false)
+            setFresh(false)
+        }, 1000)
+    }
 
     useEffect(() => {
         if (success) {
@@ -90,7 +105,7 @@ function EditPassword({ route, navigation }: { route: any, navigation: any }) {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1, padding: 15 }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Edit password</Text>
