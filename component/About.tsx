@@ -135,7 +135,7 @@ const aboutStyle = StyleSheet.create({
 
     headUp: {
         fontWeight: "bold",
-        fontSize: 18,
+        fontSize: 20,
         color: "#FEA116"
     },
 
@@ -147,7 +147,7 @@ const aboutStyle = StyleSheet.create({
 
     textAbout: {
         paddingTop: 15,
-        fontSize: 15,
+        fontSize: 17,
         color: "#666565"
     }
 })

@@ -39,17 +39,17 @@ export default function Footer() {
                     <Text style={footerStyle.headUp}>━━</Text>
                 </View>
                 <View style={footerStyle.category}>
-                    <Pressable><Text style={{ color: "#fff" }}>{word} Meat</Text></Pressable>
-                    <Pressable><Text style={{ color: "#fff" }}>{word} Vegetables</Text></Pressable>
-                    <Pressable><Text style={{ color: "#fff" }}>{word} Drink</Text></Pressable>
+                    <Pressable><Text style={{ color: "#fff", fontSize: 15 }}>{word} Meat</Text></Pressable>
+                    <Pressable><Text style={{ color: "#fff", fontSize: 15 }}>{word} Vegetables</Text></Pressable>
+                    <Pressable><Text style={{ color: "#fff", fontSize: 15 }}>{word} Drink</Text></Pressable>
                 </View>
                 <View style={footerStyle.aboutUs}>
                     <Text style={footerStyle.headUp}>Opening</Text>
                     <Text style={footerStyle.headUp}>━━</Text>
                 </View>
                 <View style={footerStyle.category}>
-                    <Text style={{ color: "#fff", fontWeight: "bold" }}>All week</Text>
-                    <Text style={{ color: "#fff" }}>{HTMLReactParser(`${time}`)}</Text>
+                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>All week</Text>
+                    <Text style={{ color: "#fff", fontSize: 15 }}>{HTMLReactParser(`${time}`)}</Text>
                 </View>
                 <View style={footerStyle.aboutUs}>
                     <Text style={footerStyle.headUp}>Contact</Text>
@@ -78,7 +78,7 @@ export default function Footer() {
                         paddingVertical: 15
                     }}
                 />
-                <Text style={{ textAlign: "center", paddingTop: 15, color: "#fff" }}>© EatCom, All Right Reserved.</Text>
+                <Text style={{ textAlign: "center", paddingTop: 15, color: "#fff", fontSize: 15 }}>© EatCom, All Right Reserved.</Text>
             </View>
             <View style={{ backgroundColor: "transparent", height: 60 }}></View>
         </View>
@@ -107,12 +107,14 @@ const footerStyle = StyleSheet.create({
     },
 
     headUp: {
-        color: "#FEA116"
+        color: "#FEA116",
+        fontSize: 18
     },
 
     textOfAboutUs: {
         paddingTop: 3,
-        color: "#fff"
+        color: "#fff",
+        fontSize: 15
     },
 
     category: {
@@ -126,10 +128,11 @@ const footerStyle = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        gap: 5
+        gap: 5,
     },
 
     textContact: {
-        color: "#fff"
+        color: "#fff",
+        fontSize: 15
     }
 })

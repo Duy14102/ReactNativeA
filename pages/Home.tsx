@@ -4,7 +4,6 @@ import Header from '../component/Header';
 import Footer from '../component/Footer';
 import Services from '../component/Services';
 import About from '../component/About';
-import Menu from '../component/Menu';
 import Testimonial from '../component/Testimonial';
 import axios from 'axios';
 import HTMLReactParser from 'html-react-parser';
@@ -161,8 +160,6 @@ function Home(): JSX.Element {
                     <Services />
 
                     <About />
-
-                    <Menu />
 
                     <Testimonial />
 

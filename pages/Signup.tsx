@@ -1,23 +1,24 @@
-import { SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Dimensions, ImageBackground, TouchableOpacity, RefreshControl } from "react-native"
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, TextInput, Dimensions, ImageBackground, TouchableOpacity, RefreshControl, ActivityIndicator } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import axios from "axios"
 
 function Signup({ navigation }: { navigation: any }) {
+    const [stateName, setStateName] = useState(null)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPass, setConfirmPass] = useState("")
     const [fullname, setFullname] = useState("")
     const [phone, setPhone] = useState("")
     const [seePassword, setSeePassword] = useState(false)
+    const [load, setLoad] = useState(false)
     const [seePassword2, setSeePassword2] = useState(false)
-    const [testEmail, setTestEmail] = useState(false)
-    const [testPhone, setTestPhone] = useState(false)
-    const [testConfirm, setTestConfirm] = useState(false)
-    const [testPasswordUpper, setTestPasswordUpper] = useState(false)
-    const [testPasswordDigit, setPasswordDigit] = useState(false)
     const [refresh, setFresh] = useState(false);
+    const [fullyLoad, setFullyLoad] = useState(false);
+    const [checkPhoneState, setCheckPhoneState] = useState(false)
+    const scrollViewRef = useRef<any>(null);
     const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
     var emailTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     var checkUpperCase = RegExp("(.*[A-Z].*)")
@@ -39,55 +40,84 @@ function Signup({ navigation }: { navigation: any }) {
     }
 
     useEffect(() => {
-        if (username !== "") {
-            if (!emailTest.test(username)) {
-                setTestEmail(true)
-            } else {
-                setTestEmail(false)
-            }
+        if (fullyLoad) {
+            setUsername("")
+            setPassword("")
+            setConfirmPass("")
+            setPhone("")
+            setFullname("")
+            setSeePassword(false)
+            setSeePassword2(false)
+            setTimeout(() => {
+                setStateName(null)
+                setFullyLoad(false)
+            }, 3000)
         }
-    }, [username])
-
-    useEffect(() => {
-        if (password !== "") {
-            if (!checkUpperCase.test(password)) {
-                setTestPasswordUpper(true)
-            } else {
-                setTestPasswordUpper(false)
-            }
-            if (!checkDigit.test(password)) {
-                setPasswordDigit(true)
-            } else {
-                setPasswordDigit(false)
-            }
-        }
-    }, [password])
-
-    useEffect(() => {
-        if (confirmPass !== "") {
-            if (confirmPass !== password) {
-                setTestConfirm(true)
-            } else {
-                setTestConfirm(false)
-            }
-        }
-    }, [confirmPass])
+    }, [fullyLoad])
 
     useEffect(() => {
         if (phone !== "") {
             if (!checkPhone.test(phone)) {
-                setTestPhone(true)
+                setCheckPhoneState(true)
             } else {
-                setTestPhone(false)
+                setCheckPhoneState(false)
             }
         }
     }, [phone])
 
+    const handleSubmit = () => {
+        const configuration = {
+            method: "post",
+            url: "http://localhost:3000/Register",
+            data: {
+                email: username,
+                password,
+                fullname,
+                phone,
+            },
+        };
+        if (confirmPass !== password) {
+            return false
+        } if (!emailTest.test(username)) {
+            return false
+        } if (!checkDigit.test(password)) {
+            return false
+        } if (!checkUpperCase.test(password)) {
+            return false
+        }
+        if (checkPhoneState) {
+            console.log("Ye3");
+            return false
+        }
+        setLoad(true)
+        setTimeout(() => {
+            axios(configuration)
+                .then((result) => {
+                    setLoad(false)
+                    if (scrollViewRef.current) {
+                        scrollViewRef.current.scrollTo({ y: 0, animated: true })
+                    }
+                    setStateName(result.data.fullname)
+                    setFullyLoad(true)
+                })
+                .catch((er) => {
+                    setLoad(false)
+                    console.log(er);
+                });
+        }, 1000);
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
+            <ScrollView ref={scrollViewRef} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={settingStyle.container}>
+                    {stateName ? (
+                        <View style={{ position: "absolute", backgroundColor: "#03ba5f", top: 50, right: 5, zIndex: 10, padding: 12, borderRadius: 5, flexDirection: "column", gap: 5 }}>
+                            <Text style={{ textAlign: "center", fontSize: 15, color: "#fff", fontWeight: "bold" }}>Signup successfully!</Text>
+                            <Text style={{ textAlign: "center", fontSize: 15, color: "#fff", fontWeight: "bold" }}>Hi {stateName}</Text>
+                        </View>
+                    ) : null}
                     <ImageBackground source={BgImage} style={settingStyle.bgimage} />
                     <View style={settingStyle.borderLog}>
                         <View style={settingStyle.insideLog}>
@@ -96,7 +126,7 @@ function Signup({ navigation }: { navigation: any }) {
                                 <Text style={settingStyle.mochText}>Email</Text>
                                 <TextInput style={settingStyle.input} onChange={(e) => setUsername(e.nativeEvent.text)} value={username} />
                                 {username !== "" ? (
-                                    testEmail ? (
+                                    !emailTest.test(username) ? (
                                         <Text style={{ paddingLeft: 10, color: "red" }}>Email is invalid!</Text>
                                     ) : null
                                 ) : null}
@@ -115,10 +145,10 @@ function Signup({ navigation }: { navigation: any }) {
                                 </View>
                                 {password !== "" ? (
                                     <>
-                                        {testPasswordUpper ? (
+                                        {!checkUpperCase.test(password) ? (
                                             <Text style={{ paddingLeft: 10, color: "red" }}>Password must have at least 1 uppercase letter!</Text>
                                         ) : null}
-                                        {testPasswordDigit ? (
+                                        {!checkDigit.test(password) ? (
                                             <Text style={{ paddingLeft: 10, color: "red" }}>Password must have at least 1 digit!</Text>
                                         ) : null}
                                     </>
@@ -137,7 +167,7 @@ function Signup({ navigation }: { navigation: any }) {
                                     )}
                                 </View>
                                 {confirmPass !== "" ? (
-                                    testConfirm ? (
+                                    confirmPass !== password ? (
                                         <Text style={{ paddingLeft: 10, color: "red" }}>Confirm password not match!</Text>
                                     ) : null
                                 ) : null}
@@ -147,13 +177,17 @@ function Signup({ navigation }: { navigation: any }) {
                                     <Text style={[settingStyle.mochText, { paddingTop: 15 }]}>Phone number</Text>
                                     <TextInput style={settingStyle.input} onChange={(e) => setPhone(e.nativeEvent.text)} value={phone} />
                                     {phone !== "" ? (
-                                        testPhone ? (
+                                        checkPhoneState ? (
                                             <Text style={{ paddingLeft: 10, color: "red" }}>Phone number is invalid!</Text>
                                         ) : null
                                     ) : null}
                                 </View>
-                                <TouchableOpacity style={settingStyle.loginButton}>
-                                    <Text style={{ color: "#fff", fontSize: 15, fontWeight: "bold" }}>Signup</Text>
+                                <TouchableOpacity style={settingStyle.loginButton} onPress={() => handleSubmit()}>
+                                    {load ? (
+                                        <ActivityIndicator size={21} color={"#fff"} />
+                                    ) : (
+                                        <Text style={{ color: "#fff", fontSize: 15, fontWeight: "bold" }}>Signup</Text>
+                                    )}
                                 </TouchableOpacity>
                                 <View style={{ display: "flex", flexDirection: "row", gap: 10, alignItems: "center", justifyContent: "center", paddingTop: 15 }}>
                                     <Text style={{ fontSize: 15 }}>Already have an account?</Text>

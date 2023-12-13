@@ -1,14 +1,14 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeSreen from './pages/Home';
-import SearchScreen from './pages/Search';
 import Notification from './pages/Notification';
 import Cart from './pages/Cart';
 import { View, Animated, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5'
+import Icon from 'react-native-vector-icons/FontAwesome6'
 import { useRef } from 'react';
 import SettingScreen from './screen/SettingScreen';
 import CategoryScreen from './screen/CategoryScreen';
+import SearchScreen from './screen/SearchScreen';
 
 function App(): JSX.Element {
   const Tabs = createBottomTabNavigator();
@@ -29,7 +29,7 @@ function App(): JSX.Element {
         <Tabs.Screen name='Home' component={HomeSreen} options={{
           tabBarIcon: ({ focused }) => (
             <View>
-              <Icon name='home' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
+              <Icon name='house' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
             </View>
           )
         }} listeners={({ navigation, route }) => ({
@@ -43,7 +43,7 @@ function App(): JSX.Element {
         <Tabs.Screen name='Cart' component={Cart} options={{
           tabBarIcon: ({ focused }) => (
             <View>
-              <Icon name='shopping-cart' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
+              <Icon name='cart-shopping' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
             </View>
           )
         }} listeners={({ navigation, route }) => ({
@@ -52,12 +52,12 @@ function App(): JSX.Element {
               toValue: getWidth() * 1.06,
               useNativeDriver: true
             }).start();
-          }
+          },
         })}></Tabs.Screen>
         <Tabs.Screen name='Categorys' component={CategoryScreen} options={{
           tabBarIcon: ({ focused }) => (
             <View style={{ width: 50, height: 50, backgroundColor: "#FEA116", borderRadius: 50, alignItems: "center", justifyContent: "center", marginBottom: 55 }}>
-              <Icon name='list-ul' size={20} color={"#fff"}></Icon>
+              <Icon name='bowl-food' size={20} color={"#fff"}></Icon>
             </View>
           )
         }} listeners={({ navigation, route }) => ({
@@ -68,10 +68,10 @@ function App(): JSX.Element {
             }).start();
           }
         })}></Tabs.Screen>
-        <Tabs.Screen name='Search' component={SearchScreen} options={{
+        <Tabs.Screen name='Searchs' component={SearchScreen} options={{
           tabBarIcon: ({ focused }) => (
             <View>
-              <Icon name='search' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
+              <Icon name='magnifying-glass' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
             </View>
           )
         }} listeners={({ navigation, route }) => ({
@@ -85,7 +85,7 @@ function App(): JSX.Element {
         <Tabs.Screen name='Settings' component={SettingScreen} options={{
           tabBarIcon: ({ focused }) => (
             <View>
-              <Icon name='user-alt' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
+              <Icon name='user' size={20} color={focused ? "#FEA116" : "gray"} solid></Icon>
             </View>
           )
         }} listeners={({ navigation, route }) => ({

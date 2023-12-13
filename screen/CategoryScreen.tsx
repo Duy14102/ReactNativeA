@@ -1,7 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DetailPage from '../pages/DetailPage';
-import WriteReview from '../component/WriteReview';
 import Category from '../pages/Category';
+import Setting from '../pages/Setting';
+import WriteReview from '../component/WriteReview';
 
 const CategoryStack = createNativeStackNavigator();
 function CategoryScreen() {
@@ -10,6 +11,7 @@ function CategoryScreen() {
             <CategoryStack.Screen name='Category' component={Category}></CategoryStack.Screen>
             <CategoryStack.Screen name='DetailPage' component={DetailPage}></CategoryStack.Screen>
             <CategoryStack.Screen name='WriteReview' component={WriteReview}></CategoryStack.Screen>
+            <CategoryStack.Screen name='Setting' component={Setting}></CategoryStack.Screen>
         </CategoryStack.Navigator>
     )
 }

@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { decode } from "base-64";
 global.atob = decode
 
-function Setting({ navigation }: { navigation: any }) {
+function Setting({ route, navigation }: { route: any, navigation: any }) {
     const [candecode, setCandecode] = useState<any>(null)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")

@@ -1,20 +1,52 @@
-import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, StyleSheet, TextInput, ImageBackground, Dimensions, RefreshControl } from "react-native"
+import { SafeAreaView, View, ScrollView, Text, TouchableOpacity, StyleSheet, TextInput, ImageBackground, Dimensions, RefreshControl, ActivityIndicator } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from "@react-navigation/native"
 import { useState } from "react"
+import axios from "axios"
 
 function Search() {
+    const navigation = useNavigation<any>()
     const [refresh, setFresh] = useState(false);
+    const [checkBlank, setCheckBlank] = useState(false)
+    const [load, setLoad] = useState(false)
+    const [search, setSearch] = useState("")
     const pulldown = () => {
         setFresh(true)
         setTimeout(() => {
-
+            setCheckBlank(false)
+            setLoad(false)
+            setSearch("")
             setFresh(false)
         }, 1000)
     }
-    const navigation = useNavigation<any>()
+
+    const SearchType = () => {
+        const configuration = {
+            method: "get",
+            url: "http://localhost:3000/GetSearch",
+            params: {
+                foodSearch: search
+            }
+        };
+        if (search === "") {
+            setCheckBlank(true)
+            return false
+        }
+        setLoad(true)
+        setTimeout(() => {
+            axios(configuration)
+                .then(() => {
+                    setLoad(false)
+                    navigation.navigate("SearchMenu", { search: search })
+                })
+                .catch((error) => {
+                    setLoad(false)
+                    console.log(error);
+                });
+        }, 1000);
+    }
     const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
     const keyword = "/"
     return (
@@ -40,11 +72,17 @@ function Search() {
                         <View style={{ width: "100%" }}>
                             <Text style={{ paddingLeft: 10, paddingBottom: 5, color: "#0F172B", fontSize: 15 }}>Item name : </Text>
                             <View style={{ backgroundColor: "#e3e3e3", borderRadius: 10, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                <TextInput style={{ width: "90%" }} />
-                                <TouchableOpacity style={{ width: "10%" }}>
+                                <TextInput style={{ width: "90%" }} onChange={(e) => setSearch(e.nativeEvent.text)} />
+                                <TouchableOpacity style={{ width: "10%" }} onPress={() => SearchType()}>
                                     <Icon name="search" style={{ width: "100%", fontSize: 18 }} />
                                 </TouchableOpacity>
                             </View>
+                            {load ? (
+                                <ActivityIndicator style={{ paddingTop: 5 }} color={"#FEA116"} size={21} />
+                            ) : null}
+                            {checkBlank ? (
+                                <Text style={{ color: "red", paddingTop: 3 }}>This field cant be blank!</Text>
+                            ) : null}
                         </View>
                     </View>
                 </View>

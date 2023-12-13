@@ -1,22 +1,21 @@
-import { ScrollView, View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ActivityIndicator, RefreshControl } from "react-native"
+import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, RefreshControl, ActivityIndicator, StyleSheet, Image } from "react-native";
 import { Picker } from '@react-native-picker/picker';
-import Header from "../component/Header"
-import Footer from "../component/Footer"
-import { useState, useRef, useEffect } from "react";
-import axios from 'axios';
+import Header from "../Header";
+import Footer from "../Footer";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 
-function Category({ route, navigation }: { route: any, navigation: any }) {
-    const [category, setCategory] = useState([])
-    const [cate, setCate] = useState("Meat")
-    const [fil, setFil] = useState("nto")
+function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
+    const { search } = route.params
     const [Count, setCount] = useState([]);
+    const [searchdata, setSearchData] = useState([]);
+    const [refresh, setFresh] = useState(false);
     const [load, setLoad] = useState(false)
-    const [refresh, setFresh] = useState(false)
     const [pageCount, setPageCount] = useState(6);
+    const [fil, setFil] = useState("nto")
     const currentPage = useRef<any>();
     const scrollViewRef = useRef<any>(null);
     const limit = 8
-
     const pulldown = () => {
         setFresh(true)
         setTimeout(() => {
@@ -26,16 +25,10 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
     }
 
     useEffect(() => {
-        if (route.params) {
-            const { cate } = route.params
-            setCate(cate)
-        }
-    }, [route.params])
-
-    useEffect(() => {
         currentPage.current = 1;
-        getPagination()
-    }, [cate, fil])
+        getPagination();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fil])
 
     /*      Pagination     */
     function HandlePageClick(e: any) {
@@ -49,9 +42,9 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetCategoryMenu",
+            url: "http://localhost:3000/GetSearch",
             params: {
-                category: cate,
+                foodSearch: search,
                 page: currentPage.current,
                 limit: limit,
                 filter: fil
@@ -60,13 +53,13 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
         setLoad(true)
         setTimeout(() => {
             axios(configuration)
-                .then((result: any) => {
+                .then((result) => {
                     setLoad(false)
-                    setCategory(result.data.results.result);
+                    setSearchData(result.data.results.result);
                     setCount(result.data.results.total)
                     setPageCount(result.data.results.pageCount)
                 })
-                .catch((error: any) => {
+                .catch((error) => {
                     setLoad(false)
                     console.log(error);
                 });
@@ -105,23 +98,11 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView ref={scrollViewRef} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
-                <Header type={null} />
+                <Header type={"Yes"} />
                 <View style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 15 }}>
-                    <Text style={{ paddingVertical: 15, color: "#0F172B", fontSize: 23, fontWeight: "bold", textAlign: "center" }}>Pick your favorites</Text>
-                    <View style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row" }}>
-                        <View style={{ borderWidth: 1, borderColor: "gray", width: "45%" }}>
-                            <Picker
-
-                                selectedValue={cate}
-                                onValueChange={(itemValue) =>
-                                    setCate(itemValue)
-                                }>
-                                <Picker.Item label="Meat" value="Meat" />
-                                <Picker.Item label="Vegetables" value="Vegetables" />
-                                <Picker.Item label="Drink" value="Drink" />
-                            </Picker>
-                        </View>
-                        <View style={{ borderWidth: 1, borderColor: "gray", width: "45%" }}>
+                    <Text style={{ paddingVertical: 15, color: "#0F172B", fontSize: 23, fontWeight: "bold", textAlign: "center" }}>Search result for {`"${search}"`}</Text>
+                    <View style={{ alignItems: "center" }}>
+                        <View style={{ borderWidth: 1, borderColor: "gray", width: "90%" }}>
                             <Picker
                                 selectedValue={fil}
                                 onValueChange={(itemValue) =>
@@ -149,7 +130,7 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
                         <ActivityIndicator size="large" color={"#FEA116"} />
                     ) : null}
                     <View style={{ paddingVertical: 20, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
-                        {category.map((i: any) => {
+                        {searchdata.map((i: any) => {
                             return (
                                 <View key={i._id} style={cateStyle.card}>
                                     <TouchableOpacity onPress={() => navigation.navigate('DetailPage', { name: i.foodname, category: i.foodcategory })}>
@@ -255,4 +236,5 @@ const cateStyle = StyleSheet.create({
         backgroundColor: "black"
     }
 })
-export default Category
+
+export default SearchMenu
