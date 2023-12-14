@@ -45,7 +45,7 @@ function ActiveBooking({ route, navigation }: { route: any, navigation: any }) {
     function getBooking() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.217:3000/GetTokenBooking",
+            url: "http://localhost:3000/GetTokenBooking",
             params: {
                 id: userid
             }
@@ -61,7 +61,7 @@ function ActiveBooking({ route, navigation }: { route: any, navigation: any }) {
     const CancelBooking = (id: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.217:3000/CancelBooking",
+            url: "http://localhost:3000/CancelBooking",
             data: {
                 id: id,
                 reason: cancelReason

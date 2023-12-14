@@ -30,7 +30,7 @@ function FindOrder({ route, navigation }: { route: any, navigation: any }) {
     const searchorder = () => {
         const configuration = {
             method: 'get',
-            url: 'http://192.168.1.217:3000/GetThisOrderNative',
+            url: 'http://localhost:3000/GetThisOrderNative',
             params: {
                 id: Orderid,
                 userid: userid

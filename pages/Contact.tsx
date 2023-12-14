@@ -44,7 +44,7 @@ function Contact({ route }: { route: any }) {
     const addcontact = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.217:3000/AddContact",
+            url: "http://localhost:3000/AddContact",
             data: {
                 name: candecode.userName,
                 email: candecode.userEmail,
