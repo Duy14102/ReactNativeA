@@ -1,14 +1,14 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeSreen from './pages/Home';
 import Notification from './pages/Notification';
-import Cart from './pages/Cart';
 import { View, Animated, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6'
 import { useRef } from 'react';
 import SettingScreen from './screen/SettingScreen';
 import CategoryScreen from './screen/CategoryScreen';
 import SearchScreen from './screen/SearchScreen';
+import HomeScreen from './screen/HomeScreen';
+import CartScreen from './screen/CartScreen';
 
 function App(): JSX.Element {
   const Tabs = createBottomTabNavigator();
@@ -24,9 +24,9 @@ function App(): JSX.Element {
   }
   return (
     <NavigationContainer>
-      <Tabs.Navigator backBehavior='history' initialRouteName='Home' screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { backgroundColor: "#fff", position: "absolute", height: 60, borderTopLeftRadius: 10, borderTopRightRadius: 10, shadowColor: "#000", shadowOpacity: 0.06, shadowOffset: { width: 10, height: 10 }, paddingHorizontal: 10 } }}>
+      <Tabs.Navigator backBehavior='history' initialRouteName='Homes' screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { backgroundColor: "#fff", position: "absolute", height: 60, borderTopLeftRadius: 10, borderTopRightRadius: 10, shadowColor: "#000", shadowOpacity: 0.06, shadowOffset: { width: 10, height: 10 }, paddingHorizontal: 10 } }}>
         <Tabs.Screen name='Notification' component={Notification} options={{ tabBarButton: () => null }} />
-        <Tabs.Screen name='Home' component={HomeSreen} options={{
+        <Tabs.Screen name='Homes' component={HomeScreen} options={{
           tabBarIcon: ({ focused }) => (
             <View>
               <Icon name='house' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
@@ -40,7 +40,7 @@ function App(): JSX.Element {
             }).start();
           }
         })}></Tabs.Screen>
-        <Tabs.Screen name='Cart' component={Cart} options={{
+        <Tabs.Screen name='Carts' component={CartScreen} options={{
           tabBarIcon: ({ focused }) => (
             <View>
               <Icon name='cart-shopping' size={20} color={focused ? "#FEA116" : "gray"}></Icon>

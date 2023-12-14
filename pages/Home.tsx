@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, Pressable, Animated, Easing, ActivityIndicator, RefreshControl } from 'react-native';
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, TouchableOpacity, Animated, Easing, ActivityIndicator, RefreshControl } from 'react-native';
 import Header from '../component/Header';
 import Footer from '../component/Footer';
 import Services from '../component/Services';
@@ -7,13 +7,18 @@ import About from '../component/About';
 import Testimonial from '../component/Testimonial';
 import axios from 'axios';
 import HTMLReactParser from 'html-react-parser';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { jwtDecode } from "jwt-decode"
 
 function Home(): JSX.Element {
     var word1 = null
     var word2 = null
     var word3 = null
+    const navigation = useNavigation<any>()
     const [styleA, setStyleA] = useState()
     const [styleB, setStyleB] = useState()
+    const [candecode, setCandecode] = useState<any>(null)
     const [load1, setload1] = useState(false)
     const [load2, setload2] = useState(false)
     const [refresh, setFresh] = useState(false)
@@ -34,12 +39,26 @@ function Home(): JSX.Element {
         HeroApi2()
         HeroApi()
         TextApi()
+        getData()
     }, [])
+
+    const getData = async () => {
+        try {
+            const token = await AsyncStorage.getItem('TOKEN');
+            if (token) {
+                setCandecode(jwtDecode(token))
+            } else {
+                setCandecode(null)
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     function HeroApi2() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetHeroUI",
+            url: "http://192.168.1.217:3000/GetHeroUI",
             params: {
                 name: "oh2rwdomomeno4sgguhf"
             }
@@ -58,7 +77,7 @@ function Home(): JSX.Element {
     function HeroApi() {
         const configuration2 = {
             method: "get",
-            url: "http://localhost:3000/GetHeroUI",
+            url: "http://192.168.1.217:3000/GetHeroUI",
             params: {
                 name: "e4onxrx7hmgzmrbel9jk"
             }
@@ -77,7 +96,7 @@ function Home(): JSX.Element {
     function TextApi() {
         const configuration3 = {
             method: "get",
-            url: "http://localhost:3000/GetHeroText",
+            url: "http://192.168.1.217:3000/GetHeroText",
         }
         axios(configuration3)
             .then((res) => {
@@ -141,7 +160,7 @@ function Home(): JSX.Element {
                             <Text style={styles.textInsideOverlay}>{word1}</Text>
                             <Text style={styles.textInsideOverlay}>{word2}</Text>
                             <Text style={styles.textInsideOverlay2}>{word3}</Text>
-                            <Pressable style={styles.bookATable}><Text style={styles.bookATableWord}>Book a table</Text></Pressable>
+                            <TouchableOpacity style={styles.bookATable} onPress={() => navigation.navigate("Booking", { candecode: candecode })}><Text style={styles.bookATableWord}>Book a table</Text></TouchableOpacity>
 
                             <View style={styles.CircleImage}>
                                 {load2 ? (
@@ -213,13 +232,14 @@ const styles = StyleSheet.create({
         marginTop: 15,
         width: 110,
         paddingHorizontal: 10,
-        paddingVertical: 7,
+        paddingVertical: 8,
         backgroundColor: "#FEA116"
     },
 
     bookATableWord: {
         color: "#fff",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: 15
     },
 
     CircleImage: {
