@@ -38,7 +38,7 @@ function CartPage({ jumpTo, setShippingFee, shippingFee, index }: { jumpTo: any,
             var val = JSON.parse(called)
             let overCount = []
             for (const arrist of val) {
-                const res = await fetch(`http://192.168.1.217:3000/GetCartItem?name=${arrist.name}&quantity=${arrist.quantity}`)
+                const res = await fetch(`http://localhost:3000/GetCartItem?name=${arrist.name}&quantity=${arrist.quantity}`)
                 const resD = await res.json()
                 overCount.push(resD)
             }
