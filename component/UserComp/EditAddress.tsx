@@ -1,7 +1,7 @@
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator, RefreshControl } from "react-native"
 import Header from "../Header"
 import Footer from "../Footer"
-import { useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import axios from "axios"
 
@@ -57,7 +57,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
     function getUser() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetDetailUser",
+            url: "http://192.168.1.217:3000/GetDetailUser",
             params: {
                 userid: userid
             }
@@ -77,7 +77,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
         } else {
             const configuration = {
                 method: "post",
-                url: "http://localhost:3000/AddAddressUser",
+                url: "http://192.168.1.217:3000/AddAddressUser",
                 data: {
                     id: userid,
                     address: newAddress
@@ -100,7 +100,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
     const deleteAddress = (e: any) => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/RemoveAddressUser",
+            url: "http://192.168.1.217:3000/RemoveAddressUser",
             data: {
                 userid: userid,
                 address: e
@@ -162,8 +162,8 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
                         <View style={{ marginVertical: 15, borderWidth: 1, borderColor: "gray", padding: 15 }}>
                             {userBase.address?.map((i: any) => {
                                 return (
-                                    <>
-                                        <View key={i} style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 10 }}>
+                                    <Fragment key={i}>
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 10 }}>
                                             <Text style={{ fontSize: 15, fontWeight: "bold", width: "85%" }}>{i}</Text>
                                             <View style={editAStyle.verticalLine} />
                                             <TouchableOpacity style={{ width: "10%", alignItems: "center", backgroundColor: "tomato", padding: 5 }} onPress={() => deleteAddress(i)}>
@@ -179,7 +179,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
                                                 marginVertical: 10
                                             }}
                                         />
-                                    </>
+                                    </Fragment>
                                 )
                             })}
                             {load2 ? (

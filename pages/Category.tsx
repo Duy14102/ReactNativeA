@@ -4,6 +4,7 @@ import Header from "../component/Header"
 import Footer from "../component/Footer"
 import { useState, useRef, useEffect } from "react";
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Category({ route, navigation }: { route: any, navigation: any }) {
     const [category, setCategory] = useState([])
@@ -12,6 +13,7 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
     const [Count, setCount] = useState([]);
     const [load, setLoad] = useState(false)
     const [refresh, setFresh] = useState(false)
+    const [addSuccess, setAddSuccess] = useState(null)
     const [pageCount, setPageCount] = useState(6);
     const currentPage = useRef<any>();
     const scrollViewRef = useRef<any>(null);
@@ -37,6 +39,14 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
         getPagination()
     }, [cate, fil])
 
+    useEffect(() => {
+        if (addSuccess) {
+            setTimeout(() => {
+                setAddSuccess(null)
+            }, 1500);
+        }
+    }, [addSuccess])
+
     /*      Pagination     */
     function HandlePageClick(e: any) {
         currentPage.current = e + 1
@@ -49,7 +59,7 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetCategoryMenu",
+            url: "http://192.168.1.217:3000/GetCategoryMenu",
             params: {
                 category: cate,
                 page: currentPage.current,
@@ -98,6 +108,37 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
         })
     }
 
+    async function addToCart(name: any, quantity: any) {
+        var stored = await AsyncStorage.getItem('cart');
+        if (!stored) {
+            var students = [];
+            var student1 = { name: name, quantity: quantity };
+            students.push(student1);
+            await AsyncStorage.setItem("cart", JSON.stringify(students))
+            return setAddSuccess(name)
+
+        } else {
+            var called = await AsyncStorage.getItem('cart')
+            if (called) {
+                var sameItem = JSON.parse(called) || []
+                for (var i = 0; i < sameItem.length; i++) {
+                    if (name === sameItem[i].name) {
+                        sameItem[i].quantity += quantity;
+                        await AsyncStorage.setItem("cart", JSON.stringify(sameItem))
+                        return setAddSuccess(name)
+
+                    } else if (i === sameItem.length - 1) {
+                        var stored2 = JSON.parse(called);
+                        var student2 = { name: name, quantity: quantity };
+                        stored2.push(student2);
+                        await AsyncStorage.setItem("cart", JSON.stringify(stored2))
+                        return setAddSuccess(name)
+                    }
+                }
+            }
+        }
+    }
+
     const VND = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
@@ -111,7 +152,6 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
                     <View style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row" }}>
                         <View style={{ borderWidth: 1, borderColor: "gray", width: "45%" }}>
                             <Picker
-
                                 selectedValue={cate}
                                 onValueChange={(itemValue) =>
                                     setCate(itemValue)
@@ -150,6 +190,7 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
                     ) : null}
                     <View style={{ paddingVertical: 20, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
                         {category.map((i: any) => {
+                            var quantity = 1
                             return (
                                 <View key={i._id} style={cateStyle.card}>
                                     <TouchableOpacity onPress={() => navigation.navigate('DetailPage', { name: i.foodname, category: i.foodcategory })}>
@@ -164,9 +205,15 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
                                         </TouchableOpacity>
                                         <Text style={{ color: "#0F172B", fontSize: 18 }}>{VND.format(i.foodprice)}</Text>
                                     </View>
-                                    <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 5 }}>
-                                        <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Add to cart</Text>
-                                    </TouchableOpacity>
+                                    {addSuccess === i.foodname ? (
+                                        <View style={{ alignItems: "center", backgroundColor: "#03ba5f", paddingVertical: 5 }}>
+                                            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>✔</Text>
+                                        </View>
+                                    ) : (
+                                        <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 5 }} onPress={() => addToCart(i.foodname, quantity)}>
+                                            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Add to cart</Text>
+                                        </TouchableOpacity>
+                                    )}
                                 </View>
                             )
                         })}

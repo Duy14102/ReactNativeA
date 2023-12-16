@@ -77,7 +77,7 @@ function Booking({ route, navigation }: { route: any, navigation: any }) {
         if (decode.userRole !== 1.5) {
             const configuration = {
                 method: "get",
-                url: "http://localhost:3000/GetDetailUser",
+                url: "http://192.168.1.217:3000/GetDetailUser",
                 params: {
                     userid: decode.userId
                 }
@@ -95,7 +95,7 @@ function Booking({ route, navigation }: { route: any, navigation: any }) {
     function getBookingX(decode: any) {
         const configuration2 = {
             method: "get",
-            url: "http://localhost:3000/GetTokenBooking",
+            url: "http://192.168.1.217:3000/GetTokenBooking",
             params: {
                 id: decode.userId
             }
@@ -138,7 +138,7 @@ function Booking({ route, navigation }: { route: any, navigation: any }) {
         const customer = { id: tokeId, fullname: name, phonenumber: phone }
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/AddNewBooking",
+            url: "http://192.168.1.217:3000/AddNewBooking",
             data: {
                 customer,
                 date,
@@ -174,7 +174,7 @@ function Booking({ route, navigation }: { route: any, navigation: any }) {
     const CancelBooking = (id: any) => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/CancelBooking",
+            url: "http://192.168.1.217:3000/CancelBooking",
             data: {
                 id: id,
                 reason: cancelReason

@@ -800,7 +800,6 @@ app.post("/UploadOrder", (req, res) => {
             "paymentmethod.method": req.body.paymentmethod,
             "paymentmethod.status": 1,
             shippingfee: req.body.shippingfee,
-            fulltotal: req.body.fulltotal,
             status: 1,
             orderitems: hype,
             createdAt: Date.now()
@@ -815,6 +814,7 @@ app.post("/UploadOrder", (req, res) => {
                     message: "Error creating user",
                     error,
                 });
+                console.log(error);
             })
     } catch (e) {
         console.log(e);
@@ -3088,7 +3088,7 @@ app.post('/VnpayCheckout', function (req, res, next) {
     let tmnCode = process.env.REACT_APP_vnpaytmnCode;
     let secretKey = process.env.REACT_APP_vnpaysecretKey;
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    let returnUrl = 'http://localhost:3001/OrderComplete';
+    let returnUrl = 'http://192.168.1.217:3001/OrderComplete';
     let orderId = req.body.orderId;
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;

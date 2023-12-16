@@ -14,7 +14,7 @@ export default function Footer() {
     useEffect(() => {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetTheFooter"
+            url: "http://192.168.1.217:3000/GetTheFooter"
         }
         axios(configuration)
             .then((res) => {
@@ -87,9 +87,7 @@ export default function Footer() {
 
 const footerStyle = StyleSheet.create({
     footer: {
-        flex: 0,
         backgroundColor: "#0F172B",
-        width: "100%",
         paddingLeft: 15,
         paddingRight: 15,
     },
