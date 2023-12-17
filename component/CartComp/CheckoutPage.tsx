@@ -76,7 +76,7 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
             var val = JSON.parse(called)
             let overCount = []
             for (const arrist of val) {
-                const res = await fetch(`http://192.168.1.217:3000/GetCartItem?name=${arrist.name}&quantity=${arrist.quantity}`)
+                const res = await fetch(`http://localhost:3000/GetCartItem?name=${arrist.name}&quantity=${arrist.quantity}`)
                 const resD = await res.json()
                 overCount.push(resD)
             }
@@ -123,7 +123,7 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
             setFullname(candecode.userName)
             const configuration7 = {
                 method: "get",
-                url: "http://192.168.1.217:3000/GetDetailUser",
+                url: "http://localhost:3000/GetDetailUser",
                 params: {
                     userid: candecode.userId
                 }
@@ -142,7 +142,7 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
     const VnpayCheckout = (data: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.217:3000/VnpayCheckout",
+            url: "http://localhost:3000/VnpayCheckout",
             data: {
                 amount: fulltotal,
                 bankCode: bankCode,
@@ -175,7 +175,7 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.217:3000/UploadOrder",
+            url: "http://localhost:3000/UploadOrder",
             data: {
                 user: userx,
                 phonenumber: phonenumber,
@@ -210,7 +210,7 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
                     if (SaveAddress) {
                         const configuration2 = {
                             method: "post",
-                            url: "http://192.168.1.217:3000/AddAddressUser",
+                            url: "http://localhost:3000/AddAddressUser",
                             data: {
                                 id: candecode.userId,
                                 address: address

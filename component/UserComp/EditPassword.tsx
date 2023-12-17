@@ -66,7 +66,7 @@ function EditPassword({ route, navigation }: { route: any, navigation: any }) {
     const updatePassword = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.217:3000/UpdatePasswordNative",
+            url: "http://localhost:3000/UpdatePasswordNative",
             data: {
                 updateid: user._id,
                 updatepassword: newPassword,
