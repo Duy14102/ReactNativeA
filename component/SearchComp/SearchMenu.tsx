@@ -42,7 +42,7 @@ function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetSearch",
+            url: "http://192.168.1.217:3000/GetSearch",
             params: {
                 foodSearch: search,
                 page: currentPage.current,

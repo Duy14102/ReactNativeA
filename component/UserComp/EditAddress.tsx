@@ -57,7 +57,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
     function getUser() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetDetailUser",
+            url: "http://192.168.1.217:3000/GetDetailUser",
             params: {
                 userid: userid
             }
@@ -77,7 +77,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
         } else {
             const configuration = {
                 method: "post",
-                url: "http://localhost:3000/AddAddressUser",
+                url: "http://192.168.1.217:3000/AddAddressUser",
                 data: {
                     id: userid,
                     address: newAddress
@@ -100,7 +100,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
     const deleteAddress = (e: any) => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/RemoveAddressUser",
+            url: "http://192.168.1.217:3000/RemoveAddressUser",
             data: {
                 userid: userid,
                 address: e

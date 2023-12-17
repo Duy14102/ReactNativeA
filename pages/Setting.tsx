@@ -50,7 +50,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
         if (candecode) {
             const configuration = {
                 method: "get",
-                url: "http://localhost:3000/GetDetailUser",
+                url: "http://192.168.1.217:3000/GetDetailUser",
                 params: {
                     userid: candecode.userId
                 },
@@ -77,7 +77,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/Login",
+            url: "http://192.168.1.217:3000/Login",
             data: {
                 email: username,
                 password: password,

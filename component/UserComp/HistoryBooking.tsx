@@ -34,7 +34,7 @@ function HistoryBooking({ route, navigation }: { route: any, navigation: any }) 
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetTokenBookingHistory",
+            url: "http://192.168.1.217:3000/GetTokenBookingHistory",
             params: {
                 page: currentPage.current,
                 limit: limit,

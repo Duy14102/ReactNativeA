@@ -3088,7 +3088,7 @@ app.post('/VnpayCheckout', function (req, res, next) {
     let tmnCode = process.env.REACT_APP_vnpaytmnCode;
     let secretKey = process.env.REACT_APP_vnpaysecretKey;
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    let returnUrl = 'http://localhost:3001/OrderComplete';
+    let returnUrl = 'http://192.168.1.217:8081';
     let orderId = req.body.orderId;
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;
