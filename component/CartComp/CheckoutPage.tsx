@@ -91,7 +91,7 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypa
                 body: JSON.stringify({ "payer_id": PayerID }),
                 headers: {
                     'Content-type': 'application/json',
-                    'Authorization': `Bearer A21AAK2Y4vOh9qtHHZ18ojvTz8Ee59GykjSLNVViGiHy-802aBydVw2x4KE4WCkhxPQt95_vvOSR-GYRLlQb3ywgQsx8OuN_g`
+                    'Authorization': `Bearer ${accessToke}`
                 }
             }).then((res) => res.json()).then(() => {
                 setPaypalParamsMain("Success")
