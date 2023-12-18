@@ -1,5 +1,5 @@
-import { ScrollView, View, Text, TouchableOpacity, RefreshControl, Image, TextInput, ActivityIndicator, StyleSheet, Linking, Platform } from "react-native";
-import { useState, useEffect } from "react";
+import { ScrollView, View, Text, TouchableOpacity, RefreshControl, Image, TextInput, ActivityIndicator, StyleSheet, Dimensions } from "react-native";
+import { useState, useEffect, useRef } from "react";
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "../Footer";
@@ -7,13 +7,18 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { WebView } from 'react-native-webview';
 import 'react-native-url-polyfill/auto';
+import config from "../../config";
+global.Buffer = require('buffer').Buffer;
 
-function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jumpTo: any, index: any, shippingFee: any, setVnpayParamsMain: any }) {
+function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypalParamsMain }: { jumpTo: any, index: any, shippingFee: any, setVnpayParamsMain: any, setPaypalParamsMain: any }) {
     var orderitems = {}
+    const height = Dimensions.get("screen").height
+    const width = Dimensions.get("screen").width
     const [candecode, setCandecode] = useState<any>(null)
     const [checkVal, setCheckVal] = useState(false)
     const [Card, setCard] = useState("Not choose")
     const [datas, setDatas] = useState<any>()
+    const scrollViewRef = useRef<any>(null);
     const [paymentMethodChoose, setPaymentMethodChoose] = useState(false)
     const [SaveAddress, setSaveAddress] = useState(false)
     const [accountAddress, setAccountAddress] = useState(false)
@@ -24,14 +29,17 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
     const [success, setSuccess] = useState(false)
     const [checkP, setCheckP] = useState(false)
     const [checkedPh, setCheckedPh] = useState(false)
+    const [checkCardChoose, setCheckCardChoose] = useState(false)
+    const [loadWebV, setLoadWebV] = useState(false)
     const [webV, setWebV] = useState<any>()
     const [bankCode, setBankCode] = useState("")
-    const [paypalState, setPaypalState] = useState()
+    const [paypalState, setPaypalState] = useState(false)
     const [loadAddress, setLoadAddress] = useState<any>()
     const [address, setAddress] = useState("")
     const [phonenumber, setPhonenumber] = useState("")
     const [fullname, setFullname] = useState("")
     const [vnpayParams, setVnpayParams] = useState("")
+    const [accessToke, setAccessToke] = useState("")
 
     var checkPhone = /((09|03|07|08|05)+([0-9]{8})\b)/g
     const pulldown = () => {
@@ -50,6 +58,8 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
             setPaymentMethodChoose(false)
             setSaveAddress(false)
             setVnpay(false)
+            setPaypalState(false)
+            setCheckCardChoose(false)
             setCheckInfo(false)
             setCheckP(false)
             setAddress("")
@@ -62,11 +72,40 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
 
     useEffect(() => {
         if (vnpayParams.includes("vnp_ResponseCode")) {
+            setLoadWebV(true)
             const queryParameters = new URL(vnpayParams)
             setVnpayParamsMain(queryParameters)
             setVnpayParams("")
             setWebV(null)
             jumpTo("third")
+            setLoadWebV(false)
+        }
+        if (vnpayParams.includes("paymentId=PAYID")) {
+            setLoadWebV(true)
+            setWebV(null)
+            const queryX = new URL(vnpayParams)
+            const PayerID = queryX.searchParams.get("PayerID")
+            const paymentId = queryX.searchParams.get("paymentId")
+            fetch(`https://api.sandbox.paypal.com/v1/payments/payment/${paymentId}/execute`, {
+                method: "POST",
+                body: JSON.stringify({ "payer_id": PayerID }),
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer A21AAK2Y4vOh9qtHHZ18ojvTz8Ee59GykjSLNVViGiHy-802aBydVw2x4KE4WCkhxPQt95_vvOSR-GYRLlQb3ywgQsx8OuN_g`
+                }
+            }).then((res) => res.json()).then(() => {
+                setPaypalParamsMain("Success")
+                setVnpayParams("")
+                jumpTo("third")
+            }).then(() => { setLoadWebV(false) }).catch((err) => { console.log(err) })
+        }
+        if (vnpayParams.includes("?token=")) {
+            setLoadWebV(true)
+            jumpTo("third")
+            setPaypalParamsMain("Cancel")
+            setVnpayParams("")
+            setWebV(null)
+            setLoadWebV(false)
         }
     }, [vnpayParams])
 
@@ -157,8 +196,62 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
             .catch((err) => console.log(err + " errr"))
     }
 
+    function callPaypal(fullT: any, data: any) {
+        const money = fullT / 25000
+        const dataDetail = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "transactions": [{
+                "amount": {
+                    "total": `${money}`,
+                    "currency": "USD",
+                    "details": {
+                        "subtotal": `${money}`,
+                        "tax": "0",
+                        "shipping": "0",
+                        "handling_fee": "0",
+                        "shipping_discount": "0",
+                        "insurance": "0"
+                    }
+                }
+            }],
+            "redirect_urls": {
+                "return_url": "http://localhost:8081",
+                "cancel_url": "http://localhost:8081"
+            }
+        }
+        var toketoke = null
+        const clientid: any = config.REACT_APP_paypal_clientid
+        const key: any = config.REACT_APP_paypal_secretKey
 
-    const SubmitOrder = () => {
+        fetch("https://api.sandbox.paypal.com/v1/oauth2/token", {
+            method: "POST",
+            body: "grant_type=client_credentials",
+            headers: {
+                Authorization: "Basic " + Buffer.from(clientid + ":" + key).toString("base64")
+            }
+        }).then((res) => res.json()).then((responseR) => {
+            toketoke = responseR.access_token
+            setAccessToke(responseR.access_token)
+            fetch("https://api.sandbox.paypal.com/v1/payments/payment", {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${toketoke}`
+                },
+                body: JSON.stringify(dataDetail)
+            }).then((res) => res.json()).then(async (response2) => {
+                const { id, links } = response2
+                const approveUrl = links.find((data: any) => data.rel == "approval_url")
+                await AsyncStorage.setItem("complete", data)
+                setWebV(approveUrl.href)
+            }).catch((er) => { console.log(er) })
+        })
+    }
+
+    const SubmitOrder = (fullTT: any) => {
         var paymentmethod = null
         if (Card === "Pay with card (ATM)") {
             paymentmethod = 1
@@ -203,6 +296,10 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
         if (checkedPh) {
             return false
         }
+        if (Card === "Pay with card (ATM)" && vnpay === false && paypalState === false) {
+            setCheckCardChoose(true)
+            return false
+        }
         setLoad(true)
         setTimeout(() => {
             axios(configuration)
@@ -219,14 +316,19 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
                         axios(configuration2)
                             .then(() => { }).catch((e) => { console.log(e); })
                     }
+                    if (scrollViewRef.current) {
+                        scrollViewRef.current.scrollTo({ y: 0, animated: true })
+                    }
                     setLoad(false)
                     setSuccess(true)
                     const data = res.data.message
                     await AsyncStorage.removeItem("cart")
                     if (Card === "Pay with card (ATM)" && vnpay) {
+                        setLoadWebV(true)
                         VnpayCheckout(data)
-                    } if (paypalState) {
-
+                    } if (Card === "Pay with card (ATM)" && paypalState) {
+                        setLoadWebV(true)
+                        callPaypal(fullTT, data)
                     } if (Card === "Cash on delivery (COD)") {
                         await AsyncStorage.setItem("complete", data).then(() => { jumpTo("third") })
                     }
@@ -235,6 +337,10 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
                     console.log(err + " kakaka");
                 })
         }, 1000);
+    }
+
+    function hideSpinner() {
+        setLoadWebV(false)
     }
 
     const VND = new Intl.NumberFormat('vi-VN', {
@@ -249,18 +355,25 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
         <>
             {webV ? (
                 <View style={{ flex: 1 }}>
-                    <WebView source={{ uri: webV }} onNavigationStateChange={(e) => setVnpayParams(e.url)} />
+                    <WebView onLoad={() => hideSpinner()} source={{ uri: webV }} onNavigationStateChange={(e) => setVnpayParams(e.url)} />
+                    <View style={{ backgroundColor: "#fff", height: 100 }} />
                 </View>
             ) : (
-                <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
+                <ScrollView ref={scrollViewRef} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                     <View style={{ flex: 1 }}>
                         {checkVal ? (
-                            <View style={{ flexDirection: "column", alignItems: "center", gap: 10, padding: 15, height: 300 }}>
-                                <Text style={{ fontSize: 17, fontWeight: "bold" }}>You haven't checkout anything!</Text>
-                                <TouchableOpacity style={{ backgroundColor: "#FEA116", paddingVertical: 8, paddingHorizontal: 10 }} onPress={() => jumpTo("first")}>
-                                    <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Return to cart</Text>
-                                </TouchableOpacity>
-                            </View>
+                            loadWebV ? (
+                                <View style={{ backgroundColor: "#fff", alignItems: "center", justifyContent: "center", width: "100%", height: 300 }}>
+                                    <ActivityIndicator size={45} color={"#FEA116"} />
+                                </View>
+                            ) : (
+                                <View style={{ flexDirection: "column", alignItems: "center", gap: 10, padding: 15, height: 300 }}>
+                                    <Text style={{ fontSize: 17, fontWeight: "bold" }}>You haven't checkout anything!</Text>
+                                    <TouchableOpacity style={{ backgroundColor: "#FEA116", paddingVertical: 8, paddingHorizontal: 10 }} onPress={() => jumpTo("first")}>
+                                        <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Return to cart</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )
                         ) : (
                             <>
                                 <View style={{ backgroundColor: "#fff", flexDirection: "column", padding: 15, marginBottom: 25 }}>
@@ -415,13 +528,22 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
                                                 {Card === "Pay with card (ATM)" ? (
                                                     <>
                                                         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
-                                                            <TouchableOpacity style={style.shadow} onPress={() => setVnpay(true)}>
+                                                            <TouchableOpacity style={style.shadow} onPress={() => { setVnpay(true); setPaypalState(false); setCheckCardChoose(false) }}>
                                                                 <Image source={{ uri: "https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-VNPAY-QR-1.png" }} style={{ width: "100%", height: "100%", resizeMode: "contain" }} />
+                                                                {vnpay ? (
+                                                                    <Text style={{ color: "black", right: -10, bottom: -10, position: "absolute", fontSize: 18 }}>✅</Text>
+                                                                ) : null}
                                                             </TouchableOpacity>
-                                                            <TouchableOpacity style={style.shadow}>
+                                                            <TouchableOpacity style={style.shadow} onPress={() => { setPaypalState(true); setVnpay(false); setCheckCardChoose(false) }}>
                                                                 <Image source={{ uri: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/PayPal_logo.svg/2560px-PayPal_logo.svg.png" }} style={{ width: "100%", height: "100%", resizeMode: "contain" }} />
+                                                                {paypalState ? (
+                                                                    <Text style={{ color: "black", right: -10, bottom: -10, position: "absolute", fontSize: 18 }}>✅</Text>
+                                                                ) : null}
                                                             </TouchableOpacity>
                                                         </View>
+                                                        {checkCardChoose ? (
+                                                            <Text style={{ color: "red", textAlign: "center" }}>Choose atleast one payment gateway</Text>
+                                                        ) : null}
                                                         {vnpay ? (
                                                             <View style={{ borderWidth: 1, borderColor: "gray", borderRadius: 6 }}>
                                                                 <Picker
@@ -483,15 +605,20 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain }: { jump
                                             </View>
                                         </>
                                     ) : (
-                                        <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }} onPress={() => setPaymentMethodChoose(true)}>
-                                            <Text style={{ fontSize: 16, fontWeight: "bold" }}>Payment method</Text>
-                                            <Text style={{ fontSize: 15 }}>{Card} ▼</Text>
-                                        </TouchableOpacity>
+                                        <>
+                                            <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }} onPress={() => setPaymentMethodChoose(true)}>
+                                                <Text style={{ fontSize: 16, fontWeight: "bold" }}>Payment method</Text>
+                                                <Text style={{ fontSize: 15 }}>{Card} ▼</Text>
+                                            </TouchableOpacity>
+                                            {checkCardChoose ? (
+                                                <Text style={{ color: "red" }}>Choose atleast one payment gateway</Text>
+                                            ) : null}
+                                        </>
                                     )}
                                     {checkP ? (
                                         <Text style={{ color: "red" }}>Payment method is needed!</Text>
                                     ) : null}
-                                    <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 8, marginTop: 20, marginBottom: 5 }} onPress={() => SubmitOrder()}>
+                                    <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 8, marginTop: 20, marginBottom: 5 }} onPress={() => SubmitOrder(fulltotal)}>
                                         {load ? (
                                             <ActivityIndicator size={21} color={"#fff"} />
                                         ) : (
@@ -524,7 +651,7 @@ const style = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-
+        position: "relative",
         elevation: 3.5,
     }
 })

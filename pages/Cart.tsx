@@ -5,19 +5,12 @@ import CartPage from "../component/CartComp/CartPage";
 import CompletePage from "../component/CartComp/CompletePage";
 import CheckoutPage from "../component/CartComp/CheckoutPage";
 import Header from "../component/Header";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function Cart() {
     const [index, setIndex] = useState(0);
     const [shippingFee, setShippingFee] = useState(30000)
     const [vnpayParamsMain, setVnpayParamsMain] = useState<any>()
-    setTimeout(async () => {
-        const wait = await AsyncStorage.getItem("complete")
-        if (wait) {
-            await AsyncStorage.removeItem("complete")
-        }
-        setVnpayParamsMain(null)
-    }, 60000);
+    const [paypalParamsMain, setPaypalParamsMain] = useState<any>()
     const [routes] = useState([
         { key: 'first', title: 'Cart' },
         { key: 'second', title: 'Checkout' },
@@ -29,9 +22,9 @@ function Cart() {
             case 'first':
                 return <CartPage jumpTo={jumpTo} setShippingFee={setShippingFee} shippingFee={shippingFee} index={index} />;
             case 'second':
-                return <CheckoutPage jumpTo={jumpTo} index={index} shippingFee={shippingFee} setVnpayParamsMain={setVnpayParamsMain} />;
+                return <CheckoutPage jumpTo={jumpTo} index={index} shippingFee={shippingFee} setVnpayParamsMain={setVnpayParamsMain} setPaypalParamsMain={setPaypalParamsMain} />;
             case 'third':
-                return <CompletePage index={index} jumpTo={jumpTo} vnpayParamsMain={vnpayParamsMain} setVnpayParamsMain={setVnpayParamsMain} />;
+                return <CompletePage index={index} jumpTo={jumpTo} vnpayParamsMain={vnpayParamsMain} paypalParamsMain={paypalParamsMain} setVnpayParamsMain={setVnpayParamsMain} setPaypalParamsMain={setPaypalParamsMain} />;
             default:
                 return null;
         }

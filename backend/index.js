@@ -1111,8 +1111,25 @@ app.post("/CancelVnpayPayment", (req, res) => {
     try {
         getThisOrder.updateOne({ _id: req.query.id }, {
             denyreason: req.query.reason,
-            status: 4,
+            status: 6,
             "paymentmethod.type": "Vnpay"
+        }).then(() => {
+            res.send({ data: "Updated" })
+        }).catch((err) => {
+            console.log(err);
+        })
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+// Cancel Paypal payment
+app.post("/CancelPaypalPayment", (req, res) => {
+    try {
+        getThisOrder.updateOne({ _id: req.query.id }, {
+            denyreason: "Customer cancel transaction",
+            status: 6,
+            "paymentmethod.type": "Paypal"
         }).then(() => {
             res.send({ data: "Updated" })
         }).catch((err) => {

@@ -7,11 +7,13 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import StateComplete from "./StateComplete";
 
-function CompletePage({ index, jumpTo, vnpayParamsMain, setVnpayParamsMain }: { index: any, jumpTo: any, vnpayParamsMain: any, setVnpayParamsMain: any }) {
+function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnpayParamsMain, setPaypalParamsMain }: { index: any, jumpTo: any, vnpayParamsMain: any, paypalParamsMain: any, setVnpayParamsMain: any, setPaypalParamsMain: any }) {
     const navigation = useNavigation<any>()
     const [candecode, setCandecode] = useState<any>(null)
     const [haveD, setHaveD] = useState(false)
+    const [paypalCant, setPayPalCant] = useState(false)
     const [refresh, setFresh] = useState(false);
+    const [checkCunt, setCheckCunt] = useState(false)
     const [responseCode, setResponseCode] = useState<any>()
     const [date, setDate] = useState<any>()
     const [amount, setAmount] = useState<any>()
@@ -27,6 +29,7 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, setVnpayParamsMain }: { 
         try {
             const token = await AsyncStorage.getItem('complete');
             if (token) {
+                setCheckCunt(true)
                 setCandecode(token)
             } else {
                 jumpTo("first")
@@ -36,6 +39,22 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, setVnpayParamsMain }: { 
             console.log(err);
         }
     };
+
+    useEffect(() => {
+        if (checkCunt) {
+            const funcX = async () => {
+                const wait = await AsyncStorage.getItem("complete")
+                if (wait) {
+                    setTimeout(async () => {
+                        await AsyncStorage.removeItem("complete")
+                        setVnpayParamsMain(null)
+                        setPaypalParamsMain(null)
+                    }, 60000);
+                }
+            }
+            funcX()
+        }
+    }, [checkCunt])
 
     const fetchItNow = async () => {
         try {
@@ -55,9 +74,55 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, setVnpayParamsMain }: { 
         }
     }
 
+    const callingPayP = async () => {
+        try {
+            const token = await AsyncStorage.getItem('complete');
+            if (token) {
+                const configuration = {
+                    method: "post",
+                    url: "http://localhost:3000/PaidPaypalPayment",
+                    params: {
+                        id: token
+                    }
+                }
+                axios(configuration).then(() => { }).catch((err) => { console.log(err); })
+            }
+        } catch (er) {
+            console.log(er);
+        }
+    }
+
+    const cancelPayP = async () => {
+        try {
+            const token = await AsyncStorage.getItem('complete');
+            if (token) {
+                const configuration = {
+                    method: "post",
+                    url: "http://localhost:3000/CancelPaypalPayment",
+                    params: {
+                        id: token
+                    }
+                }
+                axios(configuration).then(() => { }).catch((err) => { console.log(err); })
+            }
+        } catch (er) {
+            console.log(er);
+        }
+    }
+
     useEffect(() => {
         if (index === 2) {
             getDataExists()
+            if (paypalParamsMain) {
+                setHaveD(false)
+                if (paypalParamsMain === "Success") {
+                    callingPayP()
+                    setPayPalCant(false)
+                } else {
+                    cancelPayP()
+                    setPayPalCant(true)
+                }
+            }
             if (vnpayParamsMain) {
                 setHaveD(true)
                 const type = vnpayParamsMain.searchParams.get("vnp_ResponseCode")
@@ -147,7 +212,8 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, setVnpayParamsMain }: { 
                     }
                     axios(configuration).then(() => { }).catch((err) => { console.log(err); })
                 }
-            } else {
+            }
+            if (vnpayParamsMain === null && paypalParamsMain === null) {
                 setHaveD(false)
                 fetchItNow()
             }
@@ -166,30 +232,60 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, setVnpayParamsMain }: { 
                     <Footer />
                 </ScrollView >
             ) : (
-                <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
-                    <View style={{ flex: 1, padding: 15, backgroundColor: "#fff", height: 350 }}>
-                        <Text style={{ fontWeight: "bold", fontSize: 21, textAlign: "center", color: "#FEA116" }}>Thank You!</Text>
-                        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                            <Text style={{ fontSize: 17, paddingVertical: 8 }}><Text style={{ fontWeight: "bold" }}>Order id</Text> : {candecode}</Text>
-                            <TouchableOpacity onPress={() => copyToClipboard(candecode)}>
-                                <Text style={{ fontSize: 16, color: "#FEA116" }}>Copy</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", paddingVertical: 20 }}>
-                            <TouchableOpacity style={styles.shadow} onPress={() => navigation.navigate("Searchs")}>
-                                <Text style={{ fontSize: 15, fontWeight: "bold" }}><Text style={{ color: "black" }}>🔍</Text> Search detail</Text>
-                            </TouchableOpacity>
-                            <Text>Or</Text>
-                            <TouchableOpacity style={styles.shadow} onPress={() => navigation.navigate("Categorys")}>
-                                <Text style={{ fontSize: 15, fontWeight: "bold" }}><Text style={{ color: "black" }}>🛍️</Text> Go shopping</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ alignItems: "center" }}>
-                            <Image source={{ uri: "https://cdn.icon-icons.com/icons2/881/PNG/512/Rice_Bowl_icon-icons.com_68695.png" }} width={150} height={150} />
-                        </View>
-                    </View>
-                    <Footer />
-                </ScrollView >
+                <>
+                    {paypalCant ? (
+                        <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
+                            <View style={{ flex: 1, padding: 15, backgroundColor: "#fff", height: 400 }}>
+                                <Text style={{ fontWeight: "bold", fontSize: 21, textAlign: "center", color: "#FEA116" }}>Transaction Failed!</Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                    <Text style={{ fontSize: 17, paddingVertical: 8 }}><Text style={{ fontWeight: "bold" }}>Order id</Text> : {candecode}</Text>
+                                    <TouchableOpacity onPress={() => copyToClipboard(candecode)}>
+                                        <Text style={{ fontSize: 16, color: "#FEA116" }}>Copy</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <Text style={{ fontSize: 17, paddingVertical: 8 }}><Text style={{ fontWeight: "bold" }}>Reason</Text> : Customer cancel transaction</Text>
+                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", paddingVertical: 20 }}>
+                                    <TouchableOpacity style={styles.shadow} onPress={() => navigation.navigate("Searchs")}>
+                                        <Text style={{ fontSize: 15, fontWeight: "bold" }}><Text style={{ color: "black" }}>🔍</Text> Search detail</Text>
+                                    </TouchableOpacity>
+                                    <Text>Or</Text>
+                                    <TouchableOpacity style={styles.shadow} onPress={() => navigation.navigate("Categorys")}>
+                                        <Text style={{ fontSize: 15, fontWeight: "bold" }}><Text style={{ color: "black" }}>🛍️</Text> Go shopping</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ alignItems: "center" }}>
+                                    <Image source={{ uri: "https://cdn.icon-icons.com/icons2/881/PNG/512/Rice_Bowl_icon-icons.com_68695.png" }} width={150} height={150} />
+                                </View>
+                            </View>
+                            <Footer />
+                        </ScrollView >
+                    ) : (
+                        <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
+                            <View style={{ flex: 1, padding: 15, backgroundColor: "#fff", height: 350 }}>
+                                <Text style={{ fontWeight: "bold", fontSize: 21, textAlign: "center", color: "#FEA116" }}>Thank You!</Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                    <Text style={{ fontSize: 17, paddingVertical: 8 }}><Text style={{ fontWeight: "bold" }}>Order id</Text> : {candecode}</Text>
+                                    <TouchableOpacity onPress={() => copyToClipboard(candecode)}>
+                                        <Text style={{ fontSize: 16, color: "#FEA116" }}>Copy</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", paddingVertical: 20 }}>
+                                    <TouchableOpacity style={styles.shadow} onPress={() => navigation.navigate("Searchs")}>
+                                        <Text style={{ fontSize: 15, fontWeight: "bold" }}><Text style={{ color: "black" }}>🔍</Text> Search detail</Text>
+                                    </TouchableOpacity>
+                                    <Text>Or</Text>
+                                    <TouchableOpacity style={styles.shadow} onPress={() => navigation.navigate("Categorys")}>
+                                        <Text style={{ fontSize: 15, fontWeight: "bold" }}><Text style={{ color: "black" }}>🛍️</Text> Go shopping</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ alignItems: "center" }}>
+                                    <Image source={{ uri: "https://cdn.icon-icons.com/icons2/881/PNG/512/Rice_Bowl_icon-icons.com_68695.png" }} width={150} height={150} />
+                                </View>
+                            </View>
+                            <Footer />
+                        </ScrollView >
+                    )}
+                </>
             )}
         </>
     )
