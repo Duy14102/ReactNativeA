@@ -33,13 +33,13 @@ const headerStyle = StyleSheet.create({
         paddingRight: 15,
         backgroundColor: "#0F172B",
         width: "100%",
-        height: 55,
+        height: 65,
         position: "relative"
     },
 
     textDisplay: {
         color: "#FEA116",
-        fontSize: 18
+        fontSize: 20
     },
 
     textLogo: {

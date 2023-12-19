@@ -47,8 +47,6 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnp
                 if (wait) {
                     setTimeout(async () => {
                         await AsyncStorage.removeItem("complete")
-                        setVnpayParamsMain(null)
-                        setPaypalParamsMain(null)
                     }, 60000);
                 }
             }
@@ -122,6 +120,7 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnp
                     cancelPayP()
                     setPayPalCant(true)
                 }
+                setPaypalParamsMain(null)
             }
             if (vnpayParamsMain) {
                 setHaveD(true)
@@ -212,13 +211,14 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnp
                     }
                     axios(configuration).then(() => { }).catch((err) => { console.log(err); })
                 }
+                setVnpayParamsMain(null)
             }
-            if (vnpayParamsMain === null && paypalParamsMain === null) {
+            if (!vnpayParamsMain && !paypalParamsMain) {
                 setHaveD(false)
                 fetchItNow()
             }
         }
-    }, [index, vnpayParamsMain])
+    }, [index])
 
     const copyToClipboard = (e: any) => {
         Clipboard.setString(e);

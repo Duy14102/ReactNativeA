@@ -79,8 +79,20 @@ function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
         style: 'currency',
         currency: 'VND',
     });
-    var fulltotal = 0
-    var total2 = 0
+
+    function getTotal(i: any) {
+        var fulltotal = 0
+        var totalX = 0
+        i.orderitems.map((a: any) => {
+            var total = a.quantity * a.data.foodprice
+            totalX += total
+            fulltotal = totalX + i.shippingfee
+            return null
+        })
+        return (
+            <Text style={{ fontSize: 15 }}><Text style={{ fontWeight: "bold" }}>Fulltotal : {VND.format(fulltotal)}</Text></Text>
+        )
+    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
@@ -90,12 +102,6 @@ function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
                     {order.length > 0 ? (
                         <>
                             {order.map((i: any) => {
-                                i.orderitems.map((t: any) => {
-                                    var total = t.quantity * t.data.foodprice
-                                    total2 += total
-                                    fulltotal = total2 + i.shippingfee
-                                    return null
-                                })
                                 return (
                                     <TouchableOpacity style={cateStyle.cardStyle} key={i._id} onPress={() => navigation.navigate("DetailCart", { i: i })}>
                                         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
@@ -132,7 +138,7 @@ function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
                                         />
                                         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
                                             <Text style={{ fontSize: 15 }}>{i.orderitems.length} items</Text>
-                                            <Text style={{ fontSize: 15 }}><Text style={{ fontWeight: "bold" }}>Fulltotal : </Text>{VND.format(fulltotal)}</Text>
+                                            {getTotal(i)}
                                         </View>
                                     </TouchableOpacity>
                                 )

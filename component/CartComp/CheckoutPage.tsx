@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, TouchableOpacity, RefreshControl, Image, TextInput, ActivityIndicator, StyleSheet, Dimensions } from "react-native";
+import { ScrollView, View, Text, TouchableOpacity, RefreshControl, Image, TextInput, ActivityIndicator, StyleSheet } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -11,9 +11,7 @@ import config from "../../config";
 global.Buffer = require('buffer').Buffer;
 
 function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypalParamsMain }: { jumpTo: any, index: any, shippingFee: any, setVnpayParamsMain: any, setPaypalParamsMain: any }) {
-    var orderitems = {}
-    const height = Dimensions.get("screen").height
-    const width = Dimensions.get("screen").width
+    var orderitems: any = []
     const [candecode, setCandecode] = useState<any>(null)
     const [checkVal, setCheckVal] = useState(false)
     const [Card, setCard] = useState("Not choose")
@@ -99,7 +97,7 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypa
                 jumpTo("third")
             }).then(() => { setLoadWebV(false) }).catch((err) => { console.log(err) })
         }
-        if (vnpayParams.includes("?token=")) {
+        if (vnpayParams.includes("?token=EC")) {
             setLoadWebV(true)
             jumpTo("third")
             setPaypalParamsMain("Cancel")
@@ -159,22 +157,24 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypa
 
     useEffect(() => {
         if (candecode) {
-            setFullname(candecode.userName)
-            const configuration7 = {
-                method: "get",
-                url: "http://localhost:3000/GetDetailUser",
-                params: {
-                    userid: candecode.userId
-                }
-            };
-            axios(configuration7)
-                .then((result) => {
-                    setPhonenumber(result.data.data.phonenumber)
-                    setLoadAddress(result.data.data.address)
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            if (candecode.userRole !== 1.5) {
+                setFullname(candecode.userName)
+                const configuration7 = {
+                    method: "get",
+                    url: "http://localhost:3000/GetDetailUser",
+                    params: {
+                        userid: candecode.userId
+                    }
+                };
+                axios(configuration7)
+                    .then((result) => {
+                        setPhonenumber(result.data.data.phonenumber)
+                        setLoadAddress(result.data.data.address)
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
         }
     }, [candecode])
 
@@ -260,8 +260,13 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypa
         }
         const userx = []
         if (candecode) {
-            const nit = { id: candecode.userId, fullname: fullname }
-            userx.push(nit)
+            if (candecode.userRole === 1.5) {
+                const nit = { id: candecode.userId, fullname: candecode.userName }
+                userx.push(nit)
+            } else {
+                const nit = { id: candecode.userId, fullname: fullname }
+                userx.push(nit)
+            }
         } else {
             const nat = { id: "none", fullname: fullname }
             userx.push(nat)
@@ -393,67 +398,81 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypa
                                             </View>
                                         </>
                                     )}
-                                    <View style={{ flexDirection: "column", gap: 5, marginVertical: 15 }}>
-                                        <Text style={{ fontSize: 15, paddingLeft: 5 }}>Address</Text>
-                                        {accountAddress ? (
-                                            <View style={{ borderWidth: 1, borderColor: "gray", borderRadius: 6 }}>
-                                                <Picker
-                                                    selectedValue={address}
-                                                    onValueChange={(itemValue) =>
-                                                        setAddress(itemValue)
-                                                    }>
-                                                    <Picker.Item label="Choose address" value="" />
-                                                    {loadAddress?.map((t: any) => {
-                                                        return (
-                                                            <Picker.Item key={t} label={t} value={t} />
-                                                        )
-                                                    })}
-                                                </Picker>
+                                    {candecode ? (
+                                        candecode.userRole === 1.5 ? (
+                                            <View style={{ flexDirection: "column", gap: 5, marginVertical: 15 }}>
+                                                <Text style={{ fontSize: 15, paddingLeft: 5 }}>Phone number</Text>
+                                                <TextInput value={phonenumber} style={{ borderWidth: 1, borderColor: "gray", borderRadius: 6, padding: 10 }} onChange={(e) => setPhonenumber(e.nativeEvent.text)} />
+                                                {checkedPh ? (
+                                                    <Text style={{ color: "red", paddingLeft: 5 }}>Phone number invalid!</Text>
+                                                ) : null}
+                                                <Text style={{ fontSize: 15, paddingLeft: 5, paddingTop: 20 }}>Address</Text>
+                                                <TextInput value={address} style={{ borderWidth: 1, borderColor: "gray", borderRadius: 6, padding: 10 }} onChange={(e) => setAddress(e.nativeEvent.text)} />
                                             </View>
                                         ) : (
-                                            <TextInput value={address} style={{ borderWidth: 1, borderColor: "gray", borderRadius: 6, padding: 10 }} onChange={(e) => setAddress(e.nativeEvent.text)} />
-                                        )}
-                                        {accountAddress ? (
-                                            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, opacity: 0.5 }}>
-                                                <View style={{ borderWidth: 1, borderColor: "gray", backgroundColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5 }} />
-                                                <Text style={{ fontSize: 15 }}>Save this address</Text>
-                                            </View>
-                                        ) : (
-                                            SaveAddress ? (
-                                                <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", gap: 10 }} onPress={() => setSaveAddress(false)}>
-                                                    <View style={{ alignItems: "center", borderWidth: 1, borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5, backgroundColor: "#03ba5f" }}>
-                                                        <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" }}>✓</Text>
+                                            <View style={{ flexDirection: "column", gap: 5, marginVertical: 15 }}>
+                                                <Text style={{ fontSize: 15, paddingLeft: 5 }}>Address</Text>
+                                                {accountAddress ? (
+                                                    <View style={{ borderWidth: 1, borderColor: "gray", borderRadius: 6 }}>
+                                                        <Picker
+                                                            selectedValue={address}
+                                                            onValueChange={(itemValue) =>
+                                                                setAddress(itemValue)
+                                                            }>
+                                                            <Picker.Item label="Choose address" value="" />
+                                                            {loadAddress?.map((t: any) => {
+                                                                return (
+                                                                    <Picker.Item key={t} label={t} value={t} />
+                                                                )
+                                                            })}
+                                                        </Picker>
                                                     </View>
-                                                    <Text style={{ fontSize: 15 }}>Save this address</Text>
-                                                </TouchableOpacity>
-                                            ) : (
-                                                <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", gap: 10 }} onPress={() => setSaveAddress(true)}>
-                                                    <View style={{ borderWidth: 1, borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5 }} />
-                                                    <Text style={{ fontSize: 15 }}>Save this address</Text>
-                                                </TouchableOpacity>
-                                            )
-                                        )}
-                                        {SaveAddress ? (
-                                            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, opacity: 0.5 }}>
-                                                <View style={{ borderWidth: 1, backgroundColor: "gray", borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5 }} />
-                                                <Text style={{ fontSize: 15 }}>Use the account address </Text>
-                                            </View>
-                                        ) : (
-                                            accountAddress ? (
-                                                <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", gap: 10 }} onPress={() => setAccountAddress(false)}>
-                                                    <View style={{ alignItems: "center", borderWidth: 1, borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5, backgroundColor: "#03ba5f" }}>
-                                                        <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" }}>✓</Text>
+                                                ) : (
+                                                    <TextInput value={address} style={{ borderWidth: 1, borderColor: "gray", borderRadius: 6, padding: 10 }} onChange={(e) => setAddress(e.nativeEvent.text)} />
+                                                )}
+                                                {accountAddress ? (
+                                                    <View style={{ flexDirection: "row", alignItems: "center", gap: 10, opacity: 0.5 }}>
+                                                        <View style={{ borderWidth: 1, borderColor: "gray", backgroundColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5 }} />
+                                                        <Text style={{ fontSize: 15 }}>Save this address</Text>
                                                     </View>
-                                                    <Text style={{ fontSize: 15 }}>Use the account address</Text>
-                                                </TouchableOpacity>
-                                            ) : (
-                                                <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", gap: 10 }} onPress={() => setAccountAddress(true)}>
-                                                    <View style={{ borderWidth: 1, borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5 }} />
-                                                    <Text style={{ fontSize: 15 }}>Use the account address</Text>
-                                                </TouchableOpacity>
-                                            )
-                                        )}
-                                    </View>
+                                                ) : (
+                                                    SaveAddress ? (
+                                                        <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", gap: 10 }} onPress={() => setSaveAddress(false)}>
+                                                            <View style={{ alignItems: "center", borderWidth: 1, borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5, backgroundColor: "#03ba5f" }}>
+                                                                <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" }}>✓</Text>
+                                                            </View>
+                                                            <Text style={{ fontSize: 15 }}>Save this address</Text>
+                                                        </TouchableOpacity>
+                                                    ) : (
+                                                        <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", gap: 10 }} onPress={() => setSaveAddress(true)}>
+                                                            <View style={{ borderWidth: 1, borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5 }} />
+                                                            <Text style={{ fontSize: 15 }}>Save this address</Text>
+                                                        </TouchableOpacity>
+                                                    )
+                                                )}
+                                                {SaveAddress ? (
+                                                    <View style={{ flexDirection: "row", alignItems: "center", gap: 10, opacity: 0.5 }}>
+                                                        <View style={{ borderWidth: 1, backgroundColor: "gray", borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5 }} />
+                                                        <Text style={{ fontSize: 15 }}>Use the account address </Text>
+                                                    </View>
+                                                ) : (
+                                                    accountAddress ? (
+                                                        <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", gap: 10 }} onPress={() => setAccountAddress(false)}>
+                                                            <View style={{ alignItems: "center", borderWidth: 1, borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5, backgroundColor: "#03ba5f" }}>
+                                                                <Text style={{ fontSize: 15, fontWeight: "bold", color: "#fff" }}>✓</Text>
+                                                            </View>
+                                                            <Text style={{ fontSize: 15 }}>Use the account address</Text>
+                                                        </TouchableOpacity>
+                                                    ) : (
+                                                        <TouchableOpacity style={{ flexDirection: "row", alignItems: "center", gap: 10 }} onPress={() => setAccountAddress(true)}>
+                                                            <View style={{ borderWidth: 1, borderColor: "gray", width: 20, height: 20, marginLeft: 3, marginVertical: 5 }} />
+                                                            <Text style={{ fontSize: 15 }}>Use the account address</Text>
+                                                        </TouchableOpacity>
+                                                    )
+                                                )}
+                                            </View>
+                                        )
+                                    ) : null}
                                     {checkInfo ? (
                                         <Text style={{ color: "red" }}>These field are required!</Text>
                                     ) : null}
@@ -469,7 +488,8 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypa
                                                 var total = a.foodprice * i.quantity
                                                 total2 += total
                                                 fulltotal = total2 + shippingFee
-                                                orderitems = { data: a, quantity: i.quantity }
+                                                var kindOf = { data: a, quantity: i.quantity }
+                                                orderitems.push(kindOf)
                                                 return (
                                                     <View key={a._id} style={{ flexDirection: "row", marginVertical: 15 }}>
                                                         <View style={{ flexDirection: "row", gap: 15, width: "70%" }}>

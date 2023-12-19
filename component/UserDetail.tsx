@@ -176,27 +176,47 @@ function UserDetail({ route }: { route: any }) {
                             </>
                         ) : (
                             <View style={{ width: 100, height: 100, padding: 10, backgroundColor: "#FFFFFF", borderRadius: 50 }}>
-                                {getUser.userimage ? (
-                                    <Image source={{ uri: getUser.userimage }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                {candecode.userRole === 1.5 ? (
+                                    <Image source={{ uri: candecode.userImage }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
                                 ) : (
-                                    <Image source={{ uri: imgUser }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                    getUser.userimage ? (
+                                        <Image source={{ uri: getUser.userimage }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                    ) : (
+                                        <Image source={{ uri: imgUser }} style={{ width: "100%", height: "100%", borderRadius: 50 }} />
+                                    )
                                 )}
+
                             </View>
                         )}
                     </View>
                     <View style={[settingStyle.coverIt, { pointerEvents: editIn4 ? "auto" : "none" }]}>
-                        <View>
-                            <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Email</Text>
-                            <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.email} />
-                        </View>
-                        <View>
-                            <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Fullname</Text>
-                            <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.fullname} onChangeText={setUpdateFullname} />
-                        </View>
-                        <View>
-                            <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Phone number</Text>
-                            <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.phonenumber} onChangeText={setUpdatePhone} />
-                        </View>
+                        {candecode.userRole === 1.5 ? (
+                            <>
+                                <View>
+                                    <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Email</Text>
+                                    <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={candecode.userEmail} />
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Fullname</Text>
+                                    <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={candecode.userName} onChangeText={setUpdateFullname} />
+                                </View>
+                            </>
+                        ) : (
+                            <>
+                                <View>
+                                    <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Email</Text>
+                                    <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.email} />
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Fullname</Text>
+                                    <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.fullname} onChangeText={setUpdateFullname} />
+                                </View>
+                                <View>
+                                    <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Phone number</Text>
+                                    <TextInput style={{ backgroundColor: "#EEEEEE", borderRadius: 7, paddingHorizontal: 10 }} defaultValue={getUser.phonenumber} onChangeText={setUpdatePhone} />
+                                </View>
+                            </>
+                        )}
                         {load ? (
                             <ActivityIndicator size={21} color={"#FEA116"} />
                         ) : null}
@@ -214,59 +234,65 @@ function UserDetail({ route }: { route: any }) {
                             </View>
                         ) : null}
                     </View>
-                    <View style={{ marginTop: 25 }}>
-                        <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Options</Text>
-                        <View style={settingStyle.coverIt2}>
-                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }} onPress={() => setEditIn4(true)}>
-                                <View style={{ flexDirection: "row", gap: 10 }}>
-                                    <Icon name="info-circle" color={"#0F172B"} size={18} />
-                                    <Text style={{ fontSize: 15 }}>Edit information</Text>
+                    {candecode.userRole === 1.5 ? (<View style={{ marginBottom: 25 }} />) : (
+                        <>
+                            <View style={{ marginTop: 25 }}>
+                                <Text style={{ paddingBottom: 5, paddingLeft: 5, fontSize: 15, fontWeight: "bold" }}>Options</Text>
+                                <View style={settingStyle.coverIt2}>
+
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 5 }} onPress={() => setEditIn4(true)}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="info-circle" color={"#0F172B"} size={18} />
+                                            <Text style={{ fontSize: 15 }}>Edit information</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
+                                    <View
+                                        style={{
+                                            borderBottomColor: 'gray',
+                                            borderBottomWidth: 1,
+                                            opacity: 0.5,
+                                            left: 5,
+                                            right: 5,
+                                            paddingVertical: 10
+                                        }}
+                                    />
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5 }} onPress={() => navigation.navigate("EditPassword", { user: getUser })}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="key" color={"#0F172B"} size={18} />
+                                            <Text style={{ fontSize: 15 }}>Edit password</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
+                                    <View
+                                        style={{
+                                            borderBottomColor: 'gray',
+                                            borderBottomWidth: 1,
+                                            opacity: 0.5,
+                                            left: 5,
+                                            right: 5,
+                                            paddingVertical: 10
+                                        }}
+                                    />
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }} onPress={() => navigation.navigate("EditAddress", { userid: getUser._id })}>
+                                        <View style={{ flexDirection: "row", gap: 10 }}>
+                                            <Icon name="map-marked-alt" color={"#0F172B"} size={18} />
+                                            <Text style={{ fontSize: 15 }}>Edit address</Text>
+                                        </View>
+                                        <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
+                                    </TouchableOpacity>
+
                                 </View>
-                                <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
-                            </TouchableOpacity>
-                            <View
-                                style={{
-                                    borderBottomColor: 'gray',
-                                    borderBottomWidth: 1,
-                                    opacity: 0.5,
-                                    left: 5,
-                                    right: 5,
-                                    paddingVertical: 10
-                                }}
-                            />
-                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5 }} onPress={() => navigation.navigate("EditPassword", { user: getUser })}>
-                                <View style={{ flexDirection: "row", gap: 10 }}>
-                                    <Icon name="key" color={"#0F172B"} size={18} />
-                                    <Text style={{ fontSize: 15 }}>Edit password</Text>
+                            </View>
+                            <View style={{ marginVertical: 25 }}>
+                                <View style={settingStyle.coverIt2}>
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", paddingVertical: 3.5 }} onPress={() => setTest(true)}>
+                                        <Text style={{ fontWeight: "bold", fontSize: 15, color: "red" }}>Delete account</Text>
+                                    </TouchableOpacity>
                                 </View>
-                                <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
-                            </TouchableOpacity>
-                            <View
-                                style={{
-                                    borderBottomColor: 'gray',
-                                    borderBottomWidth: 1,
-                                    opacity: 0.5,
-                                    left: 5,
-                                    right: 5,
-                                    paddingVertical: 10
-                                }}
-                            />
-                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingTop: 17.5, paddingBottom: 5 }} onPress={() => navigation.navigate("EditAddress", { userid: getUser._id })}>
-                                <View style={{ flexDirection: "row", gap: 10 }}>
-                                    <Icon name="map-marked-alt" color={"#0F172B"} size={18} />
-                                    <Text style={{ fontSize: 15 }}>Edit address</Text>
-                                </View>
-                                <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <View style={{ marginVertical: 25 }}>
-                        <View style={settingStyle.coverIt2}>
-                            <TouchableOpacity style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", paddingVertical: 3.5 }} onPress={() => setTest(true)}>
-                                <Text style={{ fontWeight: "bold", fontSize: 15, color: "red" }}>Delete account</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                            </View>
+                        </>
+                    )}
                     {test ? (
                         <View style={{ paddingBottom: 15 }}>
                             <Text style={{ fontSize: 15, textAlign: "center", paddingBottom: 8, fontWeight: "bold" }}>Are you sure?</Text>

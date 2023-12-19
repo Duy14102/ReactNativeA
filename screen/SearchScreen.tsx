@@ -4,6 +4,7 @@ import DetailPage from '../pages/DetailPage';
 import Setting from '../pages/Setting';
 import SearchMenu from '../component/SearchComp/SearchMenu';
 import WriteReview from '../component/WriteReview';
+import SearchOrder from '../component/SearchComp/SearchOrder';
 
 const SearchStack = createNativeStackNavigator();
 function SearchScreen() {
@@ -11,6 +12,7 @@ function SearchScreen() {
         <SearchStack.Navigator screenOptions={{ headerShown: false }}>
             <SearchStack.Screen name='Search' component={Search}></SearchStack.Screen>
             <SearchStack.Screen name='SearchMenu' component={SearchMenu}></SearchStack.Screen>
+            <SearchStack.Screen name='SearchOrder' component={SearchOrder}></SearchStack.Screen>
             <SearchStack.Screen name='DetailPage' component={DetailPage}></SearchStack.Screen>
             <SearchStack.Screen name='WriteReview' component={WriteReview}></SearchStack.Screen>
             <SearchStack.Screen name='Setting' component={Setting}></SearchStack.Screen>
