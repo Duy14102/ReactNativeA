@@ -574,7 +574,7 @@ app.post("/RemoveAddressUser", (req, res) => {
 app.get("/GetAllUser", async (req, res) => {
     const sort = { role: -1 }
     try {
-        const getuser = await getUserD.find({ role: { $in: [req.query.type, req.query.pipe, req.query.hype] } }).sort(sort);
+        const getuser = await getUserD.find({ role: { $in: [req.query.type, req.query.pipe, req.query.hype] }, status: req.query.status }).sort(sort);
         const page = parseInt(req.query.page)
         const limit = parseInt(req.query.limit)
 

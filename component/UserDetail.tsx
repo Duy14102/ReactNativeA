@@ -42,7 +42,6 @@ function UserDetail({ route }: { route: any }) {
             setUpdatePhone("")
             setUpdateImage("")
             proUser()
-            setSuccess(false)
             setEditIn4(false)
             setReload(false)
         }
@@ -123,7 +122,6 @@ function UserDetail({ route }: { route: any }) {
             }
         });
     }
-    // console.log(updateimage);
 
     const imgUser = "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
     return (

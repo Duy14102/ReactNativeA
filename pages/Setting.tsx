@@ -25,6 +25,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
     const [islogin, setIsLogin] = useState(false)
     const [islogout, setIsLogout] = useState(false)
     const [refresh, setFresh] = useState(false)
+    const [success, setSuccess] = useState(false)
     const [loadGoogle, setLoadGoogle] = useState(false)
     const [googleFail, setGoogleFail] = useState(false)
     const [user, setUser] = useState<any>()
@@ -35,9 +36,20 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
         setTimeout(() => {
             getData()
             setGoogleFail(false)
+            setUsername("")
+            setPassword("")
             setFresh(false)
         }, 1000)
     }
+
+    useEffect(() => {
+        if (success) {
+            setSeePassword(false)
+            setUsername("")
+            setPassword("")
+            setSuccess(false)
+        }
+    }, [success])
 
     useEffect(() => {
         getData()
@@ -103,9 +115,21 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
             axios(configuration)
                 .then(async (result) => {
                     setIsLogin(false)
+                    setSuccess(true)
+                    const decode: any = jwtDecode(result.data.token)
                     const jsonValue = JSON.stringify(result.data.token);
                     await AsyncStorage.setItem('TOKEN', jsonValue);
-                    getData()
+                    if (decode.userRole === 4) {
+                        navigation.navigate("Admin")
+                    }
+                    else if (decode.userRole === 3) {
+
+                    }
+                    else if (decode.userRole === 2) {
+
+                    } else {
+                        getData()
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
@@ -379,7 +403,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
                                         ) : null}
                                         <Text style={[settingStyle.mochText, { paddingTop: 15 }]}>Password</Text>
                                         <View style={{ backgroundColor: "rgb(243 244 246)", borderRadius: 10, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                            <TextInput style={{ width: "90%" }} secureTextEntry={seePassword ? false : true} onChange={(e) => setPassword(e.nativeEvent.text)} />
+                                            <TextInput style={{ width: "90%" }} secureTextEntry={seePassword ? false : true} onChange={(e) => setPassword(e.nativeEvent.text)} value={password} />
                                             {seePassword ? (
                                                 <TouchableOpacity style={{ width: "10%" }} onPress={() => setSeePassword(false)}>
                                                     <Icon name="eye-slash" style={{ width: "100%", fontSize: 18 }} />

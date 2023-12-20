@@ -1,6 +1,6 @@
 import { Text, Dimensions } from "react-native";
 import { TabView, TabBar } from 'react-native-tab-view';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CartPage from "../component/CartComp/CartPage";
 import CompletePage from "../component/CartComp/CompletePage";
 import CheckoutPage from "../component/CartComp/CheckoutPage";
