@@ -49,7 +49,7 @@ function DrawerNav({ props }: { props: any }) {
                 </View>
             </DrawerContentScrollView>
             <View style={{ padding: 20, borderWidth: 1, borderColor: "#ccc" }}>
-                <TouchableOpacity onPress={() => navigation.navigate("CustomizeAdmin")} style={{ paddingVertical: 15 }}>
+                <TouchableOpacity onPress={() => navigation.navigate("CustomizeAdmins")} style={{ paddingVertical: 15 }}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                         <Icon name="pen-to-square" size={22} solid />
                         <Text style={{ fontSize: 15, marginLeft: 6 }}>Customize your account</Text>

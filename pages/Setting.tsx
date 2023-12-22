@@ -126,7 +126,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
 
                     }
                     else if (decode.userRole === 2) {
-
+                        navigation.navigate("Employee")
                     } else {
                         getData()
                     }

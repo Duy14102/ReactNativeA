@@ -22,7 +22,7 @@ function DrawerHeader({ title }: { title: any }) {
             <Text style={{ fontSize: 18, fontWeight: "bold" }}>{title}</Text>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
                 {candecode?.userImage ? (
-                    <Image source={{ uri: candecode?.userImage }} style={{ width: 30, height: 30 }} />
+                    <Image source={{ uri: candecode.userImage }} style={{ width: 40, height: 40, resizeMode: "contain", borderRadius: 50 }} />
                 ) : (
                     <Image source={{ uri: "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg" }} style={{ width: 40, height: 40, resizeMode: "contain", borderRadius: 50 }} />
                 )}

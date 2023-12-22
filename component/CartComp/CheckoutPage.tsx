@@ -396,6 +396,10 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypa
                                                     <Text style={{ color: "red", paddingLeft: 5 }}>Phone number invalid!</Text>
                                                 ) : null}
                                             </View>
+                                            <View style={{ flexDirection: "column", gap: 5, marginVertical: 15 }}>
+                                                <Text style={{ fontSize: 15, paddingLeft: 5 }}>Address</Text>
+                                                <TextInput value={address} style={{ borderWidth: 1, borderColor: "gray", borderRadius: 6, padding: 10 }} onChange={(e) => setAddress(e.nativeEvent.text)} />
+                                            </View>
                                         </>
                                     )}
                                     {candecode ? (

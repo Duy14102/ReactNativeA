@@ -1996,6 +1996,38 @@ app.get("/GetBookingHistory", async (req, res) => {
     }
 })
 
+//get employee booking history
+app.get("/GetBookingHistoryNative", async (req, res) => {
+    try {
+        const getIt = await GetBooking.find({ status: { $in: [3, 4, 5] }, employee: { $elemMatch: { id: req.query.id } } });
+        const page = parseInt(req.query.page)
+        const limit = parseInt(req.query.limit)
+
+        const start = (page - 1) * limit
+        const end = page * limit
+
+        const results = {}
+        results.total = getIt.length
+        results.pageCount = Math.ceil(getIt.length / limit)
+
+        if (end < getIt.length) {
+            results.next = {
+                page: page + 1
+            }
+        }
+        if (start > 0) {
+            results.prev = {
+                page: page - 1
+            }
+        }
+
+        results.result = getIt.slice(start, end)
+        res.send({ results });
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 //Get Booking for table
 app.get("/GetTable4BookingHistory", async (req, res) => {
     try {

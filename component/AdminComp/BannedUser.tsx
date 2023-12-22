@@ -11,7 +11,7 @@ function BannedUser({ index }: { index: any }) {
     const pulldown = () => {
         setFresh(true)
         setTimeout(() => {
-
+            getPagination()
             setFresh(false)
         }, 1000)
     }

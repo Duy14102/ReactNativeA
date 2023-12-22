@@ -64,7 +64,7 @@ function DetailUser({ route, navigation }: { route: any, navigation: any }) {
                 </TouchableOpacity>
                 <View style={{ marginVertical: 15, alignItems: "center" }}>
                     {i.userimage ? (
-                        <Image source={{ uri: i.userimage }} />
+                        <Image source={{ uri: i.userimage }} style={{ width: 90, height: 90, borderRadius: 50 }} />
                     ) : (
                         <Image source={{ uri: "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg" }} style={{ width: 90, height: 90, borderRadius: 50 }} />
                     )}
