@@ -15,15 +15,15 @@ function DetailBookEmp({ route }: { route: any }) {
     const navigation = useNavigation<any>()
     const [table, setTable] = useState<any>([])
     const [GetTable, setGetTable] = useState([])
-    const [cancelReq, setCancelReq] = useState(false)
-    const [checkBlank, setCheckBlank] = useState(false)
+    // const [cancelReq, setCancelReq] = useState(false)
+    // const [checkBlank, setCheckBlank] = useState(false)
     const [acceptTable, setAcceptTable] = useState(false)
     const [CheckTableId, setCheckTableId] = useState(false)
-    const [load, setLoad] = useState(false)
+    // const [load, setLoad] = useState(false)
     const [load2, setLoad2] = useState(false)
     const [refresh, setFresh] = useState(false);
     const [tableHis, setTableHis] = useState<any>([])
-    const [cancelReason, setCancelReason] = useState("")
+    // const [cancelReason, setCancelReason] = useState("")
     const [TableId, setTableId] = useState<any>()
     const pulldown = () => {
         setFresh(true)
@@ -110,36 +110,36 @@ function DetailBookEmp({ route }: { route: any }) {
             })
     }
 
-    const denybooking = () => {
-        const configuration = {
-            method: "post",
-            url: "http://localhost:3000/DenyBookingCustomer",
-            data: {
-                id: i._id,
-                status: 4,
-                denyreason: cancelReason,
-                employee: takeEmployee
-            }
-        }
-        if (cancelReason === "") {
-            setCheckBlank(true)
-            return false
-        }
-        setLoad(true)
-        setTimeout(() => {
-            axios(configuration)
-                .then(() => {
-                    setLoad(false)
-                    setCancelReason("")
-                    setCheckBlank(false)
-                    setCancelReq(false)
-                    navigation.goBack()
-                }).catch((err) => {
-                    setLoad(false)
-                    console.log(err);
-                })
-        }, 1000);
-    }
+    // const denybooking = () => {
+    //     const configuration = {
+    //         method: "post",
+    //         url: "http://localhost:3000/DenyBookingCustomer",
+    //         data: {
+    //             id: i._id,
+    //             status: 4,
+    //             denyreason: cancelReason,
+    //             employee: takeEmployee
+    //         }
+    //     }
+    //     if (cancelReason === "") {
+    //         setCheckBlank(true)
+    //         return false
+    //     }
+    //     setLoad(true)
+    //     setTimeout(() => {
+    //         axios(configuration)
+    //             .then(() => {
+    //                 setLoad(false)
+    //                 setCancelReason("")
+    //                 setCheckBlank(false)
+    //                 setCancelReq(false)
+    //                 navigation.goBack()
+    //             }).catch((err) => {
+    //                 setLoad(false)
+    //                 console.log(err);
+    //             })
+    //     }, 1000);
+    // }
 
     const addTableBooking = () => {
         if (TableId) {
@@ -339,7 +339,7 @@ function DetailBookEmp({ route }: { route: any }) {
                     </View>
                     {i.status === 1 ? (
                         <>
-                            <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "#03ba5f", alignItems: "center", paddingVertical: 10 }} onPress={() => { setAcceptTable(true); setCancelReq(false) }}>
+                            <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "#03ba5f", alignItems: "center", paddingVertical: 10 }} onPress={() => setAcceptTable(true)}>
                                 <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Accept booking</Text>
                             </TouchableOpacity>
                             {acceptTable ? (
@@ -375,7 +375,7 @@ function DetailBookEmp({ route }: { route: any }) {
                                     ) : null}
                                 </View>
                             ) : null}
-                            <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "tomato", alignItems: "center", paddingVertical: 10 }} onPress={() => { setCancelReq(true); setAcceptTable(false) }}>
+                            {/* <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "tomato", alignItems: "center", paddingVertical: 10 }} onPress={() => { setCancelReq(true); setAcceptTable(false) }}>
                                 <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Deny booking</Text>
                             </TouchableOpacity>
                             {cancelReq ? (
@@ -397,7 +397,7 @@ function DetailBookEmp({ route }: { route: any }) {
                             ) : null}
                             {load ? (
                                 <ActivityIndicator size={21} color={"#FEA116"} />
-                            ) : null}
+                            ) : null} */}
                         </>
                     ) : null}
                 </View>

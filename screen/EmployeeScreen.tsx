@@ -11,6 +11,10 @@ import EmployeeTable from '../pages/employee/EmployeeTable';
 import TaskHandle from '../component/EmpComp/TaskHandle';
 import DetailCartEmp from '../component/EmpComp/DetailCartEmp';
 import DetailBookEmp from '../component/EmpComp/DetailBookEmp';
+import DetailTableEmp from '../component/EmpComp/DetailTableEmp';
+import AddTableItem from '../component/EmpComp/AddTableItem';
+import ChangeTableEmp from '../component/EmpComp/ChangeTableEmp';
+import DetailHistoryTable from '../component/EmpComp/DetailHistoryTable';
 
 const Stack = createNativeStackNavigator();
 function Screen() {
@@ -44,6 +48,10 @@ function Screen4() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='EmployeeTable' component={EmployeeTable}></Stack.Screen>
+            <Stack.Screen name='DetailTableEmp' component={DetailTableEmp}></Stack.Screen>
+            <Stack.Screen name='AddTableItem' component={AddTableItem}></Stack.Screen>
+            <Stack.Screen name='ChangeTableEmp' component={ChangeTableEmp}></Stack.Screen>
+            <Stack.Screen name='DetailHistoryTable' component={DetailHistoryTable}></Stack.Screen>
         </Stack.Navigator>
     )
 }
@@ -81,7 +89,7 @@ function EmployeeScreen() {
             }} />
             <Drawer.Screen name="EmployeeTables" component={Screen4} options={{
                 drawerIcon: ({ color }) => (
-                    <Icon name='chair' size={22} color={color} solid />
+                    <Icon name='bell-concierge' size={22} color={color} solid />
                 ),
                 title: "Table Management"
             }} />

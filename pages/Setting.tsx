@@ -132,6 +132,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
                     }
                 })
                 .catch((err) => {
+                    setIsLogin(false)
                     console.log(err);
 
                 });

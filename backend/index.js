@@ -1415,10 +1415,20 @@ app.get("/GetAdminMenu", async (req, res) => {
     }
 })
 
+//Get current detail table
+app.get("/GetCurrentDetailTableNative", async (req, res) => {
+    try {
+        const getIt = await GetTable.findOne({ _id: req.query.id });
+        res.send({ data: getIt });
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 //Get all item to add 4 table
 app.get("/GetItemCanTable", async (req, res) => {
     try {
-        const getIt = await getThisMenu.find({});
+        const getIt = await getThisMenu.find({ foodcategory: req.query.cate });
         const page = parseInt(req.query.page)
         const limit = parseInt(req.query.limit)
 
@@ -2396,12 +2406,9 @@ app.post("/Checkout4Booking", (req, res) => {
                             $inc: {
                                 foodquantity: -datad.quantity
                             }
-                        }).then(() => {
-                            res.send({ message: "succeed" })
-                        }).catch((err) => {
-                            console.log(err);
-                        })
+                        }).exec()
                     })
+                    res.send({ message: "succeed" })
                 }).catch((err) => {
                     console.log(err);
                 })

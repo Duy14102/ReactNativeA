@@ -36,14 +36,19 @@ function CartPage({ jumpTo, setShippingFee, shippingFee, index }: { jumpTo: any,
         const called = await AsyncStorage.getItem("cart")
         if (called) {
             var val = JSON.parse(called)
-            let overCount = []
-            for (const arrist of val) {
-                const res = await fetch(`http://localhost:3000/GetCartItem?name=${arrist.name}&quantity=${arrist.quantity}`)
-                const resD = await res.json()
-                overCount.push(resD)
+            if (val.length > 0) {
+                let overCount = []
+                for (const arrist of val) {
+                    const res = await fetch(`http://localhost:3000/GetCartItem?name=${arrist.name}&quantity=${arrist.quantity}`)
+                    const resD = await res.json()
+                    overCount.push(resD)
+                }
+                setCheckVal(false)
+                setCart(overCount)
+            } else {
+                await AsyncStorage.removeItem("cart")
+                setCheckVal(true)
             }
-            setCheckVal(false)
-            setCart(overCount)
         } else {
             await AsyncStorage.removeItem("cart")
             setCheckVal(true)
