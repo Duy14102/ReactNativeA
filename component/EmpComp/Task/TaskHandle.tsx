@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, RefreshControl, ActivityIndicator } from "react-native";
 import { useState } from "react";
-import DrawerHeader from "../AdminComp/DrawerHeader";
+import DrawerHeader from "../../AdminComp/DrawerHeader";
 import { useNavigation } from "@react-navigation/native";
 import Clipboard from '@react-native-clipboard/clipboard';
 import axios from "axios";

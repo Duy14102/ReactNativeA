@@ -13,6 +13,7 @@ import HomeScreen from './screen/HomeScreen';
 import CartScreen from './screen/CartScreen';
 import AdminScreen from './screen/AdminScreen';
 import EmployeeScreen from './screen/EmployeeScreen';
+import ManagerScreen from './screen/ManagerScreen';
 
 function App(): JSX.Element {
   const Tabs = createBottomTabNavigator();
@@ -64,6 +65,7 @@ function App(): JSX.Element {
           <Tabs.Navigator backBehavior='history' initialRouteName={routeName} screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { backgroundColor: "#fff", position: "absolute", height: 60, borderTopLeftRadius: 10, borderTopRightRadius: 10, shadowColor: "#000", shadowOpacity: 0.06, shadowOffset: { width: 10, height: 10 }, paddingHorizontal: 10 } }}>
             <Tabs.Screen name='Notification' component={Notification} options={{ tabBarButton: () => null }} />
             <Tabs.Screen name='Admin' component={AdminScreen} options={{ tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
+            <Tabs.Screen name='Manager' component={ManagerScreen} options={{ tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
             <Tabs.Screen name='Employee' component={EmployeeScreen} options={{ tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
             <Tabs.Screen name='Homes' component={HomeScreen} options={{
               tabBarIcon: ({ focused }) => (

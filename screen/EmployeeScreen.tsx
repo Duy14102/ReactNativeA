@@ -8,13 +8,13 @@ import EmployeeTask from '../pages/employee/EmployeeTask';
 import EmployeeCart from '../pages/employee/EmployeeCart';
 import EmployeeBooking from '../pages/employee/EmployeeBooking';
 import EmployeeTable from '../pages/employee/EmployeeTable';
-import TaskHandle from '../component/EmpComp/TaskHandle';
-import DetailCartEmp from '../component/EmpComp/DetailCartEmp';
-import DetailBookEmp from '../component/EmpComp/DetailBookEmp';
-import DetailTableEmp from '../component/EmpComp/DetailTableEmp';
-import AddTableItem from '../component/EmpComp/AddTableItem';
-import ChangeTableEmp from '../component/EmpComp/ChangeTableEmp';
-import DetailHistoryTable from '../component/EmpComp/DetailHistoryTable';
+import TaskHandle from '../component/EmpComp/Task/TaskHandle';
+import DetailCartEmp from '../component/EmpComp/Cart/DetailCartEmp';
+import DetailBookEmp from '../component/EmpComp/Booking/DetailBookEmp';
+import DetailTableEmp from '../component/EmpComp/Table/DetailTableEmp';
+import AddTableItem from '../component/EmpComp/Table/AddTableItem';
+import ChangeTableEmp from '../component/EmpComp/Table/ChangeTableEmp';
+import DetailHistoryTable from '../component/EmpComp/Table/DetailHistoryTable';
 
 const Stack = createNativeStackNavigator();
 function Screen() {

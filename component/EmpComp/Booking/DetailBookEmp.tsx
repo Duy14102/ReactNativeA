@@ -1,7 +1,7 @@
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, RefreshControl, TextInput, Image, ActivityIndicator } from "react-native";
 import { useState, Fragment, useEffect } from "react";
 import { Picker } from '@react-native-picker/picker';
-import DrawerHeader from "../AdminComp/DrawerHeader";
+import DrawerHeader from "../../AdminComp/DrawerHeader";
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Clipboard from '@react-native-clipboard/clipboard';

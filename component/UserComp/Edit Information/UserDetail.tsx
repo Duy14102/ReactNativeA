@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView, View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, RefreshControl } from "react-native"
-import Header from "./Header"
-import Footer from "./Footer"
+import Header from "../../Header"
+import Footer from "../../Footer"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -115,7 +115,8 @@ function UserDetail({ route }: { route: any }) {
         launchCamera({ mediaType: "photo", includeBase64: true }, (response) => {
             if (response.assets) {
                 response.assets?.map((i) => {
-                    setUpdateImage(i.base64)
+                    const imagesss = `data:${i.type};base64,${i.base64}`;
+                    setUpdateImage(imagesss)
                 })
             } else {
                 console.log("Bug");

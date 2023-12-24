@@ -1,5 +1,5 @@
 import { Text, TouchableOpacity, Dimensions } from "react-native";
-import DrawerHeader from "../AdminComp/DrawerHeader";
+import DrawerHeader from "../../AdminComp/DrawerHeader";
 import { TabView, TabBar } from 'react-native-tab-view';
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";

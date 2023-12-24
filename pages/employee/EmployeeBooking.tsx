@@ -4,8 +4,8 @@ import DrawerHeader from "../../component/AdminComp/DrawerHeader";
 import { TabView, TabBar } from 'react-native-tab-view';
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
-import ActiveBookEmp from "../../component/EmpComp/ActiveBookEmp";
-import HistoryBookEmp from "../../component/EmpComp/HistoryBookEmp";
+import ActiveBookEmp from "../../component/EmpComp/Booking/ActiveBookEmp";
+import HistoryBookEmp from "../../component/EmpComp/Booking/HistoryBookEmp";
 
 function EmployeeBooking() {
     const navigation = useNavigation<any>()

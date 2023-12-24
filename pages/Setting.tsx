@@ -123,7 +123,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
                         navigation.navigate("Admin")
                     }
                     else if (decode.userRole === 3) {
-
+                        navigation.navigate("Manager")
                     }
                     else if (decode.userRole === 2) {
                         navigation.navigate("Employee")

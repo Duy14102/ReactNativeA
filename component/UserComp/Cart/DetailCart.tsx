@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView, View, Text, Image, TouchableOpacity, Pressable } from "react-native"
-import Header from "../Header"
-import Footer from "../Footer"
+import Header from "../../Header"
+import Footer from "../../Footer"
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useEffect, useState } from "react"
 import Clipboard from '@react-native-clipboard/clipboard';

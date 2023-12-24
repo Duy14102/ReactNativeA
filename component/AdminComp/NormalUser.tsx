@@ -25,7 +25,6 @@ function NormalUser({ index }: { index: any }) {
             currentPage.current = 1;
             getPagination()
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isfocused, index])
 
     function handlePageClick(e: any) {

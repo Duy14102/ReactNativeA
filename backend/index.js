@@ -729,6 +729,23 @@ app.post("/FinishTaskEmployee", async (req, res) => {
     }
 })
 
+//Delete Task Employee
+app.post("/DeleteTaskEmployee", (req, res) => {
+    try {
+        getUserD.updateOne({ _id: req.body.userid }, {
+            $pull: {
+                task: {
+                    id: req.body.taskid
+                }
+            }
+        })
+            .then(() => { res.send({ data: "succeed" }) })
+            .catch((err) => { console.log(err); })
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 //Get Detail User
 app.get("/GetDetailUser", async (req, res) => {
     try {

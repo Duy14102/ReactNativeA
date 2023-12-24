@@ -1,10 +1,10 @@
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, StyleSheet, Image, RefreshControl } from "react-native"
-import Header from "../Header"
-import Footer from "../Footer"
-import axios from "axios";
-import { useState, useEffect, useRef } from "react";
+import { SafeAreaView, ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, RefreshControl } from "react-native"
+import Header from "../../Header"
+import Footer from "../../Footer"
+import { useState, useEffect, useRef } from "react"
+import axios from "axios"
 
-function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
+function HistoryCart({ route, navigation }: { route: any, navigation: any }) {
     const { userid } = route.params
     const [order, setOrder] = useState<any>([])
     const [refresh, setFresh] = useState(false);
@@ -34,7 +34,7 @@ function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetOrderUserPanel",
+            url: "http://localhost:3000/GetOrderHistoryUserPanel",
             params: {
                 id: userid,
                 limit: limit,
@@ -98,7 +98,7 @@ function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
                 <View style={{ flex: 1, paddingVertical: 15 }}>
-                    <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Active order</Text>
+                    <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Order history</Text>
                     {order.length > 0 ? (
                         <>
                             {order.map((i: any) => {
@@ -113,12 +113,12 @@ function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
                                                     )
                                                 })}
                                             </View>
-                                            {i.status === 1 ? (
-                                                <Text style={{ fontSize: 15, color: "#fca103" }}>🕒 Pending</Text>
-                                            ) : i.status === 2 ? (
-                                                <Text style={{ fontSize: 15, color: "#03ba5f" }}>✅ Approve</Text>
-                                            ) : i.status === 4 ? (
-                                                <Text style={{ fontSize: 15 }}>🕒 Pending cancel</Text>
+                                            {i.status === 3 ? (
+                                                <Text style={{ fontSize: 15, color: "tomato" }}>Denied</Text>
+                                            ) : i.status === 5 ? (
+                                                <Text style={{ fontSize: 15, color: "#03ba5f" }}>Succeeded</Text>
+                                            ) : i.status === 6 ? (
+                                                <Text style={{ fontSize: 15, color: "tomato" }}>Canceled</Text>
                                             ) : null}
                                         </View>
                                         <View style={{ flexDirection: "row", gap: 10, position: "relative", paddingTop: 4 }}>
@@ -235,5 +235,4 @@ const cateStyle = StyleSheet.create({
         elevation: 5,
     }
 })
-
-export default ActiveCart
+export default HistoryCart

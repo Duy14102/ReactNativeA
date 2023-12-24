@@ -1,15 +1,14 @@
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, RefreshControl, StyleSheet, Image } from "react-native";
+import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, RefreshControl, Image, StyleSheet } from "react-native";
 import { useState, useRef, useEffect } from "react";
-import DrawerHeader from "./DrawerHeader";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import DrawerHeader from "../../../AdminComp/DrawerHeader";
 import axios from "axios";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-function SearchUser({ route }: { route: any }) {
+function TotalEmpManager() {
     const isfocused = useIsFocused()
-    const { name } = route.params
     const navigation = useNavigation<any>()
     const [refresh, setFresh] = useState(false);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([])
     const [pageCount, setPageCount] = useState(6);
     const currentPage = useRef<any>();
     const limit = 8
@@ -24,21 +23,20 @@ function SearchUser({ route }: { route: any }) {
     useEffect(() => {
         if (isfocused) {
             currentPage.current = 1;
-            findUser()
+            getPagination()
         }
     }, [isfocused])
 
     function handlePageClick(e: any) {
         currentPage.current = e + 1
-        findUser();
+        getPagination();
     }
 
-    const findUser = () => {
+    const getPagination = () => {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/Find4User",
+            url: "http://localhost:3000/GetEmploy4Mana",
             params: {
-                name: name,
                 page: currentPage.current,
                 limit: limit
             },
@@ -58,14 +56,14 @@ function SearchUser({ route }: { route: any }) {
             return false
         }
         currentPage.current = currentPage.current - 1
-        findUser()
+        getPagination()
     }
     function pageNext() {
         if (currentPage.current >= pageCount) {
             return false
         }
         currentPage.current = currentPage.current + 1
-        findUser()
+        getPagination()
     }
 
     const pageButton = (count: any) => {
@@ -80,27 +78,18 @@ function SearchUser({ route }: { route: any }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
-                <DrawerHeader title={"User Management"} />
-                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: "#fff", paddingHorizontal: 15, paddingVertical: 10 }}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Text style={{ fontSize: 17 }}>{"<"} Back</Text>
-                    </TouchableOpacity>
-                    {data.length > 0 ? (
-                        <Text style={{ fontSize: 16, fontWeight: "bold" }}>Display all {data.length} accounts</Text>
-                    ) : null}
-                </View>
+                <DrawerHeader title={"Total employee"} />
+                <TouchableOpacity style={{ backgroundColor: "#fff", paddingHorizontal: 15, paddingVertical: 10 }} onPress={() => navigation.goBack()}>
+                    <Text style={{ fontSize: 17 }}>{"<"} Back</Text>
+                </TouchableOpacity>
                 {data.length > 0 ? (
                     <View style={{ flex: 1, paddingVertical: 15 }}>
                         {data.map((i: any) => {
                             return (
-                                <TouchableOpacity key={i._id} style={{ backgroundColor: "#fff", marginVertical: 15 }} onPress={() => navigation.navigate("DetailUser", { i: i })}>
+                                <TouchableOpacity key={i._id} style={{ backgroundColor: "#fff", marginVertical: 15 }} onPress={() => navigation.navigate("DetailTotalEmpManager", { i: i })}>
                                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 10, paddingVertical: 10, borderBottomWidth: 1, borderColor: "#ccc" }}>
                                         <Text style={{ fontSize: 17 }}><Text style={{ fontWeight: "bold" }}>Id</Text> : {i._id}</Text>
-                                        {i.status === 1 ? (
-                                            <Text style={{ fontSize: 16 }}><Text style={{ fontWeight: "bold" }}>Status</Text> : <Text style={{ color: "#fff" }}>🟢</Text></Text>
-                                        ) : (
-                                            <Text style={{ fontSize: 16 }}><Text style={{ fontWeight: "bold" }}>Status</Text> : <Text style={{ color: "#fff" }}>🔴</Text></Text>
-                                        )}
+                                        <Text style={{ fontSize: 16 }}><Text style={{ fontWeight: "bold" }}>Status</Text> : <Text style={{ color: "#fff" }}>🟢</Text></Text>
                                     </View>
                                     <View style={{ paddingHorizontal: 10, paddingVertical: 15, flexDirection: "row", gap: 10 }}>
                                         {i.userimage ? (
@@ -141,7 +130,7 @@ function SearchUser({ route }: { route: any }) {
                     </View>
                 ) : (
                     <View style={{ flex: 1, padding: 15 }}>
-                        <Text style={{ textAlign: "center", fontSize: 18, fontWeight: "bold" }}>There's no account matched!</Text>
+                        <Text style={{ textAlign: "center", fontSize: 18, fontWeight: "bold" }}>There's no employee account!</Text>
                     </View>
                 )}
             </ScrollView>
@@ -206,4 +195,4 @@ const cateStyle = StyleSheet.create({
     },
 })
 
-export default SearchUser
+export default TotalEmpManager

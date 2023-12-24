@@ -3,17 +3,17 @@ import Setting from '../pages/Setting';
 import Signup from '../pages/Signup';
 import PrivacyAndTerm from '../pages/PrivacyAndTerm';
 import Contact from '../pages/Contact';
-import UserDetail from '../component/UserDetail';
-import EditAddress from '../component/UserComp/EditAddress';
-import EditPassword from '../component/UserComp/EditPassword';
-import ActiveCart from '../component/UserComp/ActiveCart';
-import DetailCart from '../component/UserComp/DetailCart';
-import WhyCancel from '../component/UserComp/WhyCancel';
-import HistoryCart from '../component/UserComp/HistoryCart';
-import FindOrder from '../component/UserComp/FindOrder';
-import ActiveBooking from '../component/UserComp/ActiveBooking';
-import HistoryBooking from '../component/UserComp/HistoryBooking';
-import DetailBooking from '../component/UserComp/DetailBooking';
+import UserDetail from '../component/UserComp/Edit Information/UserDetail';
+import EditAddress from '../component/UserComp/Edit Information/EditAddress';
+import EditPassword from '../component/UserComp/Edit Information/EditPassword';
+import ActiveCart from '../component/UserComp/Cart/ActiveCart';
+import DetailCart from '../component/UserComp/Cart/DetailCart';
+import WhyCancel from '../component/UserComp/Edit Information/WhyCancel';
+import HistoryCart from '../component/UserComp/Cart/HistoryCart';
+import FindOrder from '../component/UserComp/Cart/FindOrder';
+import ActiveBooking from '../component/UserComp/Booking/ActiveBooking';
+import HistoryBooking from '../component/UserComp/Booking/HistoryBooking';
+import DetailBooking from '../component/UserComp/Booking/DetailBooking';
 
 const SettingStack = createNativeStackNavigator();
 function SettingScreen() {

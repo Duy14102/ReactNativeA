@@ -1,6 +1,6 @@
 import { SafeAreaView, ScrollView, View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, RefreshControl } from "react-native"
-import Header from "../Header"
-import Footer from "../Footer"
+import Header from "../../Header"
+import Footer from "../../Footer"
 import { useState, useEffect } from "react"
 import axios from "axios"
 import Icon from "react-native-vector-icons/FontAwesome5"
