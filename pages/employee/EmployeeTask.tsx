@@ -28,7 +28,7 @@ function EmployeeTask() {
             SetCandecode(jwtDecode(token))
             const configuration2 = {
                 method: "get",
-                url: 'http://192.168.1.216:3000/GetDetailUser',
+                url: 'http://localhost:3000/GetDetailUser',
                 params: {
                     userid: called.userId
                 }
@@ -47,7 +47,7 @@ function EmployeeTask() {
         if (isfocused) {
             const configuration = {
                 method: "get",
-                url: "http://192.168.1.216:3000/GetData4Employee",
+                url: "http://localhost:3000/GetData4Employee",
             }
             axios(configuration)
                 .then((res) => {

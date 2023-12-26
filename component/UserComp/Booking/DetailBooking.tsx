@@ -72,7 +72,7 @@ function DetailBooking({ route, navigation }: { route: any, navigation: any }) {
     function getTableServ() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetTableNativeBooking",
+            url: "http://localhost:3000/GetTableNativeBooking",
             params: {
                 id: i._id
             }
@@ -88,7 +88,7 @@ function DetailBooking({ route, navigation }: { route: any, navigation: any }) {
     function getTableHis() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetHistoryTableNativeBooking",
+            url: "http://localhost:3000/GetHistoryTableNativeBooking",
             params: {
                 id: i._id
             }
@@ -104,7 +104,7 @@ function DetailBooking({ route, navigation }: { route: any, navigation: any }) {
     const CancelBooking = (id: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/CancelBooking",
+            url: "http://localhost:3000/CancelBooking",
             data: {
                 id: id,
                 reason: cancelReason

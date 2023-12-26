@@ -23,7 +23,7 @@ function DetailTaskManager({ route }: { route: any }) {
     const finishTask = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/DeleteTaskEmployee",
+            url: "http://localhost:3000/DeleteTaskEmployee",
             data: {
                 taskid: i.id,
                 userid: id

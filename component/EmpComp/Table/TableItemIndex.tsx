@@ -34,7 +34,7 @@ function TableItemIndex({ cate, itemss }: { cate: any, itemss: any }) {
     function getAdminMenu() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetItemCanTable",
+            url: "http://localhost:3000/GetItemCanTable",
             params: {
                 page: currentPage.current,
                 limit: limit,
@@ -94,7 +94,7 @@ function TableItemIndex({ cate, itemss }: { cate: any, itemss: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/AddItemToTable",
+            url: "http://localhost:3000/AddItemToTable",
             data: {
                 tableid: itemss._id,
                 statusCheck: itemss.tablestatus,

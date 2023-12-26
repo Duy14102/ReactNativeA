@@ -52,7 +52,7 @@ function FindBookingEmp({ route }: { route: any }) {
     const getPagination = () => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/SearchAllBooking",
+            url: "http://localhost:3000/SearchAllBooking",
             params: {
                 date: new Date(date),
                 page: currentPage.current,

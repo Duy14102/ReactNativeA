@@ -39,7 +39,7 @@ function SearchMenuManager({ route }: { route: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetSearch",
+            url: "http://localhost:3000/GetSearch",
             params: {
                 foodSearch: name,
                 page: currentPage.current,

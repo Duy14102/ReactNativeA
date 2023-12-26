@@ -36,7 +36,7 @@ function BannedUser({ index }: { index: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetAllUser2",
+            url: "http://localhost:3000/GetAllUser2",
             params: {
                 type: 1,
                 status: 2,

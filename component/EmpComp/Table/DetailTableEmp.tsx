@@ -28,7 +28,7 @@ function DetailTableEmp({ route }: { route: any }) {
     const calledSynb = () => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetCurrentDetailTableNative",
+            url: "http://localhost:3000/GetCurrentDetailTableNative",
             params: {
                 id: i._id
             }
@@ -68,7 +68,7 @@ function DetailTableEmp({ route }: { route: any }) {
     const checkOut = (e: any, data: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/Checkout4Booking",
+            url: "http://localhost:3000/Checkout4Booking",
             data: {
                 id: e,
                 fulltotal: total2,
@@ -97,7 +97,7 @@ function DetailTableEmp({ route }: { route: any }) {
     const checkOut4Normal = (data: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/Checkout4Normal",
+            url: "http://localhost:3000/Checkout4Normal",
             data: {
                 id: data._id,
                 employee: takeEmployee,
@@ -124,7 +124,7 @@ function DetailTableEmp({ route }: { route: any }) {
     const deleteTable = (i: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/DeleteTableNow",
+            url: "http://localhost:3000/DeleteTableNow",
             data: {
                 id: i
             }
@@ -149,7 +149,7 @@ function DetailTableEmp({ route }: { route: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeTableNameQuick",
+            url: "http://localhost:3000/ChangeTableNameQuick",
             data: {
                 id: i,
                 name: TBnamechange

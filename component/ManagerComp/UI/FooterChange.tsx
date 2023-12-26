@@ -35,7 +35,7 @@ function FooterChange({ index }: { index: any }) {
     const dataSynb = () => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetHeroManager",
+            url: "http://localhost:3000/GetHeroManager",
             params: {
                 title: "Footer"
             }
@@ -55,7 +55,7 @@ function FooterChange({ index }: { index: any }) {
     const changeWordUp = (i: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordUp",
+            url: "http://localhost:3000/ChangeWordUp",
             data: {
                 title: "Footer",
                 wordup: wordup
@@ -77,7 +77,7 @@ function FooterChange({ index }: { index: any }) {
     const changeWordMiddle = (i: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordMiddle",
+            url: "http://localhost:3000/ChangeWordMiddle",
             data: {
                 title: "Footer",
                 wordmiddle: wordmiddle
@@ -99,7 +99,7 @@ function FooterChange({ index }: { index: any }) {
     const changeWordDown = (i: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordDown",
+            url: "http://localhost:3000/ChangeWordDown",
             data: {
                 title: "Footer",
                 worddown: worddown
@@ -121,7 +121,7 @@ function FooterChange({ index }: { index: any }) {
     const changeWordTime = (i: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordTime",
+            url: "http://localhost:3000/ChangeWordTime",
             data: {
                 title: "Footer",
                 wordtime: wordtime

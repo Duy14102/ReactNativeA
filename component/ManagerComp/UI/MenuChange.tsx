@@ -40,7 +40,7 @@ function MenuChange({ index }: { index: any }) {
     const dataSynb = () => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetHeroManager",
+            url: "http://localhost:3000/GetHeroManager",
             params: {
                 title: "Menu"
             }
@@ -64,7 +64,7 @@ function MenuChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordUp",
+            url: "http://localhost:3000/ChangeWordUp",
             data: {
                 title: "Menu",
                 wordup: text
@@ -90,7 +90,7 @@ function MenuChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordMiddle",
+            url: "http://localhost:3000/ChangeWordMiddle",
             data: {
                 title: "Menu",
                 wordmiddle: text
@@ -116,7 +116,7 @@ function MenuChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordDown",
+            url: "http://localhost:3000/ChangeWordDown",
             data: {
                 title: "Menu",
                 worddown: text
@@ -142,7 +142,7 @@ function MenuChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeHeroImage",
+            url: "http://localhost:3000/ChangeHeroImage",
             data: {
                 title: "Menu",
                 name: name,
@@ -171,7 +171,7 @@ function MenuChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeHeroImage",
+            url: "http://localhost:3000/ChangeHeroImage",
             data: {
                 title: "Menu",
                 name: name,

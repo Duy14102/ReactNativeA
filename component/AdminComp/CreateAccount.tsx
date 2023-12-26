@@ -72,7 +72,7 @@ function CreateAccount() {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/AddAdmin",
+            url: "http://localhost:3000/AddAdmin",
             data: {
                 email: username,
                 password,

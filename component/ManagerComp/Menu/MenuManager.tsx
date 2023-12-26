@@ -37,7 +37,7 @@ function MenuManager({ cate, index }: { cate: any, index: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetAdminMenu",
+            url: "http://localhost:3000/GetAdminMenu",
             params: {
                 cate: cate,
                 page: currentPage.current,

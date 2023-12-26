@@ -68,7 +68,7 @@ function DetailBookEmp({ route }: { route: any }) {
     function getTableActive() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetAllTableActive",
+            url: "http://localhost:3000/GetAllTableActive",
         }
         axios(configuration)
             .then((res) => {
@@ -81,7 +81,7 @@ function DetailBookEmp({ route }: { route: any }) {
     function getTableServ() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetTableNativeBooking",
+            url: "http://localhost:3000/GetTableNativeBooking",
             params: {
                 id: i._id
             }
@@ -97,7 +97,7 @@ function DetailBookEmp({ route }: { route: any }) {
     function getTableHis() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetHistoryTableNativeBooking",
+            url: "http://localhost:3000/GetHistoryTableNativeBooking",
             params: {
                 id: i._id
             }
@@ -113,7 +113,7 @@ function DetailBookEmp({ route }: { route: any }) {
     const denybooking = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/DenyBookingCustomer",
+            url: "http://localhost:3000/DenyBookingCustomer",
             data: {
                 id: i._id,
                 status: 4,
@@ -145,7 +145,7 @@ function DetailBookEmp({ route }: { route: any }) {
         if (TableId) {
             const configuration = {
                 method: "post",
-                url: "http://192.168.1.216:3000/AddTableCustomer",
+                url: "http://localhost:3000/AddTableCustomer",
                 data: {
                     tableid: TableId._id,
                     tablename: TableId.tablename,

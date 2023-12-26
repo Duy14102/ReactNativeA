@@ -56,7 +56,7 @@ function Home(): JSX.Element {
     function HeroApi2() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetHeroUI",
+            url: "http://localhost:3000/GetHeroUI",
             params: {
                 name: "oh2rwdomomeno4sgguhf"
             }
@@ -75,7 +75,7 @@ function Home(): JSX.Element {
     function HeroApi() {
         const configuration2 = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetHeroUI",
+            url: "http://localhost:3000/GetHeroUI",
             params: {
                 name: "e4onxrx7hmgzmrbel9jk"
             }
@@ -94,7 +94,7 @@ function Home(): JSX.Element {
     function TextApi() {
         const configuration3 = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetHeroText",
+            url: "http://localhost:3000/GetHeroText",
         }
         axios(configuration3)
             .then((res) => {

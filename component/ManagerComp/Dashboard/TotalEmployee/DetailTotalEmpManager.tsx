@@ -27,7 +27,7 @@ function DetailTotalEmpManager({ route, navigation }: { route: any, navigation: 
     const datasynb = () => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetDetailUser",
+            url: "http://localhost:3000/GetDetailUser",
             params: {
                 userid: i._id
             }
@@ -57,7 +57,7 @@ function DetailTotalEmpManager({ route, navigation }: { route: any, navigation: 
         const Both = { title: Title, message: Message, date: datetime, status: 1, datefinish: null }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/GiveTaskEmployee",
+            url: "http://localhost:3000/GiveTaskEmployee",
             data: {
                 id: e,
                 task: Both

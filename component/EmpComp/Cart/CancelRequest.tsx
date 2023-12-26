@@ -9,7 +9,7 @@ function CancelRequest({ setCancelPaid, i, deliverEmployee, fulltotal, setReset 
     const denyOrderKin = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/VnpayRefund",
+            url: "http://localhost:3000/VnpayRefund",
             data: {
                 orderId: i._id,
                 transDate: i.createdAt,
@@ -32,7 +32,7 @@ function CancelRequest({ setCancelPaid, i, deliverEmployee, fulltotal, setReset 
     const cancelIt = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/totaldenyNow",
+            url: "http://localhost:3000/totaldenyNow",
             data: {
                 id: i._id,
                 employee: deliverEmployee,
@@ -56,7 +56,7 @@ function CancelRequest({ setCancelPaid, i, deliverEmployee, fulltotal, setReset 
     const cancelItNow = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/totaldenyNow",
+            url: "http://localhost:3000/totaldenyNow",
             data: {
                 id: i._id,
                 employee: deliverEmployee,

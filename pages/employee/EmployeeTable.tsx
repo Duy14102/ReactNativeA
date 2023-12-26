@@ -70,7 +70,7 @@ function EmployeeTable() {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/AddTableByHand",
+            url: "http://localhost:3000/AddTableByHand",
             data: {
                 tablename: tableName
             }

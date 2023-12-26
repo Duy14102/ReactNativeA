@@ -36,7 +36,7 @@ function CustomizeAdmin() {
             const called: any = jwtDecode(token)
             const configuration = {
                 method: "get",
-                url: "http://192.168.1.216:3000/GetDetailUser",
+                url: "http://localhost:3000/GetDetailUser",
                 params: {
                     userid: called.userId
                 }
@@ -81,7 +81,7 @@ function CustomizeAdmin() {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/UpdateUserDetailNative",
+            url: "http://localhost:3000/UpdateUserDetailNative",
             data: {
                 updateid: id,
                 updatefullname: updateN,

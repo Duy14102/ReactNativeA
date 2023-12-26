@@ -36,7 +36,7 @@ function SearchUser({ route }: { route: any }) {
     const findUser = () => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/Find4User",
+            url: "http://localhost:3000/Find4User",
             params: {
                 name: name,
                 page: currentPage.current,

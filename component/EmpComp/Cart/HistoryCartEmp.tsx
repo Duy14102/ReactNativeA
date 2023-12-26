@@ -42,7 +42,7 @@ function HistoryCartEmp({ index }: { index: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetAllOrderHistory",
+            url: "http://localhost:3000/GetAllOrderHistory",
             params: {
                 page: currentPage.current,
                 limit: limit

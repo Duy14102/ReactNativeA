@@ -73,7 +73,7 @@ function DetailCartEmp({ route }: { route: any }) {
     const appoveOrder = (e: any, yolo: any) => {
         const configuration = {
             method: 'post',
-            url: 'http://192.168.1.216:3000/UpdateStatusOrder',
+            url: 'http://localhost:3000/UpdateStatusOrder',
             data: {
                 id: e,
                 status: 2,
@@ -97,7 +97,7 @@ function DetailCartEmp({ route }: { route: any }) {
     const completeOrder = (type: any) => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/CompleteOrderByEmp",
+            url: "http://localhost:3000/CompleteOrderByEmp",
             data: {
                 id: i._id,
                 date: Date.now(),
@@ -121,7 +121,7 @@ function DetailCartEmp({ route }: { route: any }) {
     const denyOrderKun = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/VnpayRefund",
+            url: "http://localhost:3000/VnpayRefund",
             data: {
                 orderId: i._id,
                 transDate: i.createdAt,
@@ -148,7 +148,7 @@ function DetailCartEmp({ route }: { route: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/DenyOrder",
+            url: "http://localhost:3000/DenyOrder",
             params: {
                 id: i._id,
                 reason: DenyReason,
@@ -175,7 +175,7 @@ function DetailCartEmp({ route }: { route: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/DenyOrder",
+            url: "http://localhost:3000/DenyOrder",
             params: {
                 id: i._id,
                 reason: DenyReason,
@@ -201,7 +201,7 @@ function DetailCartEmp({ route }: { route: any }) {
     const denyOrderWait = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/DenyOrderWaiting",
+            url: "http://localhost:3000/DenyOrderWaiting",
             params: {
                 id: i._id,
                 employee: deliverEmployee,
@@ -225,7 +225,7 @@ function DetailCartEmp({ route }: { route: any }) {
     const cancelNormal = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/DenyNormalOrder",
+            url: "http://localhost:3000/DenyNormalOrder",
             params: {
                 id: i._id,
                 reason: "Cancel by manager",

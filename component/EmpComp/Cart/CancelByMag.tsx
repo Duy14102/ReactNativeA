@@ -9,7 +9,7 @@ function CancelByMag({ setCancelAprove, i, fulltotal, setReset }: { setCancelApr
     const denyOrderKin = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/VnpayRefund",
+            url: "http://localhost:3000/VnpayRefund",
             data: {
                 orderId: i._id,
                 transDate: i.createdAt,
@@ -32,7 +32,7 @@ function CancelByMag({ setCancelAprove, i, fulltotal, setReset }: { setCancelApr
     const cancelIt = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/CancelByMag",
+            url: "http://localhost:3000/CancelByMag",
             params: {
                 id: i._id
             }
@@ -54,7 +54,7 @@ function CancelByMag({ setCancelAprove, i, fulltotal, setReset }: { setCancelApr
     const cancelItNow = () => {
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/CancelByMag",
+            url: "http://localhost:3000/CancelByMag",
             params: {
                 id: i._id
             }

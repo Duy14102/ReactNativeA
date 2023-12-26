@@ -52,7 +52,7 @@ function ActiveTableEmp({ index, success }: { index: any, success: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetTableUse",
+            url: "http://localhost:3000/GetTableUse",
             params: {
                 page: currentPage.current,
                 limit: limit

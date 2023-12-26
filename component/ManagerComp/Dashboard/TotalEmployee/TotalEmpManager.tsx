@@ -35,7 +35,7 @@ function TotalEmpManager() {
     const getPagination = () => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetEmploy4Mana",
+            url: "http://localhost:3000/GetEmploy4Mana",
             params: {
                 page: currentPage.current,
                 limit: limit

@@ -45,7 +45,7 @@ function AboutChange({ index }: { index: any }) {
     const dataSynb = () => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/GetHeroManager",
+            url: "http://localhost:3000/GetHeroManager",
             params: {
                 title: "About"
             }
@@ -69,7 +69,7 @@ function AboutChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordUp",
+            url: "http://localhost:3000/ChangeWordUp",
             data: {
                 title: "About",
                 wordup: text
@@ -95,7 +95,7 @@ function AboutChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordMiddle",
+            url: "http://localhost:3000/ChangeWordMiddle",
             data: {
                 title: "About",
                 wordmiddle: text
@@ -121,7 +121,7 @@ function AboutChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeWordDown",
+            url: "http://localhost:3000/ChangeWordDown",
             data: {
                 title: "About",
                 worddown: text
@@ -147,7 +147,7 @@ function AboutChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeHeroImage",
+            url: "http://localhost:3000/ChangeHeroImage",
             data: {
                 title: "About",
                 name: name,
@@ -176,7 +176,7 @@ function AboutChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeHeroImage",
+            url: "http://localhost:3000/ChangeHeroImage",
             data: {
                 title: "About",
                 name: name,
@@ -205,7 +205,7 @@ function AboutChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeHeroImage",
+            url: "http://localhost:3000/ChangeHeroImage",
             data: {
                 title: "About",
                 name: name,
@@ -234,7 +234,7 @@ function AboutChange({ index }: { index: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://192.168.1.216:3000/ChangeHeroImage",
+            url: "http://localhost:3000/ChangeHeroImage",
             data: {
                 title: "About",
                 name: name,

@@ -45,7 +45,7 @@ function FindCartEmp({ route }: { route: any }) {
     const findOrder = () => {
         const configuration = {
             method: "get",
-            url: "http://192.168.1.216:3000/SearchAllOrder",
+            url: "http://localhost:3000/SearchAllOrder",
             params: {
                 date: new Date(date),
                 page: currentPage.current,
