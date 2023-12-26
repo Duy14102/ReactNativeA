@@ -59,21 +59,23 @@ function App(): JSX.Element {
   return (
     <>
       {load ? (
-        <ActivityIndicator style={{ top: Dimensions.get("screen").width / 2, alignItems: "center" }} size={40} color={"#FEA116"} />
+        <ActivityIndicator style={{ top: Dimensions.get("screen").width / 1.5, alignItems: "center" }} size={40} color={"#FEA116"} />
       ) : (
         <NavigationContainer>
           <Tabs.Navigator backBehavior='history' initialRouteName={routeName} screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { backgroundColor: "#fff", position: "absolute", height: 60, borderTopLeftRadius: 10, borderTopRightRadius: 10, shadowColor: "#000", shadowOpacity: 0.06, shadowOffset: { width: 10, height: 10 }, paddingHorizontal: 10 } }}>
-            <Tabs.Screen name='Notification' component={Notification} options={{ tabBarButton: () => null }} />
-            <Tabs.Screen name='Admin' component={AdminScreen} options={{ tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
-            <Tabs.Screen name='Manager' component={ManagerScreen} options={{ tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
-            <Tabs.Screen name='Employee' component={EmployeeScreen} options={{ tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
+            <Tabs.Screen name='Notification' component={Notification} options={{ lazy: true, tabBarButton: () => null }} />
+            <Tabs.Screen name='Admin' component={AdminScreen} options={{ lazy: routeName === "Admin" ? false : true, tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
+            <Tabs.Screen name='Manager' component={ManagerScreen} options={{ lazy: routeName === "Manager" ? false : true, tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
+            <Tabs.Screen name='Employee' component={EmployeeScreen} options={{ lazy: routeName === "Employee" ? false : true, tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
             <Tabs.Screen name='Homes' component={HomeScreen} options={{
+              lazy: routeName === "Homes" ? false : true,
               tabBarIcon: ({ focused }) => (
                 <View>
                   <Icon name='house' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
                 </View>
               )
             }} listeners={({ navigation, route }) => ({
+              lazy: true,
               focus: (e: any) => {
                 Animated.spring(tabOffsetValue, {
                   toValue: 0,
@@ -82,6 +84,7 @@ function App(): JSX.Element {
               }
             })}></Tabs.Screen>
             <Tabs.Screen name='Carts' component={CartScreen} options={{
+              lazy: true,
               tabBarIcon: ({ focused }) => (
                 <View>
                   <Icon name='cart-shopping' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
@@ -96,6 +99,7 @@ function App(): JSX.Element {
               },
             })}></Tabs.Screen>
             <Tabs.Screen name='Categorys' component={CategoryScreen} options={{
+              lazy: true,
               tabBarIcon: ({ focused }) => (
                 <View style={{ width: 50, height: 50, backgroundColor: "#FEA116", borderRadius: 50, alignItems: "center", justifyContent: "center", marginBottom: 55 }}>
                   <Icon name='bowl-food' size={20} color={"#fff"}></Icon>
@@ -110,6 +114,7 @@ function App(): JSX.Element {
               }
             })}></Tabs.Screen>
             <Tabs.Screen name='Searchs' component={SearchScreen} options={{
+              lazy: true,
               tabBarIcon: ({ focused }) => (
                 <View>
                   <Icon name='magnifying-glass' size={20} color={focused ? "#FEA116" : "gray"}></Icon>
@@ -124,6 +129,7 @@ function App(): JSX.Element {
               }
             })}></Tabs.Screen>
             <Tabs.Screen name='Settings' component={SettingScreen} options={{
+              lazy: true,
               tabBarIcon: ({ focused }) => (
                 <View>
                   <Icon name='user' size={20} color={focused ? "#FEA116" : "gray"} solid></Icon>

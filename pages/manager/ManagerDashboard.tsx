@@ -21,7 +21,7 @@ function ManagerDashboard() {
     const datasynb = () => {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetData4Admin",
+            url: "http://192.168.1.216:3000/GetData4Admin",
         }
         axios(configuration)
             .then((res) => {

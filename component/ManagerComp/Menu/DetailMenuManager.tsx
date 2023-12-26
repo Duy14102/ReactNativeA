@@ -49,7 +49,7 @@ function DetailMenuManager({ route }: { route: any }) {
     const datasynb = () => {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetDetailMenu",
+            url: "http://192.168.1.216:3000/GetDetailMenu",
             params: {
                 foodid: i.foodname
             }
@@ -95,7 +95,7 @@ function DetailMenuManager({ route }: { route: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/UpdateMenu",
+            url: "http://192.168.1.216:3000/UpdateMenu",
             data: {
                 updateid: i._id,
                 updatename: name1,
@@ -124,7 +124,7 @@ function DetailMenuManager({ route }: { route: any }) {
     const DeleteMenu = (id: any) => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/DeleteMenu",
+            url: "http://192.168.1.216:3000/DeleteMenu",
             params: {
                 deleteid: id
             }
@@ -146,7 +146,7 @@ function DetailMenuManager({ route }: { route: any }) {
     const deleteReview = (e: any, i: any) => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/DeleteReviewByMag",
+            url: "http://192.168.1.216:3000/DeleteReviewByMag",
             data: {
                 itemid: e,
                 reviewid: i

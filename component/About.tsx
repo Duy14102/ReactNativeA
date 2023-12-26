@@ -12,7 +12,7 @@ function About() {
     useEffect(() => {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetAllAbout"
+            url: "http://192.168.1.216:3000/GetAllAbout"
         }
         axios(configuration)
             .then((res) => {

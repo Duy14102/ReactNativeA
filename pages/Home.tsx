@@ -1,20 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, TouchableOpacity, Animated, Easing, ActivityIndicator, RefreshControl } from 'react-native';
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, ImageBackground, Dimensions, TouchableOpacity, Animated, Easing, ActivityIndicator, RefreshControl, useWindowDimensions } from 'react-native';
 import Header from '../component/Header';
 import Footer from '../component/Footer';
 import Services from '../component/Services';
 import About from '../component/About';
 import Testimonial from '../component/Testimonial';
 import axios from 'axios';
-import HTMLReactParser from 'html-react-parser';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { jwtDecode } from "jwt-decode"
+import RenderHtml from 'react-native-render-html';
 
 function Home(): JSX.Element {
-    var word1 = null
-    var word2 = null
-    var word3 = null
+    const { width } = useWindowDimensions();
     const navigation = useNavigation<any>()
     const [styleA, setStyleA] = useState()
     const [styleB, setStyleB] = useState()
@@ -58,7 +56,7 @@ function Home(): JSX.Element {
     function HeroApi2() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetHeroUI",
+            url: "http://192.168.1.216:3000/GetHeroUI",
             params: {
                 name: "oh2rwdomomeno4sgguhf"
             }
@@ -77,7 +75,7 @@ function Home(): JSX.Element {
     function HeroApi() {
         const configuration2 = {
             method: "get",
-            url: "http://localhost:3000/GetHeroUI",
+            url: "http://192.168.1.216:3000/GetHeroUI",
             params: {
                 name: "e4onxrx7hmgzmrbel9jk"
             }
@@ -96,7 +94,7 @@ function Home(): JSX.Element {
     function TextApi() {
         const configuration3 = {
             method: "get",
-            url: "http://localhost:3000/GetHeroText",
+            url: "http://192.168.1.216:3000/GetHeroText",
         }
         axios(configuration3)
             .then((res) => {
@@ -125,16 +123,6 @@ function Home(): JSX.Element {
         outputRange: ['0deg', '360deg']
     })
 
-    if (text?.up) {
-        word1 = HTMLReactParser(text?.up)
-    }
-    if (text?.middle) {
-        word2 = HTMLReactParser(text?.middle)
-    }
-    if (text?.down) {
-        word3 = HTMLReactParser(text?.down)
-    }
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
 
@@ -156,10 +144,13 @@ function Home(): JSX.Element {
                     <View style={styles.overlay}>
 
                         <View style={{ top: 200, paddingHorizontal: 35, alignItems: "center" }}>
-
-                            <Text style={styles.textInsideOverlay}>{word1}</Text>
-                            <Text style={styles.textInsideOverlay}>{word2}</Text>
-                            <Text style={styles.textInsideOverlay2}>{word3}</Text>
+                            {text ? (
+                                <>
+                                    <RenderHtml contentWidth={width} source={{ html: text?.up }} tagsStyles={tagsStyles} />
+                                    <RenderHtml contentWidth={width} source={{ html: text?.middle }} tagsStyles={tagsStyles} />
+                                    <RenderHtml contentWidth={width} source={{ html: text?.down }} tagsStyles={tagsStyles2} />
+                                </>
+                            ) : null}
                             <TouchableOpacity style={styles.bookATable} onPress={() => navigation.navigate("Booking", { candecode: candecode })}><Text style={styles.bookATableWord}>Book a table</Text></TouchableOpacity>
 
                             <View style={styles.CircleImage}>
@@ -190,6 +181,22 @@ function Home(): JSX.Element {
 
         </SafeAreaView>
     );
+}
+
+const tagsStyles: any = {
+    div: {
+        color: '#fff',
+        fontWeight: "bold",
+        fontSize: 25
+    },
+}
+
+const tagsStyles2: any = {
+    div: {
+        color: "#fff",
+        textAlign: "center",
+        fontSize: 17
+    },
 }
 
 const styles = StyleSheet.create({

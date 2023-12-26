@@ -22,7 +22,7 @@ function DetailUser({ route, navigation }: { route: any, navigation: any }) {
     function bannedAc(e: any) {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/BannedByAdmin",
+            url: "http://192.168.1.216:3000/BannedByAdmin",
             data: {
                 id: i._id,
                 status: e

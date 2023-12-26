@@ -12,7 +12,7 @@ function MenuManager({ cate, index }: { cate: any, index: any }) {
     const pulldown = () => {
         setFresh(true)
         setTimeout(() => {
-
+            getPagination()
             setFresh(false)
         }, 1000)
     }
@@ -37,7 +37,7 @@ function MenuManager({ cate, index }: { cate: any, index: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetAdminMenu",
+            url: "http://192.168.1.216:3000/GetAdminMenu",
             params: {
                 cate: cate,
                 page: currentPage.current,
@@ -97,7 +97,7 @@ function MenuManager({ cate, index }: { cate: any, index: any }) {
                     <>
                         {menu.map((i: any) => {
                             return (
-                                <TouchableOpacity key={i._id} style={{ backgroundColor: "#fff", flexDirection: "row", padding: 15, gap: 20, marginVertical: 10, position: "relative" }} onPress={() => navigation.navigate("DetailMenuManager", { i: i })}>
+                                <TouchableOpacity key={i._id} style={cateStyle.shadow} onPress={() => navigation.navigate("DetailMenuManager", { i: i })}>
                                     <Image source={{ uri: i.foodimage }} height={75} width={75} />
                                     <View style={{ flexDirection: "row", gap: 10 }}>
                                         <View style={{ flexDirection: "column", gap: 10 }}>
@@ -129,6 +129,23 @@ function MenuManager({ cate, index }: { cate: any, index: any }) {
 }
 
 const cateStyle = StyleSheet.create({
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 3,
+        backgroundColor: "#fff",
+        flexDirection: "row",
+        padding: 15,
+        gap: 20,
+        marginVertical: 10,
+        position: "relative"
+    },
+
     buttonPaginate: {
         backgroundColor: "#FEA116",
         paddingHorizontal: 10,

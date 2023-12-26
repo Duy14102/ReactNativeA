@@ -1,5 +1,5 @@
 {
-  "name": "vtcaApp",
+  "name": "EatCom",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -30,8 +30,10 @@
     "react-native-image-picker": "^7.1.0",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-pager-view": "^6.2.3",
+    "react-native-pell-rich-editor": "^1.9.0",
     "react-native-reanimated": "^3.6.1",
     "react-native-reanimated-carousel": "^3.5.1",
+    "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "^4.8.0",
     "react-native-screens": "^3.29.0",
     "react-native-tab-view": "^3.5.2",

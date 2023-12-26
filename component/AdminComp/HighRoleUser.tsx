@@ -36,7 +36,7 @@ function HighRoleUser({ index }: { index: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetAllUser",
+            url: "http://192.168.1.216:3000/GetAllUser",
             params: {
                 type: 2,
                 pipe: 3,

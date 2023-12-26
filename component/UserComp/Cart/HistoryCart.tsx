@@ -34,7 +34,7 @@ function HistoryCart({ route, navigation }: { route: any, navigation: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetOrderHistoryUserPanel",
+            url: "http://192.168.1.216:3000/GetOrderHistoryUserPanel",
             params: {
                 id: userid,
                 limit: limit,

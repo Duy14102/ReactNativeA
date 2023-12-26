@@ -50,7 +50,7 @@ function UserDetail({ route }: { route: any }) {
     function proUser() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetDetailUser",
+            url: "http://192.168.1.216:3000/GetDetailUser",
             params: {
                 userid: candecode.userId
             }
@@ -74,7 +74,7 @@ function UserDetail({ route }: { route: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/UpdateUserDetailNative",
+            url: "http://192.168.1.216:3000/UpdateUserDetailNative",
             data: {
                 updateid: id,
                 updatefullname: updateN,

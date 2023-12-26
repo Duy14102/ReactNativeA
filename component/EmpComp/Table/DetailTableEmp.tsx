@@ -2,7 +2,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import Clipboard from '@react-native-clipboard/clipboard';
 import Icon from 'react-native-vector-icons/FontAwesome6'
-import { ScrollView, View, Text, RefreshControl, TouchableOpacity, Image, ActivityIndicator } from "react-native"
+import { ScrollView, View, Text, RefreshControl, TouchableOpacity, Image, ActivityIndicator, TextInput } from "react-native"
 import axios from "axios";
 
 function DetailTableEmp({ route }: { route: any }) {
@@ -13,8 +13,13 @@ function DetailTableEmp({ route }: { route: any }) {
     const takeEmployee: any = []
     takeEmployee.push(deliverEmployee)
     const [refresh, setFresh] = useState(false);
+    const [load2, setLoad2] = useState(false)
     const [load, setLoad] = useState(false)
+    const [load3, setLoad3] = useState(false)
+    const [checkNewName, setCheckNewName] = useState(false)
+    const [wantChangeName, setWantChangeName] = useState(false)
     const [data, setData] = useState<any>()
+    const [TBnamechange, setTBnamechange] = useState<any>()
     const VND = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
@@ -23,7 +28,7 @@ function DetailTableEmp({ route }: { route: any }) {
     const calledSynb = () => {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetCurrentDetailTableNative",
+            url: "http://192.168.1.216:3000/GetCurrentDetailTableNative",
             params: {
                 id: i._id
             }
@@ -45,7 +50,7 @@ function DetailTableEmp({ route }: { route: any }) {
     const pulldown = () => {
         setFresh(true)
         setTimeout(() => {
-
+            calledSynb()
             setFresh(false)
         }, 1000)
     }
@@ -63,7 +68,7 @@ function DetailTableEmp({ route }: { route: any }) {
     const checkOut = (e: any, data: any) => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/Checkout4Booking",
+            url: "http://192.168.1.216:3000/Checkout4Booking",
             data: {
                 id: e,
                 fulltotal: total2,
@@ -92,7 +97,7 @@ function DetailTableEmp({ route }: { route: any }) {
     const checkOut4Normal = (data: any) => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/Checkout4Normal",
+            url: "http://192.168.1.216:3000/Checkout4Normal",
             data: {
                 id: data._id,
                 employee: takeEmployee,
@@ -113,6 +118,56 @@ function DetailTableEmp({ route }: { route: any }) {
                     setLoad(false)
                     console.log(err);
                 });
+        }, 1000);
+    }
+
+    const deleteTable = (i: any) => {
+        const configuration = {
+            method: "post",
+            url: "http://192.168.1.216:3000/DeleteTableNow",
+            data: {
+                id: i
+            }
+        }
+        setLoad2(true)
+        setTimeout(() => {
+            axios(configuration)
+                .then(() => {
+                    setLoad2(false)
+                    navigation.goBack()
+                }).catch((err) => {
+                    setLoad2(false)
+                    console.log(err);
+                })
+        }, 1000);
+    }
+
+    const changeTableName = (i: any) => {
+        if (TBnamechange === "") {
+            setCheckNewName(true)
+            return false
+        }
+        const configuration = {
+            method: "post",
+            url: "http://192.168.1.216:3000/ChangeTableNameQuick",
+            data: {
+                id: i,
+                name: TBnamechange
+            }
+        }
+        setLoad3(true)
+        setTimeout(() => {
+            axios(configuration)
+                .then(() => {
+                    setLoad3(false)
+                    setCheckNewName(false)
+                    setWantChangeName(false)
+                    calledSynb()
+                }).catch((err) => {
+                    setLoad3(false)
+                    setCheckNewName(false)
+                    console.log(err);
+                })
         }, 1000);
     }
 
@@ -165,14 +220,43 @@ function DetailTableEmp({ route }: { route: any }) {
                                 </View>
                             </TouchableOpacity>
                         </View>
-                    ) : (
-                        <TouchableOpacity style={{ alignItems: "center" }} onPress={() => navigation.navigate("AddTableItem", { item: i })}>
-                            <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-                                <Icon name="cart-plus" size={23} />
-                                <Text style={{ fontSize: 16 }}>Add items</Text>
+                    ) : data?.tablestatus === 1 ? (
+                        <View style={{ flexDirection: "column", gap: 15 }}>
+                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 3 }}>
+                                <TouchableOpacity style={{ alignItems: "center" }} onPress={() => setWantChangeName(true)}>
+                                    <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                                        <Icon name="edit" size={23} solid />
+                                        <Text style={{ fontSize: 16 }}>Change table name</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{ alignItems: "center" }} onPress={() => navigation.navigate("AddTableItem", { item: data })}>
+                                    <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                                        <Icon name="cart-plus" size={23} />
+                                        <Text style={{ fontSize: 16 }}>Add items</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
-                        </TouchableOpacity>
-                    )}
+                            {wantChangeName ? (
+                                <>
+                                    <TextInput style={{ borderWidth: 1, borderColor: "gray", borderRadius: 6, padding: 10 }} onChange={(e) => setTBnamechange(e.nativeEvent.text)} />
+                                    {checkNewName ? (
+                                        <Text style={{ color: "red", textAlign: "center" }}>This field cant be blank!</Text>
+                                    ) : null}
+                                    <View style={{ flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
+                                        <TouchableOpacity style={{ backgroundColor: "#FEA116", paddingVertical: 7, paddingHorizontal: 10 }} onPress={() => changeTableName(data?._id)}>
+                                            <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Confirm</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => setWantChangeName(false)} style={{ backgroundColor: "gray", paddingVertical: 7, paddingHorizontal: 10 }}>
+                                            <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Cancel</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    {load3 ? (
+                                        <ActivityIndicator size={25} color={"#FEA116"} />
+                                    ) : null}
+                                </>
+                            ) : null}
+                        </View>
+                    ) : null}
                     {data?.tablestatus === 2 || data?.tablestatus === 3 ? (
                         <>
                             <View style={{ backgroundColor: "gray", padding: 0.4 }} />
@@ -218,7 +302,7 @@ function DetailTableEmp({ route }: { route: any }) {
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                         <Text style={{ fontSize: 15, fontWeight: "bold" }}>Table id</Text>
                         <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-                            <Text style={{ fontSize: 15 }}>{i._id}</Text>
+                            <Text style={{ fontSize: 15 }}>{data?._id}</Text>
                             <TouchableOpacity onPress={() => copyToClipboardid(data?._id)}>
                                 <Text style={{ color: "#FEA116", fontSize: 17 }}>Copy</Text>
                             </TouchableOpacity>
@@ -226,7 +310,7 @@ function DetailTableEmp({ route }: { route: any }) {
                     </View>
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                         <Text style={{ fontSize: 15, fontWeight: "bold" }}>Table name</Text>
-                        <Text style={{ fontSize: 15 }}>{i.tablename}</Text>
+                        <Text style={{ fontSize: 15 }}>{data?.tablename}</Text>
                     </View>
                     {data?.tablestatus === 2 ? (
                         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
@@ -241,6 +325,15 @@ function DetailTableEmp({ route }: { route: any }) {
                             <ActivityIndicator size={21} color={"#fff"} />
                         ) : (
                             <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Checkout</Text>
+                        )}
+                    </TouchableOpacity>
+                ) : null}
+                {data?.tablestatus === 1 && candecode.userRole === 3 ? (
+                    <TouchableOpacity style={{ alignItems: "center", paddingVertical: 9, marginTop: 5, backgroundColor: "tomato", marginBottom: 20 }} onPress={() => deleteTable(data?._id)}>
+                        {load2 ? (
+                            <ActivityIndicator size={21} color={"#fff"} />
+                        ) : (
+                            <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Delete table</Text>
                         )}
                     </TouchableOpacity>
                 ) : null}

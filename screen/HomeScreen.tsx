@@ -1,14 +1,20 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { lazy, Suspense } from 'react';
+import { ActivityIndicator } from 'react-native';
 import Home from '../pages/Home';
-import Booking from '../pages/Booking';
+const bookingLazy = lazy(() => import("../pages/Booking"))
+import { decode } from "base-64";
+global.atob = decode
 
 const HomeStack = createNativeStackNavigator();
 function HomeScreen() {
     return (
-        <HomeStack.Navigator screenOptions={{ headerShown: false }}>
-            <HomeStack.Screen name='Home' component={Home}></HomeStack.Screen>
-            <HomeStack.Screen name='Booking' component={Booking}></HomeStack.Screen>
-        </HomeStack.Navigator>
+        <Suspense fallback={<ActivityIndicator size={25} color={"#FEA116"} />}>
+            <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+                <HomeStack.Screen name='Home' component={Home}></HomeStack.Screen>
+                <HomeStack.Screen name='Booking' component={bookingLazy}></HomeStack.Screen>
+            </HomeStack.Navigator>
+        </Suspense>
     )
 }
 export default HomeScreen

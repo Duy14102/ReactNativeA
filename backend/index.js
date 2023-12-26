@@ -134,7 +134,7 @@ app.get("/GetHeroUI", async (req, res) => {
 //Get Hero 4 Manager
 app.get("/GetHeroManager", async (req, res) => {
     try {
-        const getIt = await GetUI.find({})
+        const getIt = await GetUI.find({ title: req.query.title })
         res.send({ data: getIt })
     } catch (e) {
         console.log(e);
@@ -1123,6 +1123,40 @@ app.post("/DenyOrder", (req, res) => {
     }
 })
 
+//Deny Normal order
+app.post("/DenyNormalOrder", (req, res) => {
+    try {
+        getThisOrder.updateOne({ _id: req.query.id }, {
+            status: req.query.status,
+            denyreason: req.query.reason
+        }).then(() => {
+            res.send({ data: "Updated" })
+        }).catch((err) => {
+            console.log(err);
+        })
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+//Deny Order status
+app.post("/DenyOrderWaiting", (req, res) => {
+    try {
+        getThisOrder.updateOne({ _id: req.query.id }, {
+            $push: {
+                employee: req.query.employee
+            },
+            status: req.query.status
+        }).then(() => {
+            res.send({ data: "Updated" })
+        }).catch((err) => {
+            console.log(err);
+        })
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 //Cancel Vnpay payment
 app.post("/CancelVnpayPayment", (req, res) => {
     try {
@@ -1995,38 +2029,6 @@ app.get("/GetBookingByStatus", async (req, res) => {
 app.get("/GetBookingHistory", async (req, res) => {
     try {
         const getIt = await GetBooking.find({ status: { $in: [3, 4, 5] } });
-        const page = parseInt(req.query.page)
-        const limit = parseInt(req.query.limit)
-
-        const start = (page - 1) * limit
-        const end = page * limit
-
-        const results = {}
-        results.total = getIt.length
-        results.pageCount = Math.ceil(getIt.length / limit)
-
-        if (end < getIt.length) {
-            results.next = {
-                page: page + 1
-            }
-        }
-        if (start > 0) {
-            results.prev = {
-                page: page - 1
-            }
-        }
-
-        results.result = getIt.slice(start, end)
-        res.send({ results });
-    } catch (e) {
-        console.log(e);
-    }
-})
-
-//get employee booking history
-app.get("/GetBookingHistoryNative", async (req, res) => {
-    try {
-        const getIt = await GetBooking.find({ status: { $in: [3, 4, 5] }, employee: { $elemMatch: { id: req.query.id } } });
         const page = parseInt(req.query.page)
         const limit = parseInt(req.query.limit)
 
@@ -3161,7 +3163,7 @@ app.post('/VnpayCheckout', function (req, res, next) {
     let tmnCode = process.env.REACT_APP_vnpaytmnCode;
     let secretKey = process.env.REACT_APP_vnpaysecretKey;
     let vnpUrl = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
-    let returnUrl = 'http://localhost:8081';
+    let returnUrl = 'http://192.168.1.216:8081';
     let orderId = req.body.orderId;
     let amount = req.body.amount;
     let bankCode = req.body.bankCode;

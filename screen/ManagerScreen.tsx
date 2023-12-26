@@ -1,70 +1,55 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DrawerNav from '../custom/DrawerNav';
 import Icon from 'react-native-vector-icons/FontAwesome6'
-import CustomizeAdmin from '../component/AdminComp/CustomizeAdmin';
-import EditAdminPass from '../component/AdminComp/EditAdminPass';
-import ManagerDashboard from '../pages/manager/ManagerDashboard';
-import DetailContact from '../component/ManagerComp/Dashboard/Contact/DetailContact';
-import TotalEmpManager from '../component/ManagerComp/Dashboard/TotalEmployee/TotalEmpManager';
-import DetailTotalEmpManager from '../component/ManagerComp/Dashboard/TotalEmployee/DetailTotalEmpManager';
-import DetailTaskManager from '../component/ManagerComp/Dashboard/TotalEmployee/DetailTaskManager';
-import ManagerMenu from '../pages/manager/ManagerMenu';
-import DetailMenuManager from '../component/ManagerComp/Menu/DetailMenuManager';
-import CreateMenuManager from '../component/ManagerComp/Menu/CreateMenuManager';
-import SearchMenuManager from '../component/ManagerComp/Menu/SearchMenuManager';
-
-
-const Stack = createNativeStackNavigator();
-function Screen() {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='ManagerDashboard' component={ManagerDashboard}></Stack.Screen>
-            <Stack.Screen name='TotalEmpManager' component={TotalEmpManager}></Stack.Screen>
-            <Stack.Screen name='DetailContact' component={DetailContact}></Stack.Screen>
-            <Stack.Screen name='DetailTotalEmpManager' component={DetailTotalEmpManager}></Stack.Screen>
-            <Stack.Screen name='DetailTaskManager' component={DetailTaskManager}></Stack.Screen>
-        </Stack.Navigator>
-    )
-}
-
-function Screen2() {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='ManagerMenu' component={ManagerMenu}></Stack.Screen>
-            <Stack.Screen name='DetailMenuManager' component={DetailMenuManager}></Stack.Screen>
-            <Stack.Screen name='CreateMenuManager' component={CreateMenuManager}></Stack.Screen>
-            <Stack.Screen name='SearchMenuManager' component={SearchMenuManager}></Stack.Screen>
-        </Stack.Navigator>
-    )
-}
-
-function Screen3() {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='CustomizeAdmin' component={CustomizeAdmin}></Stack.Screen>
-            <Stack.Screen name='EditAdminPass' component={EditAdminPass}></Stack.Screen>
-        </Stack.Navigator>
-    )
-}
+import Customize from './SecondScreen/Customize';
+import MagDash from './SecondScreen/MagDash';
+import MagUI from './SecondScreen/MagUI';
+import MagMenu from './SecondScreen/MagMenu';
+import AllCart from './SecondScreen/AllCart';
+import AllBook from './SecondScreen/AllBook';
+import AllTable from './SecondScreen/AllTable';
 
 const Drawer = createDrawerNavigator();
 function ManagerScreen() {
     return (
-        <Drawer.Navigator screenOptions={{ headerShown: false, drawerLabelStyle: { marginLeft: -20, fontSize: 15 }, drawerActiveTintColor: "#fff", drawerActiveBackgroundColor: "#e820a5", drawerInactiveTintColor: "#333" }} drawerContent={props => <DrawerNav props={props} />}>
-            <Drawer.Screen name="ManagerPanels" component={Screen} options={{
+        <Drawer.Navigator screenOptions={{ headerShown: false, drawerLabelStyle: { marginLeft: -20, fontSize: 15 }, drawerActiveTintColor: "#fff", drawerActiveBackgroundColor: "#FEA116", drawerInactiveTintColor: "#333" }} drawerContent={props => <DrawerNav props={props} />}>
+            <Drawer.Screen name="ManagerPanels" component={MagDash} options={{
                 drawerIcon: ({ color }) => (
                     <Icon name='user' size={22} color={color} solid />
                 ),
                 title: "Dashboard"
             }} />
-            <Drawer.Screen name="ManagerMenus" component={Screen2} options={{
+            <Drawer.Screen name="ManagerUIs" component={MagUI} options={{
                 drawerIcon: ({ color }) => (
-                    <Icon name='user' size={22} color={color} solid />
+                    <Icon name='palette' size={22} color={color} solid />
+                ),
+                title: "UI management"
+            }} />
+            <Drawer.Screen name="ManagerMenus" component={MagMenu} options={{
+                drawerIcon: ({ color }) => (
+                    <Icon name='bowl-food' size={22} color={color} solid />
                 ),
                 title: "Menu management"
             }} />
-            <Drawer.Screen name='CustomizeAdmins' component={Screen3} options={{ drawerItemStyle: { display: "none" } }} />
+            <Drawer.Screen name="ManagerCarts" component={AllCart} options={{
+                drawerIcon: ({ color }) => (
+                    <Icon name='cart-shopping' size={22} color={color} solid />
+                ),
+                title: "Cart management"
+            }} />
+            <Drawer.Screen name="ManagerBookings" component={AllBook} options={{
+                drawerIcon: ({ color }) => (
+                    <Icon name='address-book' size={22} color={color} solid />
+                ),
+                title: "Booking Management"
+            }} />
+            <Drawer.Screen name="ManagerTables" component={AllTable} options={{
+                drawerIcon: ({ color }) => (
+                    <Icon name='bell-concierge' size={22} color={color} solid />
+                ),
+                title: "Table Management"
+            }} />
+            <Drawer.Screen name='CustomizeAdmins' component={Customize} options={{ lazy: true, drawerItemStyle: { display: "none" } }} />
         </Drawer.Navigator>
     )
 }

@@ -6,11 +6,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { decode } from "base-64";
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import LinearGradient from 'react-native-linear-gradient'
 import config from "../config"
-global.atob = decode
 
 function Setting({ route, navigation }: { route: any, navigation: any }) {
     GoogleSignin.configure({
@@ -73,7 +71,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
             if (candecode.userRole !== 1.5) {
                 const configuration = {
                     method: "get",
-                    url: "http://localhost:3000/GetDetailUser",
+                    url: "http://192.168.1.216:3000/GetDetailUser",
                     params: {
                         userid: candecode.userId
                     },
@@ -101,7 +99,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/Login",
+            url: "http://192.168.1.216:3000/Login",
             data: {
                 email: username,
                 password: password,
@@ -187,7 +185,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
                     .then(() => {
                         const configuration9 = {
                             method: "get",
-                            url: "http://localhost:3000/LoginWithGoogle",
+                            url: "http://192.168.1.216:3000/LoginWithGoogle",
                             params: {
                                 id: userInfo.user.id,
                                 name: userInfo.user.name,

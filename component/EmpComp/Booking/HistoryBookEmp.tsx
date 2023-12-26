@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 import { ScrollView, View, Text, RefreshControl, StyleSheet, TouchableOpacity } from "react-native"
 import Clipboard from '@react-native-clipboard/clipboard';
 import Icon from "react-native-vector-icons/FontAwesome5"
@@ -48,28 +48,23 @@ function HistoryBookEmp({ index }: { index: any }) {
         getPagination();
     }
 
-    async function getPagination() {
-        const token = await AsyncStorage.getItem("TOKEN")
-        if (token) {
-            const called: any = jwtDecode(token)
-            const configuration = {
-                method: "get",
-                url: "http://localhost:3000/GetBookingHistoryNative",
-                params: {
-                    id: called.userId,
-                    page: currentPage.current,
-                    limit: limit
-                }
-            };
-            axios(configuration)
-                .then((result) => {
-                    setBookingHistory(result.data.results.result);
-                    setPageCount(result.data.results.pageCount)
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
+    function getPagination() {
+        const configuration = {
+            method: "get",
+            url: "http://192.168.1.216:3000/GetBookingHistory",
+            params: {
+                page: currentPage.current,
+                limit: limit
+            }
+        };
+        axios(configuration)
+            .then((result) => {
+                setBookingHistory(result.data.results.result);
+                setPageCount(result.data.results.pageCount)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     function pagePrev() {
@@ -110,49 +105,104 @@ function HistoryBookEmp({ index }: { index: any }) {
                             const time = new Date(i.date).toLocaleTimeString()
                             const datetime = date + " - " + time
                             return (
-                                <TouchableOpacity key={i._id} style={cateStyle.cardStyle} onPress={() => navigation.navigate("DetailBookEmp", { i: i, candecode: candecode })}>
-                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
-                                        <Text style={{ fontSize: 15 }}><Text style={{ fontWeight: "bold" }}>Id</Text> : {i._id}</Text>
-                                        <TouchableOpacity onPress={() => copyToClipboardid(i._id)}>
-                                            <Text style={{ fontSize: 16, color: "#FEA116" }}>Copy</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={{ backgroundColor: "gray", padding: 0.2, marginVertical: 5 }} />
-                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
-                                        <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-                                            <Text style={{ fontSize: 15, fontWeight: "bold" }}>Customer :</Text>
-                                            <Text style={{ fontSize: 15 }}>{i.customer?.fullname}</Text>
-                                        </View>
-                                        {i.status === 3 ? (
-                                            <Text style={{ fontSize: 15, color: "#03ba5f" }}>Completed</Text>
-                                        ) : i.status === 4 ? (
-                                            <Text style={{ fontSize: 15, color: "tomato" }}>Denied</Text>
-                                        ) : i.status === 5 ? (
-                                            <Text style={{ fontSize: 15, color: "orange" }}>Cancel</Text>
-                                        ) : null}
-                                    </View>
-                                    <Text style={{ fontSize: 15, paddingVertical: 5 }}><Text style={{ fontWeight: "bold" }}>Date arrvived</Text> : {datetime}</Text>
-                                    {i.status === 4 ? (
-                                        <Text style={{ fontSize: 15, paddingBottom: 5 }}><Text style={{ fontWeight: "bold" }}>Deny reason</Text> : {i.denyreason}</Text>
-                                    ) : i.status === 5 ? (
-                                        <Text style={{ fontSize: 15, paddingBottom: 5 }}><Text style={{ fontWeight: "bold" }}>Cancel reason</Text> : {i.denyreason}</Text>
+                                <Fragment key={i._id} >
+                                    {i.employee?.length > 0 ? (
+                                        i.employee?.map((a: any) => {
+                                            if (a.id === candecode.userId && candecode.userRole === 2) {
+                                                return (
+                                                    <TouchableOpacity key={a.id} style={cateStyle.cardStyle} onPress={() => navigation.navigate("DetailBookEmp", { i: i, candecode: candecode })}>
+                                                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
+                                                            <Text style={{ fontSize: 15 }}><Text style={{ fontWeight: "bold" }}>Id</Text> : {i._id}</Text>
+                                                            <TouchableOpacity onPress={() => copyToClipboardid(i._id)}>
+                                                                <Text style={{ fontSize: 16, color: "#FEA116" }}>Copy</Text>
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                        <View style={{ backgroundColor: "gray", padding: 0.2, marginVertical: 5 }} />
+                                                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
+                                                            <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                                                                <Text style={{ fontSize: 15, fontWeight: "bold" }}>Customer :</Text>
+                                                                <Text style={{ fontSize: 15 }}>{i.customer?.fullname}</Text>
+                                                            </View>
+                                                            {i.status === 3 ? (
+                                                                <Text style={{ fontSize: 15, color: "#03ba5f" }}>Completed</Text>
+                                                            ) : i.status === 4 ? (
+                                                                <Text style={{ fontSize: 15, color: "tomato" }}>Denied</Text>
+                                                            ) : i.status === 5 ? (
+                                                                <Text style={{ fontSize: 15, color: "orange" }}>Cancel</Text>
+                                                            ) : null}
+                                                        </View>
+                                                        <Text style={{ fontSize: 15, paddingVertical: 5 }}><Text style={{ fontWeight: "bold" }}>Date arrvived</Text> : {datetime}</Text>
+                                                        {i.status === 4 ? (
+                                                            <Text style={{ fontSize: 15, paddingBottom: 5 }}><Text style={{ fontWeight: "bold" }}>Deny reason</Text> : {i.denyreason}</Text>
+                                                        ) : i.status === 5 ? (
+                                                            <Text style={{ fontSize: 15, paddingBottom: 5 }}><Text style={{ fontWeight: "bold" }}>Cancel reason</Text> : {i.denyreason}</Text>
+                                                        ) : null}
+                                                        <View
+                                                            style={{
+                                                                borderBottomColor: 'gray',
+                                                                borderBottomWidth: 0.5,
+                                                                left: 5,
+                                                                right: 5,
+                                                                paddingVertical: 3
+                                                            }}
+                                                        />
+                                                        <View style={{ marginVertical: 5 }}>
+                                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+                                                                <Text style={{ fontSize: 15 }}><Text style={{ fontWeight: "bold" }}>Table : </Text>{i.table}</Text>
+                                                                <Text style={{ fontSize: 15 }}><Icon name="user" solid size={18} /> {i.people}</Text>
+                                                            </View>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                )
+                                            }
+                                        })
                                     ) : null}
-                                    <View
-                                        style={{
-                                            borderBottomColor: 'gray',
-                                            borderBottomWidth: 0.5,
-                                            left: 5,
-                                            right: 5,
-                                            paddingVertical: 3
-                                        }}
-                                    />
-                                    <View style={{ marginVertical: 5 }}>
-                                        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
-                                            <Text style={{ fontSize: 15 }}><Text style={{ fontWeight: "bold" }}>Table : </Text>{i.table}</Text>
-                                            <Text style={{ fontSize: 15 }}><Icon name="user" solid size={18} /> {i.people}</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
+                                    {candecode.userRole === 3 ? (
+                                        <TouchableOpacity style={cateStyle.cardStyle} onPress={() => navigation.navigate("DetailBookEmp", { i: i, candecode: candecode })}>
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
+                                                <Text style={{ fontSize: 15 }}><Text style={{ fontWeight: "bold" }}>Id</Text> : {i._id}</Text>
+                                                <TouchableOpacity onPress={() => copyToClipboardid(i._id)}>
+                                                    <Text style={{ fontSize: 16, color: "#FEA116" }}>Copy</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{ backgroundColor: "gray", padding: 0.2, marginVertical: 5 }} />
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
+                                                <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                                                    <Text style={{ fontSize: 15, fontWeight: "bold" }}>Customer :</Text>
+                                                    <Text style={{ fontSize: 15 }}>{i.customer?.fullname}</Text>
+                                                </View>
+                                                {i.status === 3 ? (
+                                                    <Text style={{ fontSize: 15, color: "#03ba5f" }}>Completed</Text>
+                                                ) : i.status === 4 ? (
+                                                    <Text style={{ fontSize: 15, color: "tomato" }}>Denied</Text>
+                                                ) : i.status === 5 ? (
+                                                    <Text style={{ fontSize: 15, color: "orange" }}>Cancel</Text>
+                                                ) : null}
+                                            </View>
+                                            <Text style={{ fontSize: 15, paddingVertical: 5 }}><Text style={{ fontWeight: "bold" }}>Date arrvived</Text> : {datetime}</Text>
+                                            {i.status === 4 ? (
+                                                <Text style={{ fontSize: 15, paddingBottom: 5 }}><Text style={{ fontWeight: "bold" }}>Deny reason</Text> : {i.denyreason}</Text>
+                                            ) : i.status === 5 ? (
+                                                <Text style={{ fontSize: 15, paddingBottom: 5 }}><Text style={{ fontWeight: "bold" }}>Cancel reason</Text> : {i.denyreason}</Text>
+                                            ) : null}
+                                            <View
+                                                style={{
+                                                    borderBottomColor: 'gray',
+                                                    borderBottomWidth: 0.5,
+                                                    left: 5,
+                                                    right: 5,
+                                                    paddingVertical: 3
+                                                }}
+                                            />
+                                            <View style={{ marginVertical: 5 }}>
+                                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+                                                    <Text style={{ fontSize: 15 }}><Text style={{ fontWeight: "bold" }}>Table : </Text>{i.table}</Text>
+                                                    <Text style={{ fontSize: 15 }}><Icon name="user" solid size={18} /> {i.people}</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </Fragment>
                             )
                         })}
                         <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 }}>
@@ -169,7 +219,7 @@ function HistoryBookEmp({ index }: { index: any }) {
                     <Text style={{ fontSize: 15, paddingVertical: 15, textAlign: "center" }}>There's no active booking!</Text>
                 )}
             </View>
-        </ScrollView>
+        </ScrollView >
     )
 }
 

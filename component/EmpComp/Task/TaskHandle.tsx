@@ -22,7 +22,7 @@ function TaskHandle({ route }: { route: any }) {
     const finishTask = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/FinishTaskEmployee",
+            url: "http://192.168.1.216:3000/FinishTaskEmployee",
             data: {
                 taskid: i.id,
                 userid: id

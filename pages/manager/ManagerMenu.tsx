@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import MenuManager from "../../component/ManagerComp/Menu/MenuManager";
 import { useNavigation } from "@react-navigation/native";
 
-function DefaultPages() {
+function ManagerMenu() {
     const navigation = useNavigation<any>()
     const [index, setIndex] = useState(0);
     const [search, setSearch] = useState("")
@@ -69,6 +69,7 @@ function DefaultPages() {
                 ) : null}
             </View>
             <TabView
+                lazy={true}
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
                 onIndexChange={setIndex}
@@ -80,4 +81,4 @@ function DefaultPages() {
     )
 }
 
-export default DefaultPages
+export default ManagerMenu

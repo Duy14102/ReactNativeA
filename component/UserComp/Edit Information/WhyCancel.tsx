@@ -24,7 +24,7 @@ function WhyCancel({ route, navigation }: { route: any, navigation: any }) {
     const denyOrder = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/DenyOrder",
+            url: "http://192.168.1.216:3000/DenyOrder",
             params: {
                 id: id,
                 reason: DenyReason,

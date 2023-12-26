@@ -1,19 +1,30 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Clipboard from '@react-native-clipboard/clipboard';
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { ScrollView, View, Text, RefreshControl, ActivityIndicator, TouchableOpacity, Pressable, Image } from "react-native"
+import { ScrollView, View, Text, RefreshControl, ActivityIndicator, TouchableOpacity, Pressable, Image, TextInput } from "react-native"
 import axios from "axios";
+import CancelRequest from "./CancelRequest";
+import CancelByMag from "./CancelByMag";
 
 function DetailCartEmp({ route }: { route: any }) {
     const navigation = useNavigation<any>()
     const { i, candecode } = route.params
     const deliverEmployee = { id: candecode.userId, email: candecode.userEmail }
-
     const [refresh, setFresh] = useState(false);
     const [moreDetail, setMoreDetail] = useState(false)
+    const [wantDeny, setWantDeny] = useState(false)
+    const [checkDenyBlank, setCheckDenyBlank] = useState(false)
+    const [loadReject, setLoadReject] = useState(false)
+    const [reject, setReject] = useState(false)
+    const [cancelPaid, setCancelPaid] = useState(false)
+    const [cancelAprove, setCancelAprove] = useState(false)
+    const [normalCancel, setNormalCancel] = useState(false)
     const [load, setLoad] = useState(false)
     const [load2, setLoad2] = useState(false)
+    const [load3, setLoad3] = useState(false)
+    const [reset, setReset] = useState(false)
+    const [DenyReason, setDenyReason] = useState("")
     const VND = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
@@ -26,6 +37,20 @@ function DetailCartEmp({ route }: { route: any }) {
             setFresh(false)
         }, 1000)
     }
+
+    useEffect(() => {
+        if (reset) {
+            setDenyReason("")
+            setCancelPaid(false)
+            setCancelAprove(false)
+            setNormalCancel(false)
+            setReject(false)
+            setMoreDetail(false)
+            setWantDeny(false)
+            setCheckDenyBlank(false)
+            setReset(false)
+        }
+    }, [reset])
 
     var fulltotal2 = 0
     var total2 = 0
@@ -48,7 +73,7 @@ function DetailCartEmp({ route }: { route: any }) {
     const appoveOrder = (e: any, yolo: any) => {
         const configuration = {
             method: 'post',
-            url: 'http://localhost:3000/UpdateStatusOrder',
+            url: 'http://192.168.1.216:3000/UpdateStatusOrder',
             data: {
                 id: e,
                 status: 2,
@@ -72,7 +97,7 @@ function DetailCartEmp({ route }: { route: any }) {
     const completeOrder = (type: any) => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/CompleteOrderByEmp",
+            url: "http://192.168.1.216:3000/CompleteOrderByEmp",
             data: {
                 id: i._id,
                 date: Date.now(),
@@ -89,6 +114,134 @@ function DetailCartEmp({ route }: { route: any }) {
                 }).catch((err) => {
                     setLoad2(false)
                     console.log(err);
+                })
+        }, 1000);
+    }
+
+    const denyOrderKun = () => {
+        const configuration = {
+            method: "post",
+            url: "http://192.168.1.216:3000/VnpayRefund",
+            data: {
+                orderId: i._id,
+                transDate: i.createdAt,
+                amount: fulltotal2,
+                transType: "03",
+                user: "Manager",
+                reason: DenyReason
+            }
+        }
+        axios(configuration).then(() => {
+            setLoad3(false)
+            setReset(true)
+            navigation.goBack()
+        }).catch((err) => {
+            setLoad3(false)
+            console.log(err);
+        })
+    }
+
+    const denyOrderPaid = () => {
+        if (DenyReason === "") {
+            setCheckDenyBlank(true)
+            return false
+        }
+        const configuration = {
+            method: "post",
+            url: "http://192.168.1.216:3000/DenyOrder",
+            params: {
+                id: i._id,
+                reason: DenyReason,
+                employee: deliverEmployee,
+                status: 3,
+            }
+        }
+        setLoad3(true)
+        setTimeout(() => {
+            axios(configuration)
+                .then(() => {
+                    denyOrderKun()
+                }).catch((e) => {
+                    setLoad3(false)
+                    console.log(e);
+                })
+        }, 1000);
+    }
+
+    const denyOrder = () => {
+        if (DenyReason === "") {
+            setCheckDenyBlank(true)
+            return false
+        }
+        const configuration = {
+            method: "post",
+            url: "http://192.168.1.216:3000/DenyOrder",
+            params: {
+                id: i._id,
+                reason: DenyReason,
+                employee: deliverEmployee,
+                status: 3,
+            }
+        }
+        setLoad3(true)
+        setTimeout(() => {
+            axios(configuration)
+                .then(() => {
+                    setLoad3(false)
+                    setReset(true)
+                    navigation.goBack()
+                }).catch((e) => {
+                    setLoad3(false)
+                    setCheckDenyBlank(false)
+                    console.log(e);
+                })
+        }, 1000);
+    }
+
+    const denyOrderWait = () => {
+        const configuration = {
+            method: "post",
+            url: "http://192.168.1.216:3000/DenyOrderWaiting",
+            params: {
+                id: i._id,
+                employee: deliverEmployee,
+                status: 6,
+            }
+        }
+        setLoadReject(true)
+        setTimeout(() => {
+            axios(configuration)
+                .then(() => {
+                    setLoadReject(false)
+                    setReset(true)
+                    navigation.goBack()
+                }).catch((et) => {
+                    setLoadReject(false)
+                    console.log(et);
+                })
+        }, 1000);
+    }
+
+    const cancelNormal = () => {
+        const configuration = {
+            method: "post",
+            url: "http://192.168.1.216:3000/DenyNormalOrder",
+            params: {
+                id: i._id,
+                reason: "Cancel by manager",
+                status: 6,
+            }
+        }
+        setLoadReject(true)
+        setTimeout(() => {
+            axios(configuration)
+                .then(() => {
+                    setLoadReject(false)
+                    setReset(true)
+                    navigation.goBack()
+                }).catch((et) => {
+                    setLoadReject(false)
+                    console.log(et);
                 })
         }, 1000);
     }
@@ -269,15 +422,94 @@ function DetailCartEmp({ route }: { route: any }) {
                             )
                         })
                     ) : null}
+                    {i.denyreason ? (
+                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                            <Text style={{ fontSize: 15, fontWeight: "bold" }}>Deny reason</Text>
+                            <Text style={{ fontSize: 15 }}>{i.denyreason}</Text>
+                        </View>
+                    ) : null}
                 </View>
+                {i.status === 4 && candecode.userRole === 3 ? (
+                    <>
+                        {candecode.userRole === 3 && i.paymentmethod?.type === "Vnpay" ? (
+                            <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "tomato", alignItems: "center", paddingVertical: 10 }} onPress={() => setCancelPaid(true)}>
+                                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Cancel order</Text>
+                            </TouchableOpacity>
+                        ) : null}
+                        {cancelPaid ? (
+                            <CancelRequest setCancelPaid={setCancelPaid} i={i} deliverEmployee={deliverEmployee} fulltotal={fulltotal2} setReset={setReject} />
+                        ) : null}
+                        {candecode.userRole === 3 && i.paymentmethod?.type === "COD" ? (
+                            <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "tomato", alignItems: "center", paddingVertical: 10 }} onPress={() => setReject(true)}>
+                                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Cancel order</Text>
+                            </TouchableOpacity>
+                        ) : null}
+                        {reject ? (
+                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
+                                <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "#FEA116", alignItems: "center", paddingVertical: 7, paddingHorizontal: 10 }} onPress={() => denyOrderWait()}>
+                                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Confirm</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "gray", alignItems: "center", paddingVertical: 7, paddingHorizontal: 10 }} onPress={() => setReject(false)}>
+                                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ) : null}
+                    </>
+                ) : null}
                 {i.status === 1 ? (
-                    <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "#03ba5f", alignItems: "center", paddingVertical: 10 }} onPress={() => appoveOrder(i._id, i.orderitems)}>
-                        {load ? (
-                            <ActivityIndicator size={21} color={"#fff"} />
+                    <>
+                        <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "#03ba5f", alignItems: "center", paddingVertical: 10 }} onPress={() => appoveOrder(i._id, i.orderitems)}>
+                            {load ? (
+                                <ActivityIndicator size={21} color={"#fff"} />
+                            ) : (
+                                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Accept order</Text>
+                            )}
+                        </TouchableOpacity>
+                        {candecode.userRole === 3 && (i.paymentmethod.type === "Vnpay" || i.paymentmethod.type === "COD") ? (
+                            <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "tomato", alignItems: "center", paddingVertical: 10 }} onPress={() => setWantDeny(true)}>
+                                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Deny order</Text>
+                            </TouchableOpacity>
+                        ) : null}
+                    </>
+                ) : null}
+                {wantDeny ? (
+                    <View style={{ padding: 15, marginBottom: 15, flexDirection: "column", gap: 15 }}>
+                        <Text style={{ fontSize: 15, fontWeight: "bold" }}>Reason deny :</Text>
+                        {i.paymentmethod.type === "Vnpay" && i.paymentmethod.status === 2 ? (
+                            <>
+                                <TextInput multiline={true} onChange={(e) => setDenyReason(e.nativeEvent.text)} style={{ borderWidth: 1, borderColor: "gray", backgroundColor: "#fff", borderRadius: 6, height: 100, verticalAlign: "top" }} />
+                                {checkDenyBlank ? (
+                                    <Text style={{ color: "red", textAlign: "center" }}>This field cant be blank!</Text>
+                                ) : null}
+                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
+                                    <TouchableOpacity style={{ backgroundColor: "#FEA116", paddingVertical: 7, paddingHorizontal: 10 }} onPress={() => denyOrderPaid()}>
+                                        <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Confirm</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => setWantDeny(false)} style={{ backgroundColor: "gray", paddingVertical: 7, paddingHorizontal: 10 }}>
+                                        <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Cancel</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </>
                         ) : (
-                            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Accept order</Text>
+                            <>
+                                <TextInput multiline={true} onChange={(e) => setDenyReason(e.nativeEvent.text)} style={{ borderWidth: 1, borderColor: "gray", backgroundColor: "#fff", borderRadius: 6, height: 100, verticalAlign: "top" }} />
+                                {checkDenyBlank ? (
+                                    <Text style={{ color: "red", textAlign: "center" }}>This field cant be blank!</Text>
+                                ) : null}
+                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
+                                    <TouchableOpacity style={{ backgroundColor: "#FEA116", paddingVertical: 7, paddingHorizontal: 10 }} onPress={() => denyOrder()}>
+                                        <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Confirm</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => setWantDeny(false)} style={{ backgroundColor: "gray", paddingVertical: 7, paddingHorizontal: 10 }}>
+                                        <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Cancel</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </>
                         )}
-                    </TouchableOpacity>
+                        {load3 ? (
+                            <ActivityIndicator size={25} color={"#FEA116"} />
+                        ) : null}
+                    </View>
                 ) : null}
                 {i.employee.map((o: any) => {
                     if (o.id === candecode.userId && i.status === 2) {
@@ -303,6 +535,39 @@ function DetailCartEmp({ route }: { route: any }) {
                     }
                     return null
                 })}
+                {i.status === 2 && candecode.userRole === 3 ? (
+                    <>
+                        {i.paymentmethod?.type === "Vnpay" ? (
+                            <>
+                                <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "tomato", alignItems: "center", paddingVertical: 10 }} onPress={() => setCancelAprove(true)}>
+                                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Cancel order</Text>
+                                </TouchableOpacity>
+                                {cancelAprove ? (
+                                    <CancelByMag setCancelAprove={setCancelAprove} i={i} fulltotal={fulltotal2} setReset={setReset} />
+                                ) : null}
+                            </>
+                        ) : i.paymentmethod?.type === "COD" ? (
+                            <>
+                                <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "tomato", alignItems: "center", paddingVertical: 10 }} onPress={() => setNormalCancel(true)}>
+                                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Cancel order</Text>
+                                </TouchableOpacity>
+                                {normalCancel ? (
+                                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
+                                        <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "#FEA116", alignItems: "center", paddingVertical: 7, paddingHorizontal: 10 }} onPress={() => cancelNormal()}>
+                                            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Confirm</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "gray", alignItems: "center", paddingVertical: 7, paddingHorizontal: 10 }} onPress={() => setNormalCancel(false)}>
+                                            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Cancel</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                ) : null}
+                            </>
+                        ) : null}
+                    </>
+                ) : null}
+                {loadReject ? (
+                    <ActivityIndicator size={25} color={"#FEA116"} />
+                ) : null}
             </View>
         </ScrollView>
     )

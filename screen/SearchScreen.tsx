@@ -1,22 +1,26 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Search from '../pages/Search';
-import DetailPage from '../pages/DetailPage';
-import Setting from '../pages/Setting';
-import SearchMenu from '../component/SearchComp/SearchMenu';
-import WriteReview from '../component/WriteReview';
-import SearchOrder from '../component/SearchComp/SearchOrder';
+import { lazy, Suspense } from 'react';
+import { ActivityIndicator } from 'react-native';
+const searchLazy = lazy(() => import("../pages/Search"))
+const detailPageLazy = lazy(() => import("../pages/DetailPage"))
+const settingLazy = lazy(() => import("../pages/Setting"))
+const searchMenuLazy = lazy(() => import("../component/SearchComp/SearchMenu"))
+const writeReviewLazy = lazy(() => import("../component/WriteReview"))
+const searchOrderLazy = lazy(() => import("../component/SearchComp/SearchOrder"))
 
 const SearchStack = createNativeStackNavigator();
 function SearchScreen() {
     return (
-        <SearchStack.Navigator screenOptions={{ headerShown: false }}>
-            <SearchStack.Screen name='Search' component={Search}></SearchStack.Screen>
-            <SearchStack.Screen name='SearchMenu' component={SearchMenu}></SearchStack.Screen>
-            <SearchStack.Screen name='SearchOrder' component={SearchOrder}></SearchStack.Screen>
-            <SearchStack.Screen name='DetailPage' component={DetailPage}></SearchStack.Screen>
-            <SearchStack.Screen name='WriteReview' component={WriteReview}></SearchStack.Screen>
-            <SearchStack.Screen name='Setting' component={Setting}></SearchStack.Screen>
-        </SearchStack.Navigator>
+        <Suspense fallback={<ActivityIndicator size={25} color={"#FEA116"} />}>
+            <SearchStack.Navigator screenOptions={{ headerShown: false }}>
+                <SearchStack.Screen name='Search' component={searchLazy}></SearchStack.Screen>
+                <SearchStack.Screen name='SearchMenu' component={searchMenuLazy}></SearchStack.Screen>
+                <SearchStack.Screen name='SearchOrder' component={searchOrderLazy}></SearchStack.Screen>
+                <SearchStack.Screen name='DetailPage' component={detailPageLazy}></SearchStack.Screen>
+                <SearchStack.Screen name='WriteReview' component={writeReviewLazy}></SearchStack.Screen>
+                <SearchStack.Screen name='Setting' component={settingLazy}></SearchStack.Screen>
+            </SearchStack.Navigator>
+        </Suspense>
     )
 }
 export default SearchScreen

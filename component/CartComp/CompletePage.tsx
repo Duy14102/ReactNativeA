@@ -60,7 +60,7 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnp
             if (token) {
                 const configuration = {
                     method: "post",
-                    url: "http://localhost:3000/PaidCodPayment",
+                    url: "http://192.168.1.216:3000/PaidCodPayment",
                     params: {
                         id: token
                     }
@@ -78,7 +78,7 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnp
             if (token) {
                 const configuration = {
                     method: "post",
-                    url: "http://localhost:3000/PaidPaypalPayment",
+                    url: "http://192.168.1.216:3000/PaidPaypalPayment",
                     params: {
                         id: token
                     }
@@ -96,7 +96,7 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnp
             if (token) {
                 const configuration = {
                     method: "post",
-                    url: "http://localhost:3000/CancelPaypalPayment",
+                    url: "http://192.168.1.216:3000/CancelPaypalPayment",
                     params: {
                         id: token
                     }
@@ -182,7 +182,7 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnp
                 if (type4) {
                     const configuration = {
                         method: "post",
-                        url: "http://localhost:3000/ChangeVnpayDate",
+                        url: "http://192.168.1.216:3000/ChangeVnpayDate",
                         data: {
                             id: type4,
                             date: sendDate
@@ -194,7 +194,7 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnp
                 if (type === "24" || type === "09" || type === "10" || type === "11" || type === "12" || type === "13" || type === "51" || type === "65" || type === "75" || type === "79" || type === "99" || type === "15") {
                     const configuration = {
                         method: "post",
-                        url: "http://localhost:3000/CancelVnpayPayment",
+                        url: "http://192.168.1.216:3000/CancelVnpayPayment",
                         params: {
                             reason: kakao,
                             id: type4
@@ -204,7 +204,7 @@ function CompletePage({ index, jumpTo, vnpayParamsMain, paypalParamsMain, setVnp
                 } else {
                     const configuration = {
                         method: "post",
-                        url: "http://localhost:3000/PaidVnpayPayment",
+                        url: "http://192.168.1.216:3000/PaidVnpayPayment",
                         params: {
                             id: type4
                         }

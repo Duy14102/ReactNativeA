@@ -42,7 +42,7 @@ function HistoryCartEmp({ index }: { index: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetAllOrderHistory",
+            url: "http://192.168.1.216:3000/GetAllOrderHistory",
             params: {
                 page: currentPage.current,
                 limit: limit
@@ -121,7 +121,7 @@ function HistoryCartEmp({ index }: { index: any }) {
                                     {i.employee.length > 0 ? (
                                         i.employee.map((k: any) => {
                                             return (
-                                                k.id === candecode.userId ? (
+                                                k.id === candecode.userId && candecode.userRole === 2 ? (
                                                     <TouchableOpacity style={cateStyle.cardStyle} key={i._id} onPress={() => navigation.navigate("DetailCartEmp", { i: i, candecode: candecode })}>
                                                         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
                                                             <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
@@ -164,6 +164,46 @@ function HistoryCartEmp({ index }: { index: any }) {
                                             )
                                         })
                                     ) : null}
+                                    {candecode.userRole === 3 ? (
+                                        <TouchableOpacity style={cateStyle.cardStyle} key={i._id} onPress={() => navigation.navigate("DetailCartEmp", { i: i, candecode: candecode })}>
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
+                                                <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                                                    <Text style={{ fontSize: 15, fontWeight: "bold" }}>Customer :</Text>
+                                                    {i.user?.map((a: any) => {
+                                                        return (
+                                                            <Text key={a.id} style={{ fontSize: 15 }}>{a.fullname}</Text>
+                                                        )
+                                                    })}
+                                                </View>
+                                                {i.status === 3 ? (
+                                                    <Text style={{ fontSize: 15, color: "tomato" }}>Denied</Text>
+                                                ) : i.status === 5 ? (
+                                                    <Text style={{ fontSize: 15, color: "#03ba5f" }}>Succeeded</Text>
+                                                ) : i.status === 6 ? (
+                                                    <Text style={{ fontSize: 15, color: "tomato" }}>Canceled</Text>
+                                                ) : null}
+                                            </View>
+                                            <View style={{ flexDirection: "row", gap: 10, position: "relative", paddingTop: 4 }}>
+                                                <Image source={{ uri: i.orderitems[0].data.foodimage }} height={70} width={70} />
+                                                <Text style={{ fontSize: 15, fontWeight: "bold" }}>{i.orderitems[0].data.foodname}</Text>
+                                                <Text style={{ fontSize: 15, bottom: "30%", position: "absolute", right: 10 }}>x {i.orderitems[0].quantity}</Text>
+                                                <Text style={{ fontSize: 15, bottom: 0, position: "absolute", right: 10, color: "#FEA116" }}>{VND.format(i.orderitems[0].data.foodprice)}</Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    borderBottomColor: 'gray',
+                                                    borderBottomWidth: 0.5,
+                                                    left: 5,
+                                                    right: 5,
+                                                    paddingVertical: 3
+                                                }}
+                                            />
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+                                                <Text style={{ fontSize: 15 }}>{i.orderitems.length} items</Text>
+                                                {getTotal(i)}
+                                            </View>
+                                        </TouchableOpacity>
+                                    ) : null}
                                 </Fragment>
                             )
                         })}
@@ -178,7 +218,7 @@ function HistoryCartEmp({ index }: { index: any }) {
                         </View>
                     </>
                 ) : (
-                    <Text style={{ fontSize: 18, textAlign: "center" }}>There's no order!</Text>
+                    <Text style={{ fontSize: 18, textAlign: "center", padding: 15 }}>There's no order!</Text>
                 )}
             </View>
         </ScrollView>

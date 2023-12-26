@@ -72,6 +72,7 @@ function AdminPanel() {
                 ) : null}
             </View>
             <TabView
+                lazy={true}
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
                 onIndexChange={setIndex}

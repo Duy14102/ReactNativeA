@@ -61,7 +61,7 @@ function EditAdminPass({ route, navigation }: { route: any, navigation: any }) {
     const updatePassword = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/UpdatePasswordNative",
+            url: "http://192.168.1.216:3000/UpdatePasswordNative",
             data: {
                 updateid: user._id,
                 updatepassword: newPassword,

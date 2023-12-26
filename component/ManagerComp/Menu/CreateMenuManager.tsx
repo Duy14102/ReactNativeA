@@ -35,7 +35,7 @@ function CreateMenuManager() {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/UploadMenu",
+            url: "http://192.168.1.216:3000/UploadMenu",
             data: {
                 foodname,
                 foodprice: parseInt(foodprice),

@@ -29,7 +29,7 @@ function DetailContact({ route }: { route: any }) {
     const DeleteContact = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/DeleteContact",
+            url: "http://192.168.1.216:3000/DeleteContact",
             data: {
                 id: i._id
             }

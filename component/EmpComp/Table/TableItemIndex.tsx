@@ -34,7 +34,7 @@ function TableItemIndex({ cate, itemss }: { cate: any, itemss: any }) {
     function getAdminMenu() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetItemCanTable",
+            url: "http://192.168.1.216:3000/GetItemCanTable",
             params: {
                 page: currentPage.current,
                 limit: limit,
@@ -94,7 +94,7 @@ function TableItemIndex({ cate, itemss }: { cate: any, itemss: any }) {
         }
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/AddItemToTable",
+            url: "http://192.168.1.216:3000/AddItemToTable",
             data: {
                 tableid: itemss._id,
                 statusCheck: itemss.tablestatus,
@@ -135,7 +135,7 @@ function TableItemIndex({ cate, itemss }: { cate: any, itemss: any }) {
                             ) : null}
                             {menu.map((i: any) => {
                                 return (
-                                    <View key={i._id} style={{ backgroundColor: "#fff", flexDirection: "row", padding: 15, gap: 20, height: 170, marginVertical: 10, position: "relative" }}>
+                                    <View key={i._id} style={cateStyle.shadow}>
                                         <Image source={{ uri: i.foodimage }} height={75} width={75} />
                                         <View style={{ flexDirection: "row", gap: 10 }}>
                                             <View style={{ flexDirection: "column", gap: 10 }}>
@@ -178,6 +178,24 @@ function TableItemIndex({ cate, itemss }: { cate: any, itemss: any }) {
 }
 
 const cateStyle = StyleSheet.create({
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 3,
+        backgroundColor: "#fff",
+        flexDirection: "row",
+        padding: 15,
+        gap: 20,
+        marginVertical: 10,
+        position: "relative",
+        height: 170
+    },
+
     buttonPaginate: {
         backgroundColor: "#FEA116",
         paddingHorizontal: 10,

@@ -30,7 +30,7 @@ function ChangeTableEmp({ route }: { route: any }) {
     function getTableActive() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetAllTableActive",
+            url: "http://192.168.1.216:3000/GetAllTableActive",
         }
         axios(configuration)
             .then((res) => {
@@ -45,7 +45,7 @@ function ChangeTableEmp({ route }: { route: any }) {
             setCheckTableId(false)
             const configuration = {
                 method: "post",
-                url: "http://localhost:3000/ChangeTableNow",
+                url: "http://192.168.1.216:3000/ChangeTableNow",
                 data: {
                     oldid: item._id,
                     newid: changeThis,

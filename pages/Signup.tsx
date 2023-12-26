@@ -68,7 +68,7 @@ function Signup({ navigation }: { navigation: any }) {
     const handleSubmit = () => {
         const configuration = {
             method: "post",
-            url: "http://localhost:3000/Register",
+            url: "http://192.168.1.216:3000/Register",
             data: {
                 email: username,
                 password,

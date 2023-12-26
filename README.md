@@ -8,6 +8,12 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
+Note : if you encounter lazy bug, then do this:
+```bash
+# Go to this directory, then change compilerOptions/module to esnext
+node_modules/@react-native/typescript-config/tsconfig.json
+```
+
 To start Metro, run the following command from the _root_ of your React Native project:
 
 ```bash

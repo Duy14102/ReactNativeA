@@ -31,7 +31,7 @@ function Search() {
     const SearchType = () => {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetSearch",
+            url: "http://192.168.1.216:3000/GetSearch",
             params: {
                 foodSearch: search
             }
@@ -57,7 +57,7 @@ function Search() {
     const searchorder = () => {
         const configuration = {
             method: 'get',
-            url: 'http://localhost:3000/GetThisOrder',
+            url: 'http://192.168.1.216:3000/GetThisOrder',
             params: {
                 id: order
             }

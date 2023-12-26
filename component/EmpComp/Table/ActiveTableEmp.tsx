@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-function ActiveTableEmp({ index }: { index: any }) {
+function ActiveTableEmp({ index, success }: { index: any, success: any }) {
     const navigation = useNavigation<any>()
     const isfocused = useIsFocused()
     const [table, setTable] = useState([])
@@ -37,12 +37,12 @@ function ActiveTableEmp({ index }: { index: any }) {
     }
 
     useEffect(() => {
-        if (isfocused || index === 0) {
+        if (isfocused || index === 0 || success) {
             currentPage.current = 1;
             datasynb()
             getPagination()
         }
-    }, [isfocused, index])
+    }, [isfocused, index, success])
 
     function handlePageClick(e: any) {
         currentPage.current = e + 1
@@ -52,7 +52,7 @@ function ActiveTableEmp({ index }: { index: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetTableUse",
+            url: "http://192.168.1.216:3000/GetTableUse",
             params: {
                 page: currentPage.current,
                 limit: limit

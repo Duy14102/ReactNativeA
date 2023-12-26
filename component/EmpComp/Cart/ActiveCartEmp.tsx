@@ -42,7 +42,7 @@ function ActiveCartEmp({ index }: { index: any }) {
     function getPagination() {
         const configuration = {
             method: "get",
-            url: "http://localhost:3000/GetAllOrderActive",
+            url: "http://192.168.1.216:3000/GetAllOrderActive",
             params: {
                 page: currentPage.current,
                 limit: limit
@@ -191,6 +191,46 @@ function ActiveCartEmp({ index }: { index: any }) {
                                             </View>
                                         </TouchableOpacity>
                                     ) : null}
+                                    {candecode.userRole === 3 ? (
+                                        <TouchableOpacity style={cateStyle.cardStyle} onPress={() => navigation.navigate("DetailCartEmp", { i: i, candecode: candecode })}>
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 5 }}>
+                                                <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                                                    <Text style={{ fontSize: 15, fontWeight: "bold" }}>Customer :</Text>
+                                                    {i.user?.map((w: any) => {
+                                                        return (
+                                                            <Text key={w.id} style={{ fontSize: 15 }}>{w.fullname}</Text>
+                                                        )
+                                                    })}
+                                                </View>
+                                                {i.status === 1 ? (
+                                                    <Text style={{ fontSize: 15, color: "#fca103" }}>🕒 Pending</Text>
+                                                ) : i.status === 2 ? (
+                                                    <Text style={{ fontSize: 15, color: "#03ba5f" }}>✅ Approve</Text>
+                                                ) : i.status === 4 ? (
+                                                    <Text style={{ fontSize: 15 }}>🕒 Pending cancel</Text>
+                                                ) : null}
+                                            </View>
+                                            <View style={{ flexDirection: "row", gap: 10, position: "relative", paddingTop: 4 }}>
+                                                <Image source={{ uri: i.orderitems[0].data.foodimage }} height={70} width={70} />
+                                                <Text style={{ fontSize: 15, fontWeight: "bold" }}>{i.orderitems[0].data.foodname}</Text>
+                                                <Text style={{ fontSize: 15, bottom: "30%", position: "absolute", right: 10 }}>x {i.orderitems[0].quantity}</Text>
+                                                <Text style={{ fontSize: 15, bottom: 0, position: "absolute", right: 10, color: "#FEA116" }}>{VND.format(i.orderitems[0].data.foodprice)}</Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    borderBottomColor: 'gray',
+                                                    borderBottomWidth: 0.5,
+                                                    left: 5,
+                                                    right: 5,
+                                                    paddingVertical: 3
+                                                }}
+                                            />
+                                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+                                                <Text style={{ fontSize: 15 }}>{i.orderitems.length} items</Text>
+                                                {getTotal(i)}
+                                            </View>
+                                        </TouchableOpacity>
+                                    ) : null}
                                 </Fragment>
                             )
                         })}
@@ -205,7 +245,7 @@ function ActiveCartEmp({ index }: { index: any }) {
                         </View>
                     </>
                 ) : (
-                    <Text style={{ fontSize: 18, textAlign: "center" }}>There's no order!</Text>
+                    <Text style={{ fontSize: 18, textAlign: "center", padding: 15 }}>There's no order!</Text>
                 )}
             </View>
         </ScrollView>

@@ -30,18 +30,24 @@ function DrawerNav({ props }: { props: any }) {
     }
     return (
         <View style={{ flex: 1 }}>
-            <DrawerContentScrollView {...props} contentContainerStyle={{ backgroundColor: "#e820a5" }}>
-                <ImageBackground source={{ uri: "https://wallpapers.com/images/hd/profile-picture-background-10tprnkqwqif4lyv.jpg" }} style={{ padding: 20 }}>
-                    <View style={{ width: "100%", alignItems: "center" }}>
-                        <Image source={{ uri: "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg" }} style={{ height: 80, width: 80, borderRadius: 40, marginBottom: 10 }} />
-                        <Text style={{ fontSize: 18, color: "#fff", fontWeight: "bold" }}>{candecode?.userName}</Text>
-                        {candecode?.userRole === 4 ? (
-                            <Text style={{ color: "#fff" }}>Administrator</Text>
-                        ) : candecode?.userRole === 3 ? (
-                            <Text style={{ color: "#fff" }}>Manager</Text>
-                        ) : candecode?.userRole === 2 ? (
-                            <Text style={{ color: "#fff" }}>Employee</Text>
-                        ) : null}
+            <DrawerContentScrollView {...props} contentContainerStyle={{ backgroundColor: "#FEA116" }}>
+                <ImageBackground source={{ uri: "https://st4.depositphotos.com/3664757/27559/i/450/depositphotos_275596086-stock-photo-ingredients-making-traditional-italian-pesto.jpg" }}>
+                    <View style={{ padding: 20, flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', }}>
+                        <View style={{ width: "100%", alignItems: "center", }}>
+                            {candecode?.userImage ? (
+                                <Image source={{ uri: candecode.userImage }} style={{ height: 80, width: 80, borderRadius: 40, marginBottom: 10 }} />
+                            ) : (
+                                <Image source={{ uri: "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg" }} style={{ height: 80, width: 80, borderRadius: 40, marginBottom: 10 }} />
+                            )}
+                            <Text style={{ fontSize: 18, color: "#fff", fontWeight: "bold" }}>{candecode?.userName}</Text>
+                            {candecode?.userRole === 4 ? (
+                                <Text style={{ color: "#fff" }}>Administrator</Text>
+                            ) : candecode?.userRole === 3 ? (
+                                <Text style={{ color: "#fff" }}>Manager</Text>
+                            ) : candecode?.userRole === 2 ? (
+                                <Text style={{ color: "#fff" }}>Employee</Text>
+                            ) : null}
+                        </View>
                     </View>
                 </ImageBackground>
                 <View style={{ flex: 1, backgroundColor: "#fff", paddingVertical: 5 }}>
@@ -65,4 +71,5 @@ function DrawerNav({ props }: { props: any }) {
         </View>
     )
 }
+
 export default DrawerNav
