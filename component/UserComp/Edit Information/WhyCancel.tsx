@@ -40,7 +40,7 @@ function WhyCancel({ route, navigation }: { route: any, navigation: any }) {
             axios(configuration)
                 .then(() => {
                     setLoad(false)
-                    navigation.navigate("ActiveCart", { userid: userid })
+                    navigation.goBack()
                 }).catch((e) => {
                     setLoad(false)
                     console.log(e);
@@ -51,22 +51,22 @@ function WhyCancel({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1, padding: 15 }}>
+                <View style={{ flex: 1, padding: 15, backgroundColor: "#fff" }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Cancel Order</Text>
-                    <Text style={{ paddingVertical: 10 }}>Please tell us why you cancel :</Text>
-                    <TextInput style={{ borderWidth: 1, borderColor: "gray", padding: 10, height: 100, verticalAlign: "top" }} onChange={(e) => setDenyReason(e.nativeEvent.text)} />
+                    <Text style={{ paddingVertical: 10, fontSize: 16, color: "#0F172B" }}>Please tell us why you cancel :</Text>
+                    <TextInput style={{ borderWidth: 1, borderColor: "gray", padding: 10, height: 100, verticalAlign: "top", borderRadius: 6 }} onChange={(e) => setDenyReason(e.nativeEvent.text)} />
                     {check ? (
                         <Text style={{ color: "red" }}>This field cant be blank!</Text>
                     ) : null}
                     <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 10, justifyContent: "space-evenly" }}>
-                        <TouchableOpacity style={{ width: 80, backgroundColor: "#FEA116", paddingVertical: 5, alignItems: "center", paddingHorizontal: 10 }} onPress={() => denyOrder()}>
+                        <TouchableOpacity style={{ width: 80, backgroundColor: "#FEA116", paddingVertical: 7, alignItems: "center", paddingHorizontal: 10 }} onPress={() => denyOrder()}>
                             {load ? (
                                 <ActivityIndicator color={"#fff"} size={21} />
                             ) : (
                                 <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Confirm</Text>
                             )}
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ width: 80, backgroundColor: "gray", paddingVertical: 5, alignItems: "center", paddingHorizontal: 10 }} onPress={() => navigation.goBack()}>
+                        <TouchableOpacity style={{ width: 80, backgroundColor: "gray", paddingVertical: 7, alignItems: "center", paddingHorizontal: 10 }} onPress={() => navigation.goBack()}>
                             <Text style={{ fontSize: 15, color: "#fff", fontWeight: "bold" }}>Cancel</Text>
                         </TouchableOpacity>
                     </View>

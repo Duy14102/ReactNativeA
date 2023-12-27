@@ -3,8 +3,10 @@ import Header from "../../Header"
 import Footer from "../../Footer"
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
+import { useIsFocused } from "@react-navigation/native";
 
 function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
+    const isfocused = useIsFocused()
     const { userid } = route.params
     const [order, setOrder] = useState<any>([])
     const [refresh, setFresh] = useState(false);
@@ -21,9 +23,11 @@ function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
     }
 
     useEffect(() => {
-        currentPage.current = 1;
-        getPagination()
-    }, [route])
+        if (isfocused) {
+            currentPage.current = 1;
+            getPagination()
+        }
+    }, [isfocused])
 
     /*      Pagination     */
     function HandlePageClick(e: any) {
@@ -97,7 +101,7 @@ function ActiveCart({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1, paddingVertical: 15 }}>
+                <View style={{ flex: 1, paddingVertical: 15, backgroundColor: "#fff" }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Active order</Text>
                     {order.length > 0 ? (
                         <>

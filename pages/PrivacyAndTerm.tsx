@@ -22,7 +22,7 @@ function PrivacyAndTerm() {
                 <View style={{ flex: 1 }}>
                     <ImageBackground source={BgImage} style={PnT.bgimage} />
                     <View style={PnT.overlay}>
-                        <View style={{ top: 200, paddingHorizontal: 35, alignItems: "center" }}>
+                        <View style={{ top: 60, paddingHorizontal: 35, alignItems: "center" }}>
                             <Text style={PnT.notiText}>Privacy and Term</Text>
                             <View style={PnT.flexible}>
                                 <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
@@ -116,7 +116,7 @@ const PnT = StyleSheet.create({
     bgimage: {
         flex: 1,
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height / 2,
+        height: Dimensions.get('window').height / 4,
         resizeMode: "cover",
         backgroundColor: "black",
         top: 0,

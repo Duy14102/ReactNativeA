@@ -4,27 +4,25 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 function Services() {
     return (
         <View style={serviceStyle.services}>
-            <View style={{ marginVertical: 65 }}>
-                <View style={serviceStyle.boxServices}>
-                    <Icon name='user-tie' style={serviceStyle.boxIcon}></Icon>
-                    <Text style={serviceStyle.boxh5}>Certificate Chefs</Text>
-                    <Text style={serviceStyle.boxp}>Up to 10 with full food service expertise</Text>
-                </View>
-                <View style={serviceStyle.boxServices}>
-                    <Icon name='utensils' style={serviceStyle.boxIcon}></Icon>
-                    <Text style={serviceStyle.boxh5}>Quality Food</Text>
-                    <Text style={serviceStyle.boxp}>Food is carefully selected and prepared</Text>
-                </View>
-                <View style={serviceStyle.boxServices}>
-                    <Icon name='cart-plus' style={serviceStyle.boxIcon}></Icon>
-                    <Text style={serviceStyle.boxh5}>Online Order</Text>
-                    <Text style={serviceStyle.boxp}>Order food and reserve a table online or at the restaurant</Text>
-                </View>
-                <View style={serviceStyle.boxServices}>
-                    <Icon name='headset' style={serviceStyle.boxIcon}></Icon>
-                    <Text style={serviceStyle.boxh5}>24/7 Service</Text>
-                    <Text style={serviceStyle.boxp}>Support service is always available at all times</Text>
-                </View>
+            <View style={serviceStyle.boxServices}>
+                <Icon name='user-tie' style={serviceStyle.boxIcon}></Icon>
+                <Text style={serviceStyle.boxh5}>Certificate Chefs</Text>
+                <Text style={serviceStyle.boxp}>Up to 10 with full food service expertise</Text>
+            </View>
+            <View style={serviceStyle.boxServices}>
+                <Icon name='utensils' style={serviceStyle.boxIcon}></Icon>
+                <Text style={serviceStyle.boxh5}>Quality Food</Text>
+                <Text style={serviceStyle.boxp}>Food is carefully selected and prepared</Text>
+            </View>
+            <View style={serviceStyle.boxServices}>
+                <Icon name='cart-plus' style={serviceStyle.boxIcon}></Icon>
+                <Text style={serviceStyle.boxh5}>Online Order</Text>
+                <Text style={serviceStyle.boxp}>Order food and reserve a table online or at the restaurant</Text>
+            </View>
+            <View style={serviceStyle.boxServices}>
+                <Icon name='headset' style={serviceStyle.boxIcon}></Icon>
+                <Text style={serviceStyle.boxh5}>24/7 Service</Text>
+                <Text style={serviceStyle.boxp}>Support service is always available at all times</Text>
             </View>
         </View>
     )
@@ -33,8 +31,8 @@ function Services() {
 const serviceStyle = StyleSheet.create({
     services: {
         backgroundColor: "#fff",
-        paddingLeft: 15,
-        paddingRight: 15,
+        paddingHorizontal: 15,
+        paddingVertical: 65
     },
 
     boxServices: {

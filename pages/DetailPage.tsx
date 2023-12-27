@@ -19,6 +19,7 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
     const { name, category } = route.params;
     const scrollViewRef = useRef<any>(null);
     const [refresh, setFresh] = useState(false)
+    const [addSuccess, setAddSuccess] = useState(false)
     const [pageCount, setPageCount] = useState(6);
     const [wowreview, setWowReview] = useState([])
     const currentPage = useRef<any>();
@@ -46,6 +47,14 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
     };
 
     useEffect(() => {
+        if (addSuccess) {
+            setTimeout(() => {
+                setAddSuccess(false)
+            }, 1500);
+        }
+    }, [addSuccess])
+
+    useEffect(() => {
         GetDetail()
         GetSimilar()
         getData()
@@ -65,6 +74,37 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
             }).catch((err) => {
                 console.log(err);
             })
+    }
+
+    async function addToCart(name: any, quantity: any) {
+        var stored = await AsyncStorage.getItem('cart');
+        if (!stored) {
+            var students = [];
+            var student1 = { name: name, quantity: quantity };
+            students.push(student1);
+            await AsyncStorage.setItem("cart", JSON.stringify(students))
+            return setAddSuccess(true)
+
+        } else {
+            var called = await AsyncStorage.getItem('cart')
+            if (called) {
+                var sameItem = JSON.parse(called) || []
+                for (var i = 0; i < sameItem.length; i++) {
+                    if (name === sameItem[i].name) {
+                        sameItem[i].quantity += quantity;
+                        await AsyncStorage.setItem("cart", JSON.stringify(sameItem))
+                        return setAddSuccess(true)
+
+                    } else if (i === sameItem.length - 1) {
+                        var stored2 = JSON.parse(called);
+                        var student2 = { name: name, quantity: quantity };
+                        stored2.push(student2);
+                        await AsyncStorage.setItem("cart", JSON.stringify(stored2))
+                        return setAddSuccess(true)
+                    }
+                }
+            }
+        }
     }
 
     function GetSimilar() {
@@ -188,18 +228,18 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView ref={scrollViewRef} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1, paddingVertical: 15 }}>
+                <View style={{ flex: 1, paddingVertical: 15, backgroundColor: "#fff" }}>
                     {Object.values(detail).map((i: any) => {
                         return (
                             <View key={i._id} style={{ paddingVertical: 15 }}>
+                                <Image source={{ uri: i.foodimage }} style={{ width: "100%", height: 200 }} />
                                 <View style={{ paddingHorizontal: 15 }}>
-                                    <Image source={{ uri: i.foodimage }} style={{ width: "100%", height: 200 }} />
                                     <View style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: 15 }}>
-                                        <Text style={{ fontSize: 18, color: "#0F172B", fontWeight: "bold" }}>{i.foodname}</Text>
-                                        <Text style={{ fontSize: 15, color: "#0F172B" }}>{i.foodcategory}</Text>
-                                        <Text style={{ fontSize: 15, color: "#0F172B" }}>{VND.format(i.foodprice)}</Text>
-                                        <Text style={{ fontSize: 15, color: "#0F172B" }}>Quantity : {i.foodquantity}</Text>
-                                        <Text style={{ fontSize: 15, color: "#0F172B" }}>{i.review?.length} review from customer</Text>
+                                        <Text style={{ fontSize: 20, color: "#0F172B", fontWeight: "bold" }}>{i.foodname}</Text>
+                                        <Text style={{ fontSize: 17, color: "#0F172B" }}>{i.foodcategory}</Text>
+                                        <Text style={{ fontSize: 17, color: "#0F172B" }}>{VND.format(i.foodprice)}</Text>
+                                        <Text style={{ fontSize: 17, color: "#0F172B" }}>Quantity : {i.foodquantity}</Text>
+                                        <Text style={{ fontSize: 17, color: "#0F172B" }}>{i.review?.length} review from customer</Text>
                                         <View style={{ display: "flex", flexDirection: "row", alignItems: "center", height: 50, gap: 5 }}>
                                             <TouchableOpacity style={detailStyle.buttonPlus} onPress={() => minus()}>
                                                 <Icon name="minus" />
@@ -209,104 +249,92 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
                                                 <Icon name="plus" />
                                             </TouchableOpacity>
                                         </View>
-                                        <TouchableOpacity style={detailStyle.addtocart}>
-                                            <Text style={detailStyle.textAddtocart}>Add to cart</Text>
+                                        <TouchableOpacity style={[detailStyle.addtocart, { backgroundColor: addSuccess ? "#03ba5f" : "#FEA116" }]} onPress={() => addToCart(i.foodname, parseInt(quantity))}>
+                                            {addSuccess ? (
+                                                <Text style={detailStyle.textAddtocart}>✓</Text>
+                                            ) : (
+                                                <Text style={detailStyle.textAddtocart}>Add to cart</Text>
+                                            )}
                                         </TouchableOpacity>
                                     </View>
-                                    <View
-                                        style={{
-                                            borderBottomColor: 'gray',
-                                            borderBottomWidth: 1,
-                                            paddingVertical: 15
-                                        }}
-                                    />
-                                    <Text style={{ paddingTop: 20, fontSize: 15, fontWeight: "bold" }}>Description :</Text>
-                                    <Text style={{ fontSize: 15 }}>{i.fooddescription}</Text>
-                                    <View
-                                        style={{
-                                            borderBottomColor: 'gray',
-                                            borderBottomWidth: 1,
-                                            paddingVertical: 15
-                                        }}
-                                    />
-                                    <View style={{ paddingTop: 20 }}>
-                                        {candecode ? null : (
-                                            <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 3 }}>
-                                                <Text style={detailStyle.logintoR}>You need</Text>
-                                                <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
-                                                    <Text style={[detailStyle.logintoR, { color: "#FEA116" }]}>Login</Text>
-                                                </TouchableOpacity>
-                                                <Text style={detailStyle.logintoR}>to review this item!</Text>
-                                            </View>
-                                        )}
-                                        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 10 }}>
-                                            <View style={{ display: "flex", flexDirection: "row" }}>
-                                                <Text style={{ fontSize: 15, fontWeight: "bold" }}>Review : </Text>
-                                                {i.review?.length === 0 ? (
-                                                    <Text style={detailStyle.logintoR}>There's no review yet! </Text>
-                                                ) : (
-                                                    <Text style={detailStyle.logintoR}>There's total {i.review?.length} review</Text>
-                                                )}
-                                            </View>
-                                            {candecode ? (
-                                                <TouchableOpacity onPress={() => navigation.navigate('WriteReview', { item: i, candecode: candecode })}>
-                                                    <Icon name="edit" style={{ fontSize: 18 }} />
-                                                </TouchableOpacity>
-                                            ) : null}
+                                </View>
+                                <View style={[detailStyle.shadow, { marginVertical: 25 }]}>
+                                    <View style={{ backgroundColor: "#fff", padding: 15 }}>
+                                        <Text style={{ fontSize: 17, fontWeight: "bold" }}>Description :</Text>
+                                        <Text style={{ fontSize: 16 }}>{i.fooddescription}</Text>
+                                    </View>
+                                </View>
+                                <View style={{ borderWidth: 1, borderColor: "#ccc", padding: 15, marginVertical: 15 }}>
+                                    {candecode ? null : (
+                                        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 3 }}>
+                                            <Text style={detailStyle.logintoR}>You need</Text>
+                                            <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
+                                                <Text style={[detailStyle.logintoR, { color: "#FEA116" }]}>Login</Text>
+                                            </TouchableOpacity>
+                                            <Text style={detailStyle.logintoR}>to review this item!</Text>
                                         </View>
-                                        {wowreview.length > 0 ? (
-                                            <View style={{ display: "flex", flexDirection: "column", gap: 20, marginVertical: 15, padding: 7, backgroundColor: "#FFFFFF" }}>
-                                                {wowreview.map((k: any) => {
-                                                    return (
-                                                        <View key={k.id}>
-                                                            <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 5 }}>
-                                                                {k.image ? (
-                                                                    <Image source={{ uri: k.image }} width={50} height={50} />
-                                                                ) : (
-                                                                    <Image source={{ uri: imgUser }} width={50} height={50} />
-                                                                )}
-                                                                <View>
-                                                                    <Text>{rating(k.star)}</Text>
-                                                                    <View style={{ flexDirection: "row", gap: 5 }}>
-                                                                        <Text style={{ fontWeight: "bold" }}>{k.name}</Text>
-                                                                        <Text>-</Text>
-                                                                        <Text>{k.date}</Text>
-                                                                    </View>
-                                                                    <Text>{k.message}</Text>
-                                                                </View>
-                                                            </View>
-                                                            <View
-                                                                style={{
-                                                                    borderBottomColor: 'gray',
-                                                                    borderBottomWidth: 0.8,
-                                                                    paddingTop: 20
-                                                                }}
-                                                            />
-                                                        </View>
-                                                    )
-                                                })}
-                                            </View>
-                                        ) : null}
-                                        {i.review?.length > 5 ? (
-                                            <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 }}>
-                                                <TouchableOpacity style={currentPage.current === 1 ? detailStyle.prevNotActive : detailStyle.buttonPaginate3} onPress={() => pagePrev(i)}>
-                                                    <Text style={currentPage.current === 1 ? detailStyle.textPrevNotActive : detailStyle.textPrevActive}>{"< Prev"}</Text>
-                                                </TouchableOpacity>
-                                                {pageButton(pageCount, i)}
-                                                <TouchableOpacity style={currentPage.current >= pageCount ? detailStyle.prevNotActive : detailStyle.buttonPaginate3} onPress={() => pageNext(i)}>
-                                                    <Text style={currentPage.current >= pageCount ? detailStyle.textPrevNotActive : detailStyle.textPrevActive}>{"Next >"}</Text>
-                                                </TouchableOpacity>
-                                            </View>
+                                    )}
+                                    <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 10 }}>
+                                        <View style={{ display: "flex", flexDirection: "row" }}>
+                                            <Text style={{ fontSize: 17, fontWeight: "bold" }}>Review : </Text>
+                                            {i.review?.length === 0 ? (
+                                                <Text style={detailStyle.logintoR}>There's no review yet! </Text>
+                                            ) : (
+                                                <Text style={detailStyle.logintoR}>There's total {i.review?.length} review</Text>
+                                            )}
+                                        </View>
+                                        {candecode ? (
+                                            <TouchableOpacity onPress={() => navigation.navigate('WriteReview', { item: i, candecode: candecode })}>
+                                                <Icon name="edit" style={{ fontSize: 20 }} />
+                                            </TouchableOpacity>
                                         ) : null}
                                     </View>
-                                    <View
-                                        style={{
-                                            borderBottomColor: 'gray',
-                                            borderBottomWidth: 1,
-                                            paddingVertical: 15
-                                        }}
-                                    />
+                                    {wowreview.length > 0 ? (
+                                        <View style={{ display: "flex", flexDirection: "column", gap: 20, marginVertical: 15, padding: 7, backgroundColor: "#FFFFFF" }}>
+                                            {wowreview.map((k: any) => {
+                                                return (
+                                                    <View key={k.id}>
+                                                        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 5 }}>
+                                                            {k.image ? (
+                                                                <Image source={{ uri: k.image }} width={50} height={50} />
+                                                            ) : (
+                                                                <Image source={{ uri: imgUser }} width={50} height={50} />
+                                                            )}
+                                                            <View>
+                                                                <Text>{rating(k.star)}</Text>
+                                                                <View style={{ flexDirection: "row", gap: 5 }}>
+                                                                    <Text style={{ fontWeight: "bold" }}>{k.name}</Text>
+                                                                    <Text>-</Text>
+                                                                    <Text>{k.date}</Text>
+                                                                </View>
+                                                                <Text>{k.message}</Text>
+                                                            </View>
+                                                        </View>
+                                                        <View
+                                                            style={{
+                                                                borderBottomColor: 'gray',
+                                                                borderBottomWidth: 0.8,
+                                                                paddingTop: 20
+                                                            }}
+                                                        />
+                                                    </View>
+                                                )
+                                            })}
+                                        </View>
+                                    ) : null}
+                                    {i.review?.length > 5 ? (
+                                        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 10 }}>
+                                            <TouchableOpacity style={currentPage.current === 1 ? detailStyle.prevNotActive : detailStyle.buttonPaginate3} onPress={() => pagePrev(i)}>
+                                                <Text style={currentPage.current === 1 ? detailStyle.textPrevNotActive : detailStyle.textPrevActive}>{"< Prev"}</Text>
+                                            </TouchableOpacity>
+                                            {pageButton(pageCount, i)}
+                                            <TouchableOpacity style={currentPage.current >= pageCount ? detailStyle.prevNotActive : detailStyle.buttonPaginate3} onPress={() => pageNext(i)}>
+                                                <Text style={currentPage.current >= pageCount ? detailStyle.textPrevNotActive : detailStyle.textPrevActive}>{"Next >"}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    ) : null}
                                 </View>
+
                                 <View style={{ paddingTop: 20 }}>
                                     <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>Similar Items</Text>
                                     <Carousel
@@ -327,8 +355,8 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
                                                             <TouchableOpacity onPress={() => onPressTouch(item.foodname, item.foodcategory)}>
                                                                 <Text style={{ fontSize: 18, fontWeight: "bold" }}>{item.foodname}</Text>
                                                             </TouchableOpacity>
-                                                            <Text style={{ fontSize: 15 }}>{item.foodcategory}</Text>
-                                                            <Text style={{ fontSize: 15 }}>{VND.format(item.foodprice)}</Text>
+                                                            <Text style={{ fontSize: 16 }}>{item.foodcategory}</Text>
+                                                            <Text style={{ fontSize: 16 }}>{VND.format(item.foodprice)}</Text>
                                                         </View>
                                                     </>
                                                 ) : null}
@@ -348,6 +376,19 @@ function DetailPage({ route, navigation }: { route: any, navigation: any }) {
 }
 
 const detailStyle = StyleSheet.create({
+    shadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        borderWidth: 1,
+        borderColor: "transparent"
+    },
+
     buttonPlus: {
         backgroundColor: "lightgray",
         padding: 11
@@ -361,7 +402,6 @@ const detailStyle = StyleSheet.create({
     },
 
     addtocart: {
-        backgroundColor: "#FEA116",
         width: 126,
         paddingHorizontal: 15,
         paddingVertical: 7,
@@ -381,7 +421,7 @@ const detailStyle = StyleSheet.create({
     },
 
     logintoR: {
-        fontSize: 15
+        fontSize: 17
     },
 
     buttonPaginate: {

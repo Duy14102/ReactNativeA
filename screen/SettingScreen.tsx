@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 const settingLazy = lazy(() => import("../pages/Setting"))
 const signupLazy = lazy(() => import("../pages/Signup"))
 const privacyAndTermLazy = lazy(() => import("../pages/PrivacyAndTerm"))
@@ -19,6 +20,12 @@ const detailBookingLazy = lazy(() => import("../component/UserComp/Booking/Detai
 
 const SettingStack = createNativeStackNavigator();
 function SettingScreen() {
+    useEffect(() => {
+        SplashScreen.show()
+        setTimeout(() => {
+            SplashScreen.hide()
+        }, 1000);
+    }, [])
     return (
         <Suspense fallback={<ActivityIndicator size={25} color={"#FEA116"} />}>
             <SettingStack.Navigator screenOptions={{ headerShown: false }}>

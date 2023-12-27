@@ -66,7 +66,7 @@ function FindOrder({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1, padding: 15 }}>
+                <View style={{ flex: 1, padding: 15, backgroundColor: "#fff" }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Find Order</Text>
                     <View style={{ paddingVertical: 15, flexDirection: "column", gap: 5 }}>
                         <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5 }}>Order id :</Text>

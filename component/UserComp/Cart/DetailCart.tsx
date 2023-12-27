@@ -203,6 +203,16 @@ function DetailCart({ route, navigation }: { route: any, navigation: any }) {
                                 <Text style={{ fontSize: 15 }}>{datetime2}</Text>
                             </View>
                         ) : null}
+                        {i.employee?.length > 0 ? (
+                            i.employee?.map((r: any) => {
+                                return (
+                                    <View key={r.id} style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                                        <Text style={{ fontSize: 15, fontWeight: "bold" }}>Employee</Text>
+                                        <Text style={{ fontSize: 15 }}>{r.email}</Text>
+                                    </View>
+                                )
+                            })
+                        ) : null}
                     </View>
                     {i.status === 1 ? (
                         <TouchableOpacity style={{ marginBottom: 15, backgroundColor: "tomato", alignItems: "center", paddingVertical: 10 }} onPress={() => navigation.navigate("WhyCancel", { id: i._id, userid: userid })}>

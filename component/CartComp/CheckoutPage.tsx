@@ -366,7 +366,7 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypa
                 </View>
             ) : (
                 <ScrollView ref={scrollViewRef} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, backgroundColor: "#fff" }}>
                         {checkVal ? (
                             loadWebV ? (
                                 <View style={{ backgroundColor: "#fff", alignItems: "center", justifyContent: "center", width: "100%", height: 300 }}>
@@ -653,8 +653,8 @@ function CheckoutPage({ jumpTo, index, shippingFee, setVnpayParamsMain, setPaypa
                                 </View>
                             </>
                         )}
-                        <Footer />
                     </View>
+                    <Footer />
                 </ScrollView >
             )}
         </>

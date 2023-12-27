@@ -14,12 +14,16 @@ import CartScreen from './screen/CartScreen';
 import AdminScreen from './screen/AdminScreen';
 import EmployeeScreen from './screen/EmployeeScreen';
 import ManagerScreen from './screen/ManagerScreen';
+import SplashScreen from 'react-native-splash-screen'
 
 function App(): JSX.Element {
   const Tabs = createBottomTabNavigator();
   const [routeName, SetRouteName] = useState<any>("")
   const [load, setLoad] = useState(true)
   useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 1000);
     const dataTransfer = async () => {
       try {
         const token = await AsyncStorage.getItem("TOKEN")

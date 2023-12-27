@@ -129,7 +129,7 @@ function UserDetail({ route }: { route: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, backgroundColor: "#fff" }}>
                     <View style={{ alignItems: "center", paddingVertical: 15 }}>
                         {editIn4 ? (
                             <>

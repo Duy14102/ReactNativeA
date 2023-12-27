@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 const EmployeeTableLazy = lazy(() => import("../../pages/employee/EmployeeTable"))
 const DetailTableEmpLazy = lazy(() => import("../../component/EmpComp/Table/DetailTableEmp"))
 const AddTableItemLazy = lazy(() => import("../../component/EmpComp/Table/AddTableItem"))
@@ -9,6 +10,12 @@ const DetailHistoryTableLazy = lazy(() => import("../../component/EmpComp/Table/
 
 function AllTable() {
     const Stack = createNativeStackNavigator();
+    useEffect(() => {
+        SplashScreen.show()
+        setTimeout(() => {
+            SplashScreen.hide()
+        }, 1000);
+    }, [])
     return (
         <Suspense fallback={<ActivityIndicator size={25} color={"#FEA116"} />}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>

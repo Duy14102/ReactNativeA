@@ -116,7 +116,7 @@ function CartPage({ jumpTo, setShippingFee, shippingFee, index }: { jumpTo: any,
     });
     return (
         <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: "#fff" }}>
                 {checkVal ? (
                     <View style={{ flexDirection: "column", alignItems: "center", gap: 10, padding: 15, height: 300 }}>
                         <Text style={{ fontSize: 17, fontWeight: "bold" }}>There's no items in cart</Text>

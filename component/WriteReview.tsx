@@ -114,7 +114,7 @@ function WriteReview({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1, padding: 15 }}>
+                <View style={{ flex: 1, padding: 15, backgroundColor: "#fff" }}>
                     <Text style={{ textAlign: "center", fontSize: 20, fontWeight: "bold", color: "#0F172B", paddingTop: 10 }}>Review {item.foodname}</Text>
                     {exists ? (
                         <>
@@ -189,8 +189,8 @@ function WriteReview({ route, navigation }: { route: any, navigation: any }) {
                             {checkStar ? (
                                 <Text style={{ color: "red", textAlign: "center" }}>Choose star for item!</Text>
                             ) : null}
-                            <Text style={{ paddingVertical: 10, fontSize: 15, color: "#0F172B" }}>Write your review :</Text>
-                            <TextInput style={{ width: "100%", borderWidth: 1, borderColor: "gray", height: 100, verticalAlign: "top" }} onChange={(e) => setReviewMessage(e.nativeEvent.text)} />
+                            <Text style={{ paddingVertical: 10, fontSize: 16, color: "#0F172B" }}>Write your review :</Text>
+                            <TextInput style={{ width: "100%", borderWidth: 1, borderColor: "gray", height: 100, verticalAlign: "top", borderRadius: 6 }} onChange={(e) => setReviewMessage(e.nativeEvent.text)} />
                             <TouchableOpacity style={{ width: "100%", alignItems: "center", backgroundColor: "#FEA116", marginVertical: 15, paddingVertical: 8 }} onPress={() => addreview(item._id)}>
                                 {load ? (
                                     <ActivityIndicator size={21} color={"#fff"} />

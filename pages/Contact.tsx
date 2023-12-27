@@ -79,7 +79,7 @@ function Contact({ route }: { route: any }) {
                 <View style={{ flex: 1 }}>
                     <ImageBackground source={BgImage} style={contactStyle.bgimage} />
                     <View style={contactStyle.overlay}>
-                        <View style={{ top: 200, paddingHorizontal: 35, alignItems: "center" }}>
+                        <View style={{ top: 60, paddingHorizontal: 35, alignItems: "center" }}>
                             <Text style={contactStyle.notiText}>Contact</Text>
                             <View style={contactStyle.flexible}>
                                 <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
@@ -140,7 +140,7 @@ const contactStyle = StyleSheet.create({
     bgimage: {
         flex: 1,
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height / 2,
+        height: Dimensions.get('window').height / 4,
         resizeMode: "cover",
         backgroundColor: "black",
         top: 0,

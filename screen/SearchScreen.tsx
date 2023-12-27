@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 const searchLazy = lazy(() => import("../pages/Search"))
 const detailPageLazy = lazy(() => import("../pages/DetailPage"))
 const settingLazy = lazy(() => import("../pages/Setting"))
@@ -10,6 +11,12 @@ const searchOrderLazy = lazy(() => import("../component/SearchComp/SearchOrder")
 
 const SearchStack = createNativeStackNavigator();
 function SearchScreen() {
+    useEffect(() => {
+        SplashScreen.show()
+        setTimeout(() => {
+            SplashScreen.hide()
+        }, 1000);
+    }, [])
     return (
         <Suspense fallback={<ActivityIndicator size={25} color={"#FEA116"} />}>
             <SearchStack.Navigator screenOptions={{ headerShown: false }}>

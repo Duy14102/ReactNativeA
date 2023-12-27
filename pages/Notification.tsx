@@ -1,17 +1,42 @@
 import { SafeAreaView, StyleSheet, View, ScrollView, Text, ImageBackground, Dimensions, TouchableOpacity, RefreshControl } from "react-native"
 import Header from "../component/Header"
 import Footer from "../component/Footer"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import axios from "axios"
+import { useIsFocused } from "@react-navigation/native"
+import RenderHtml from 'react-native-render-html';
 
 function Notification({ navigation }: { navigation: any }) {
+    const isfocused = useIsFocused()
     const [refresh, setFresh] = useState(false);
+    const [news, setNews] = useState([])
+
     const pulldown = () => {
         setFresh(true)
         setTimeout(() => {
-
+            called()
             setFresh(false)
         }, 1000)
     }
+
+    const called = () => {
+        const configuration = {
+            method: "get",
+            url: "http://localhost:3000/GetNewsActive"
+        }
+        axios(configuration)
+            .then((res) => {
+                setNews(res.data.data)
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
+
+    useEffect(() => {
+        if (isfocused) {
+            called()
+        }
+    }, [isfocused])
     const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
     const keyword = "/"
     return (
@@ -21,7 +46,7 @@ function Notification({ navigation }: { navigation: any }) {
                 <View style={{ flex: 1 }}>
                     <ImageBackground source={BgImage} style={NotiStyle.bgimage} />
                     <View style={NotiStyle.overlay}>
-                        <View style={{ top: 200, paddingHorizontal: 35, alignItems: "center" }}>
+                        <View style={{ top: 60, paddingHorizontal: 35, alignItems: "center" }}>
                             <Text style={NotiStyle.notiText}>Notification</Text>
                             <View style={NotiStyle.flexible}>
                                 <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -34,13 +59,30 @@ function Notification({ navigation }: { navigation: any }) {
                     </View >
                     <View style={NotiStyle.notifi}>
                         <Text style={NotiStyle.mainText}>Announcement</Text>
-                        <Text>There's no notification yet !</Text>
+                        {news.length > 0 ? (
+                            news.map((i: any, index: any) => {
+                                return (
+                                    <View key={i._id} style={{ flexDirection: "column", gap: 5, marginVertical: 15, flexWrap: "wrap" }}>
+                                        <Text style={{ fontSize: 17, fontWeight: "bold" }}>{index} . {i.title}</Text>
+                                        <RenderHtml source={{ html: i.message }} tagsStyles={tagsStyles} />
+                                    </View>
+                                )
+                            })
+                        ) : (
+                            <Text>There's no notification yet !</Text>
+                        )}
                     </View>
                 </View>
                 <Footer />
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     )
+}
+
+const tagsStyles: any = {
+    div: {
+        fontSize: 15
+    },
 }
 
 const NotiStyle = StyleSheet.create({
@@ -60,7 +102,7 @@ const NotiStyle = StyleSheet.create({
     bgimage: {
         flex: 1,
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height / 2,
+        height: Dimensions.get('window').height / 4,
         resizeMode: "cover",
         backgroundColor: "black",
         top: 0,

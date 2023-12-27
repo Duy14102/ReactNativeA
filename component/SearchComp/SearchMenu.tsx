@@ -4,12 +4,15 @@ import Header from "../Header";
 import Footer from "../Footer";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
     const { search } = route.params
     const [Count, setCount] = useState([]);
     const [searchdata, setSearchData] = useState([]);
     const [refresh, setFresh] = useState(false);
+    const [addSuccess, setAddSuccess] = useState(null)
     const [load, setLoad] = useState(false)
     const [pageCount, setPageCount] = useState(6);
     const [fil, setFil] = useState("nto")
@@ -23,6 +26,14 @@ function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
             setFresh(false)
         }, 1000)
     }
+
+    useEffect(() => {
+        if (addSuccess) {
+            setTimeout(() => {
+                setAddSuccess(null)
+            }, 1500);
+        }
+    }, [addSuccess])
 
     useEffect(() => {
         currentPage.current = 1;
@@ -66,6 +77,37 @@ function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
         }, 1000);
     }
 
+    async function addToCart(name: any, quantity: any) {
+        var stored = await AsyncStorage.getItem('cart');
+        if (!stored) {
+            var students = [];
+            var student1 = { name: name, quantity: quantity };
+            students.push(student1);
+            await AsyncStorage.setItem("cart", JSON.stringify(students))
+            return setAddSuccess(name)
+
+        } else {
+            var called = await AsyncStorage.getItem('cart')
+            if (called) {
+                var sameItem = JSON.parse(called) || []
+                for (var i = 0; i < sameItem.length; i++) {
+                    if (name === sameItem[i].name) {
+                        sameItem[i].quantity += quantity;
+                        await AsyncStorage.setItem("cart", JSON.stringify(sameItem))
+                        return setAddSuccess(name)
+
+                    } else if (i === sameItem.length - 1) {
+                        var stored2 = JSON.parse(called);
+                        var student2 = { name: name, quantity: quantity };
+                        stored2.push(student2);
+                        await AsyncStorage.setItem("cart", JSON.stringify(stored2))
+                        return setAddSuccess(name)
+                    }
+                }
+            }
+        }
+    }
+
     function pagePrev() {
         if (currentPage.current <= 1) {
             return false
@@ -99,7 +141,7 @@ function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView ref={scrollViewRef} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 15 }}>
+                <View style={{ flex: 1, padding: 15, backgroundColor: "#fff" }}>
                     <Text style={{ paddingVertical: 15, color: "#0F172B", fontSize: 23, fontWeight: "bold", textAlign: "center" }}>Search result for {`"${search}"`}</Text>
                     <View style={{ alignItems: "center" }}>
                         <View style={{ borderWidth: 1, borderColor: "gray", width: "90%" }}>
@@ -125,12 +167,13 @@ function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
                             paddingVertical: 10
                         }}
                     />
-                    <Text style={{ textAlign: "center", paddingTop: 12, fontSize: 16, color: "#0F172B" }}>Display all {Count} results</Text>
+                    <Text style={{ textAlign: "center", paddingTop: 12, fontSize: 16, fontWeight: "bold" }}>Display all {Count} results</Text>
                     {load ? (
                         <ActivityIndicator size="large" color={"#FEA116"} />
                     ) : null}
                     <View style={{ paddingVertical: 20, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
                         {searchdata.map((i: any) => {
+                            var quantity = 1
                             return (
                                 <View key={i._id} style={cateStyle.card}>
                                     <TouchableOpacity onPress={() => navigation.navigate('DetailPage', { name: i.foodname, category: i.foodcategory })}>
@@ -145,9 +188,15 @@ function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
                                         </TouchableOpacity>
                                         <Text style={{ color: "#0F172B", fontSize: 18 }}>{VND.format(i.foodprice)}</Text>
                                     </View>
-                                    <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 5 }}>
-                                        <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Add to cart</Text>
-                                    </TouchableOpacity>
+                                    {addSuccess === i.foodname ? (
+                                        <View style={{ alignItems: "center", backgroundColor: "#03ba5f", paddingVertical: 5 }}>
+                                            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>✔</Text>
+                                        </View>
+                                    ) : (
+                                        <TouchableOpacity style={{ alignItems: "center", backgroundColor: "#FEA116", paddingVertical: 5 }} onPress={() => addToCart(i.foodname, quantity)}>
+                                            <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>Add to cart</Text>
+                                        </TouchableOpacity>
+                                    )}
                                 </View>
                             )
                         })}
@@ -171,9 +220,17 @@ function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
 const cateStyle = StyleSheet.create({
     card: {
         width: "47%",
-        borderRadius: 8,
+        borderRadius: 6,
         overflow: "hidden",
         backgroundColor: "#FFFFFF",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
 
     buttonPaginate: {

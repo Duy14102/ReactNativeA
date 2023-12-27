@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import axios from 'axios';
-import HTMLReactParser from "html-react-parser";
 
 export default function Footer() {
     const word = ">"
@@ -28,68 +27,19 @@ export default function Footer() {
     }, [])
     return (
         <View style={footerStyle.footer}>
-            <View style={footerStyle.insideFooter}>
-                <View style={footerStyle.aboutUs}>
-                    <Text style={footerStyle.headUp}>About us</Text>
-                    <Text style={footerStyle.headUp}>━━</Text>
-                </View>
-                <Text style={footerStyle.textOfAboutUs}>EatCom's official and only website. Currently we only accept orders on the website and not anywhere else!</Text>
-                <View style={footerStyle.aboutUs}>
-                    <Text style={footerStyle.headUp}>Category</Text>
-                    <Text style={footerStyle.headUp}>━━</Text>
-                </View>
-                <View style={footerStyle.category}>
-                    <Pressable><Text style={{ color: "#fff", fontSize: 15 }}>{word} Meat</Text></Pressable>
-                    <Pressable><Text style={{ color: "#fff", fontSize: 15 }}>{word} Vegetables</Text></Pressable>
-                    <Pressable><Text style={{ color: "#fff", fontSize: 15 }}>{word} Drink</Text></Pressable>
-                </View>
-                <View style={footerStyle.aboutUs}>
-                    <Text style={footerStyle.headUp}>Opening</Text>
-                    <Text style={footerStyle.headUp}>━━</Text>
-                </View>
-                <View style={footerStyle.category}>
-                    <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 15 }}>All week</Text>
-                    <Text style={{ color: "#fff", fontSize: 15 }}>{HTMLReactParser(`${time}`)}</Text>
-                </View>
-                <View style={footerStyle.aboutUs}>
-                    <Text style={footerStyle.headUp}>Contact</Text>
-                    <Text style={footerStyle.headUp}>━━</Text>
-                </View>
-                <View style={footerStyle.category}>
-                    <View style={footerStyle.contact}>
-                        <Icon style={footerStyle.textContact} name='map-marker-alt'></Icon>
-                        <Text style={footerStyle.textContact}>{HTMLReactParser(`${address}`)}</Text>
-                    </View>
-                    <View style={footerStyle.contact}>
-                        <Icon style={footerStyle.textContact} name='phone-alt'></Icon>
-                        <Text style={footerStyle.textContact}>{HTMLReactParser(`${phone}`)}</Text>
-                    </View>
-                    <View style={footerStyle.contact}>
-                        <Icon style={footerStyle.textContact} name='envelope'></Icon>
-                        <Text style={footerStyle.textContact}>{HTMLReactParser(`${email}`)}</Text>
-                    </View>
-                </View>
-                <View
-                    style={{
-                        borderBottomColor: 'gray',
-                        borderBottomWidth: 1,
-                        left: 5,
-                        right: 5,
-                        paddingVertical: 15
-                    }}
-                />
-                <Text style={{ textAlign: "center", paddingTop: 15, color: "#fff", fontSize: 15 }}>© EatCom, All Right Reserved.</Text>
-            </View>
-            <View style={{ backgroundColor: "transparent", height: 60 }}></View>
+            <View style={{ backgroundColor: "gray", padding: 0.2 }} />
+            <Text style={{ textAlign: "center", paddingTop: 15, color: "#0F172B", fontSize: 15 }}>© EatCom, All Right Reserved.</Text>
+            <View style={{ backgroundColor: "transparent", height: 70 }}></View>
         </View>
     )
 }
 
 const footerStyle = StyleSheet.create({
     footer: {
-        backgroundColor: "#0F172B",
+        backgroundColor: "#fff",
         paddingLeft: 15,
         paddingRight: 15,
+        marginBottom: 15
     },
 
     insideFooter: {

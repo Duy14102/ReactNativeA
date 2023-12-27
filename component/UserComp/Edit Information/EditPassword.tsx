@@ -107,11 +107,11 @@ function EditPassword({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1, padding: 15 }}>
+                <View style={{ flex: 1, padding: 15, backgroundColor: "#fff" }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Edit password</Text>
                     <View style={{ paddingVertical: 15 }}>
                         <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>Old password</Text>
-                        <TextInput style={{ backgroundColor: "#E1E1E1", borderRadius: 8, paddingHorizontal: 5 }} value={oldPassword} onChange={(e) => setOldPassword(e.nativeEvent.text)} />
+                        <TextInput style={{ backgroundColor: "#ccc", borderRadius: 8, paddingHorizontal: 5 }} value={oldPassword} onChange={(e) => setOldPassword(e.nativeEvent.text)} />
                         {oldW ? (
                             <Text style={{ color: "red" }}>Old password incorrect!</Text>
                         ) : null}
@@ -121,7 +121,7 @@ function EditPassword({ route, navigation }: { route: any, navigation: any }) {
                     </View>
                     <View style={{ paddingVertical: 10 }}>
                         <Text style={{ fontSize: 15, color: "#0F172B", paddingLeft: 5, paddingBottom: 3 }}>New password</Text>
-                        <TextInput style={{ backgroundColor: "#E1E1E1", borderRadius: 8, paddingHorizontal: 5 }} value={newPassword} onChange={(e) => setNewPassword(e.nativeEvent.text)} />
+                        <TextInput style={{ backgroundColor: "#ccc", borderRadius: 8, paddingHorizontal: 5 }} value={newPassword} onChange={(e) => setNewPassword(e.nativeEvent.text)} />
                         {checkNew ? (
                             <Text style={{ color: "red" }}>This field cant be blank!</Text>
                         ) : null}

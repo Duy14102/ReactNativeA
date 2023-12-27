@@ -91,7 +91,7 @@ function ActiveBooking({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1, paddingVertical: 15 }}>
+                <View style={{ flex: 1, paddingVertical: 15, backgroundColor: "#fff" }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Active Booking</Text>
                     {Booking ? (
                         <TouchableOpacity style={bookingStyle.cardStyle} onPress={() => navigation.navigate("DetailBooking", { i: Booking })}>

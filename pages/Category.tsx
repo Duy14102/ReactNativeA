@@ -147,10 +147,10 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView ref={scrollViewRef} contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={null} />
-                <View style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 15 }}>
+                <View style={{ flex: 1, paddingHorizontal: 15, paddingVertical: 15, backgroundColor: "#fff" }}>
                     <Text style={{ paddingVertical: 15, color: "#0F172B", fontSize: 23, fontWeight: "bold", textAlign: "center" }}>Pick your favorites</Text>
                     <View style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row" }}>
-                        <View style={{ borderWidth: 1, borderColor: "gray", width: "45%" }}>
+                        <View style={{ borderWidth: 1, borderColor: "gray", width: "45%", backgroundColor: "#fff" }}>
                             <Picker
                                 selectedValue={cate}
                                 onValueChange={(itemValue) =>
@@ -161,7 +161,7 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
                                 <Picker.Item label="Drink" value="Drink" />
                             </Picker>
                         </View>
-                        <View style={{ borderWidth: 1, borderColor: "gray", width: "45%" }}>
+                        <View style={{ borderWidth: 1, borderColor: "gray", width: "45%", backgroundColor: "#fff" }}>
                             <Picker
                                 selectedValue={fil}
                                 onValueChange={(itemValue) =>
@@ -184,7 +184,7 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
                             paddingVertical: 10
                         }}
                     />
-                    <Text style={{ textAlign: "center", paddingTop: 12, fontSize: 16, color: "#0F172B" }}>Display all {Count} results</Text>
+                    <Text style={{ textAlign: "center", paddingTop: 12, fontSize: 16, fontWeight: "bold" }}>Display all {Count} results</Text>
                     {load ? (
                         <ActivityIndicator size="large" color={"#FEA116"} />
                     ) : null}
@@ -237,9 +237,17 @@ function Category({ route, navigation }: { route: any, navigation: any }) {
 const cateStyle = StyleSheet.create({
     card: {
         width: "47%",
-        borderRadius: 8,
+        borderRadius: 6,
         overflow: "hidden",
         backgroundColor: "#FFFFFF",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
 
     buttonPaginate: {

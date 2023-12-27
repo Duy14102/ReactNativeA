@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 const adminPanelLazy = lazy(() => import("../../pages/admin/AdminPanel"))
 const detailUserLazy = lazy(() => import("../../component/AdminComp/DetailUser"))
 const searchUserLazy = lazy(() => import("../../component/AdminComp/SearchUser"))
@@ -8,6 +9,12 @@ const createAccountLazy = lazy(() => import("../../component/AdminComp/CreateAcc
 
 function UserManage() {
     const Stack = createNativeStackNavigator();
+    useEffect(() => {
+        SplashScreen.show()
+        setTimeout(() => {
+            SplashScreen.hide()
+        }, 1000);
+    }, [])
     return (
         <Suspense fallback={<ActivityIndicator size={25} color={"#FEA116"} />}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>

@@ -122,7 +122,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1, padding: 15 }}>
+                <View style={{ flex: 1, padding: 15, backgroundColor: "#fff" }}>
                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", color: "#0F172B" }}>Edit address</Text>
                     {addNew ? (
                         <>
@@ -187,7 +187,7 @@ function EditAddress({ route, navigation }: { route: any, navigation: any }) {
                             ) : null}
                         </View>
                     ) : (
-                        <Text style={{ fontSize: 15, marginVertical: 15, textAlign: "center", color: "#0F172B" }}>There's no address!</Text>
+                        <Text style={{ fontSize: 17, marginVertical: 15, textAlign: "center", color: "#0F172B" }}>There's no address!</Text>
                     )}
                 </View>
                 <Footer />

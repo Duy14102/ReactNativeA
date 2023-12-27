@@ -73,11 +73,9 @@ function Search() {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={null} />
-                <View style={{ flex: 1 }}>
-                    <View style={{ backgroundColor: "#fff" }}>
-                        <Image source={{ uri: "https://media.istockphoto.com/id/1193994845/vector/man-looking-on-golden-coins-lying-on-ground-through-magnifier-glass.jpg?s=612x612&w=0&k=20&c=rpKprqrVScJwHMDmdk3mah_U8m6ldQDpuHxwS4ORgvE=" }} height={150} resizeMode="contain" />
-                        <Text style={{ textAlign: "center", fontSize: 18, paddingBottom: 15, fontWeight: "bold" }}>Pick your search type</Text>
-                    </View>
+                <View style={{ flex: 1, backgroundColor: "#fff" }}>
+                    <Image source={{ uri: "https://media.istockphoto.com/id/1193994845/vector/man-looking-on-golden-coins-lying-on-ground-through-magnifier-glass.jpg?s=612x612&w=0&k=20&c=rpKprqrVScJwHMDmdk3mah_U8m6ldQDpuHxwS4ORgvE=" }} height={150} resizeMode="contain" />
+                    <Text style={{ textAlign: "center", fontSize: 18, paddingBottom: 15, fontWeight: "bold" }}>Pick your search type</Text>
                     <View style={{ marginBottom: 20 }}>
                         {searchItem ? (
                             <>

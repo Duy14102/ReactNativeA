@@ -167,13 +167,13 @@ function Home(): JSX.Element {
 
                     </View>
 
-                    <Services />
-
-                    <About />
-
-                    <Testimonial />
-
                 </View>
+                
+                <Services />
+
+                <About />
+
+                <Testimonial />
 
                 <Footer />
 

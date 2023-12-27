@@ -393,7 +393,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
                                     <View style={settingStyle.fatherInput}>
                                         <Text style={settingStyle.mochText}>Email</Text>
                                         <View style={{ backgroundColor: "rgb(243 244 246)", borderRadius: 10, }}>
-                                            <TextInput style={{ width: "100%" }} value={username} onChange={(e) => setUsername(e.nativeEvent.text)} />
+                                            <TextInput style={{ width: "100%", padding: 10 }} value={username} onChange={(e) => setUsername(e.nativeEvent.text)} />
                                         </View>
                                         {username !== "" ? (
                                             testEmail ? (
@@ -402,7 +402,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
                                         ) : null}
                                         <Text style={[settingStyle.mochText, { paddingTop: 15 }]}>Password</Text>
                                         <View style={{ backgroundColor: "rgb(243 244 246)", borderRadius: 10, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                                            <TextInput style={{ width: "90%" }} secureTextEntry={seePassword ? false : true} onChange={(e) => setPassword(e.nativeEvent.text)} value={password} />
+                                            <TextInput style={{ width: "90%", padding: 10 }} secureTextEntry={seePassword ? false : true} onChange={(e) => setPassword(e.nativeEvent.text)} value={password} />
                                             {seePassword ? (
                                                 <TouchableOpacity style={{ width: "10%" }} onPress={() => setSeePassword(false)}>
                                                     <Icon name="eye-slash" style={{ width: "100%", fontSize: 18 }} />
@@ -455,6 +455,7 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
 const settingStyle = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: "#fff"
     },
 
     loginText: {
@@ -533,7 +534,17 @@ const settingStyle = StyleSheet.create({
     },
 
     coverIt2: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
 
+        elevation: 3,
+        borderWidth: 1,
+        borderColor: "transparent",
         backgroundColor: "#FFFFFF",
         padding: 15,
         borderRadius: 5,
