@@ -5,7 +5,7 @@ import Footer from "../Footer";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import SplashScreen from 'react-native-splash-screen';
 
 function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
     const { search } = route.params
@@ -36,8 +36,12 @@ function SearchMenu({ route, navigation }: { route: any, navigation: any }) {
     }, [addSuccess])
 
     useEffect(() => {
-        currentPage.current = 1;
-        getPagination();
+        SplashScreen.show()
+        setTimeout(() => {
+            SplashScreen.hide()
+            currentPage.current = 1;
+            getPagination();
+        }, 1000);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fil])
 

@@ -4,6 +4,7 @@ import Footer from "../Footer"
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useEffect, useState } from "react"
 import Clipboard from '@react-native-clipboard/clipboard';
+import SplashScreen from 'react-native-splash-screen';
 
 function SearchOrder({ route, navigation }: { route: any, navigation: any }) {
     const { i } = route.params
@@ -13,6 +14,13 @@ function SearchOrder({ route, navigation }: { route: any, navigation: any }) {
         style: 'currency',
         currency: 'VND',
     });
+
+    useEffect(() => {
+        SplashScreen.show()
+        setTimeout(() => {
+            SplashScreen.hide()
+        }, 1000);
+    }, [])
 
     useEffect(() => {
         i.user.map((w: any) => {

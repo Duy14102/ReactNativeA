@@ -37,26 +37,29 @@ function Notification({ navigation }: { navigation: any }) {
             called()
         }
     }, [isfocused])
+
     const BgImage = { uri: "https://res.cloudinary.com/dlev2viy9/image/upload/v1700307517/UI/e4onxrx7hmgzmrbel9jk.webp" }
     const keyword = "/"
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ flexGrow: 1 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={() => pulldown()} />}>
                 <Header type={"Yes"} />
-                <View style={{ flex: 1 }}>
-                    <ImageBackground source={BgImage} style={NotiStyle.bgimage} />
-                    <View style={NotiStyle.overlay}>
-                        <View style={{ top: 60, paddingHorizontal: 35, alignItems: "center" }}>
-                            <Text style={NotiStyle.notiText}>Notification</Text>
-                            <View style={NotiStyle.flexible}>
-                                <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                                    <Text style={{ color: "#FEA116", fontSize: 18 }}>Home</Text>
-                                </TouchableOpacity>
-                                <Text style={{ fontSize: 18, color: "gray" }}>{keyword}</Text>
-                                <Text style={{ fontSize: 18, color: "#fff" }}>Notification</Text>
+                <View style={{ flex: 1, backgroundColor: "#fff" }}>
+                    <View style={{ width: Dimensions.get("window").width, height: Dimensions.get("window").height / 4 }}>
+                        <ImageBackground source={BgImage} style={NotiStyle.bgimage} />
+                        <View style={NotiStyle.overlay}>
+                            <View style={{ top: 60, paddingHorizontal: 35, alignItems: "center" }}>
+                                <Text style={NotiStyle.notiText}>Notification</Text>
+                                <View style={NotiStyle.flexible}>
+                                    <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                                        <Text style={{ color: "#FEA116", fontSize: 18 }}>Home</Text>
+                                    </TouchableOpacity>
+                                    <Text style={{ fontSize: 18, color: "gray" }}>{keyword}</Text>
+                                    <Text style={{ fontSize: 18, color: "#fff" }}>Notification</Text>
+                                </View>
                             </View>
-                        </View>
-                    </View >
+                        </View >
+                    </View>
                     <View style={NotiStyle.notifi}>
                         <Text style={NotiStyle.mainText}>Announcement</Text>
                         {news.length > 0 ? (
@@ -69,7 +72,7 @@ function Notification({ navigation }: { navigation: any }) {
                                 )
                             })
                         ) : (
-                            <Text>There's no notification yet !</Text>
+                            <Text style={{ fontSize: 16 }}>There's no notification yet !</Text>
                         )}
                     </View>
                 </View>
@@ -95,16 +98,15 @@ const NotiStyle = StyleSheet.create({
     mainText: {
         textAlign: "center",
         color: "#0F172B",
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: "bold"
     },
 
     bgimage: {
         flex: 1,
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height / 4,
+        width: "100%",
+        height: "100%",
         resizeMode: "cover",
-        backgroundColor: "black",
         top: 0,
         left: 0,
         right: 0,

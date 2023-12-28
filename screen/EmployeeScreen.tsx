@@ -6,9 +6,6 @@ import AllBook from './SecondScreen/AllBook';
 import AllTable from './SecondScreen/AllTable';
 import Customize from './SecondScreen/Customize';
 import EmpTask from './SecondScreen/EmpTask';
-import { decode } from "base-64";
-global.atob = decode
-
 
 const Drawer = createDrawerNavigator();
 function EmployeeScreen() {

@@ -3,8 +3,6 @@ import DrawerNav from '../custom/DrawerNav';
 import Icon from 'react-native-vector-icons/FontAwesome6'
 import Customize from './SecondScreen/Customize';
 import UserManage from './SecondScreen/UserManage';
-import { decode } from "base-64";
-global.atob = decode
 
 const Drawer = createDrawerNavigator();
 function AdminScreen() {

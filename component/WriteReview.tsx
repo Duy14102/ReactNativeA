@@ -4,6 +4,7 @@ import Footer from "./Footer"
 import axios from "axios"
 import { useState, useEffect, Fragment } from "react"
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import SplashScreen from 'react-native-splash-screen';
 
 function WriteReview({ route, navigation }: { route: any, navigation: any }) {
     var reviewName = ""
@@ -26,6 +27,13 @@ function WriteReview({ route, navigation }: { route: any, navigation: any }) {
             setFresh(false)
         }, 1000)
     }
+
+    useEffect(() => {
+        SplashScreen.show()
+        setTimeout(() => {
+            SplashScreen.hide()
+        }, 1000);
+    }, [])
 
     useEffect(() => {
         if (candecode && candecode.userRole !== 1.5) {

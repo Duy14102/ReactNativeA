@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Animated, Dimensions, ActivityIndicator } from 'react-native';
 import { jwtDecode } from 'jwt-decode';
 import { useRef, useEffect, useState } from 'react';
+import { decode } from "base-64";
+global.atob = decode
 import Icon from 'react-native-vector-icons/FontAwesome6'
 import Notification from './pages/Notification';
 import SettingScreen from './screen/SettingScreen';
@@ -67,7 +69,7 @@ function App(): JSX.Element {
       ) : (
         <NavigationContainer>
           <Tabs.Navigator backBehavior='history' initialRouteName={routeName} screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { backgroundColor: "#fff", position: "absolute", height: 60, borderTopLeftRadius: 10, borderTopRightRadius: 10, shadowColor: "#000", shadowOpacity: 0.06, shadowOffset: { width: 10, height: 10 }, paddingHorizontal: 10 } }}>
-            <Tabs.Screen name='Notification' component={Notification} options={{ lazy: true, tabBarButton: () => null }} />
+            <Tabs.Screen name='Notification' component={Notification} options={{ lazy: true, tabBarButton: () => null }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
             <Tabs.Screen name='Admin' component={AdminScreen} options={{ lazy: routeName === "Admin" ? false : true, tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
             <Tabs.Screen name='Manager' component={ManagerScreen} options={{ lazy: routeName === "Manager" ? false : true, tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />
             <Tabs.Screen name='Employee' component={EmployeeScreen} options={{ lazy: routeName === "Employee" ? false : true, tabBarButton: () => null, tabBarStyle: { display: "none" } }} listeners={({ navigation, route }) => ({ focus: (e: any) => { Animated.spring(tabOffsetValue, { toValue: getWidth() * -500, useNativeDriver: true }).start() } })} />

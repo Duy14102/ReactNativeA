@@ -6,6 +6,7 @@ import DatePicker from 'react-native-date-picker'
 import { Picker } from '@react-native-picker/picker';
 import axios from "axios";
 import Icon from "react-native-vector-icons/FontAwesome5"
+import SplashScreen from 'react-native-splash-screen';
 
 function Booking({ route, navigation }: { route: any, navigation: any }) {
     const datenow = Date.now()
@@ -42,6 +43,12 @@ function Booking({ route, navigation }: { route: any, navigation: any }) {
         }, 1000)
     }
 
+    useEffect(() => {
+        SplashScreen.show()
+        setTimeout(() => {
+            SplashScreen.hide()
+        }, 1000);
+    }, [])
 
     useEffect(() => {
         setDate(new Date(datenow))

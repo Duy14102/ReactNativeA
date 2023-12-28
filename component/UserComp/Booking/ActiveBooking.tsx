@@ -4,8 +4,15 @@ import Footer from "../../Footer"
 import { useState, useEffect } from "react"
 import axios from "axios"
 import Icon from "react-native-vector-icons/FontAwesome5"
+import SplashScreen from 'react-native-splash-screen';
 
 function ActiveBooking({ route, navigation }: { route: any, navigation: any }) {
+    useEffect(() => {
+        SplashScreen.show()
+        setTimeout(() => {
+            SplashScreen.hide()
+        }, 1000);
+    }, [])
     const { userid } = route.params
     const [Booking, setBooking] = useState<any>([])
     const [cancelReq, setCancelReq] = useState(false)

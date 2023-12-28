@@ -2,11 +2,28 @@ import 'react-native-gesture-handler'
 import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel';
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function Testimonial() {
     const width = Dimensions.get('window').width;
-    const array = ["David", "Liams", "Faker", "Cr7", "Messi"]
-    const avatar = { uri: "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg" }
+    const [getUser, setGetUser] = useState([])
+
+    useEffect(() => {
+        const configuration = {
+            method: "get",
+            url: "http://localhost:3000/GetTestiCont",
+        }
+        axios(configuration)
+            .then((res) => {
+                setGetUser(res.data.data)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, [])
+
+    const avatar = "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
     return (
         <View style={TestiStyle.Testi}>
             <View style={{ marginBottom: 65, alignItems: "center" }}>
@@ -21,19 +38,20 @@ function Testimonial() {
                     width={width}
                     height={width / 2 + 30}
                     autoPlay={true}
-                    data={array}
+                    data={getUser}
                     scrollAnimationDuration={1500}
-                    renderItem={({ item }) => (
+                    renderItem={({ item }: { item: any }) => (
                         <View style={TestiStyle.carousel}>
-                            <Icon name='quote-left' style={TestiStyle.quote} />
-                            <Text style={TestiStyle.message}>Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet amet eirmod eos labore diam</Text>
+                            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                                <Icon name='quote-left' style={TestiStyle.quote} />
+                                <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>{item.title}</Text>
+                            </View>
+                            <Text style={TestiStyle.message}>{item.message}</Text>
                             <View style={TestiStyle.flexAble}>
-                                <View style={TestiStyle.fatherAvatar}>
-                                    <Image source={avatar} style={TestiStyle.avatar} />
-                                </View>
+                                <Image source={{ uri: avatar }} style={TestiStyle.avatar} />
                                 <View>
-                                    <Text style={TestiStyle.clientName}>{item}</Text>
-                                    <Text style={{ color: "#fff" }}>{item}</Text>
+                                    <Text style={TestiStyle.clientName}>{item.name}</Text>
+                                    <Text style={{ color: "#fff", fontSize: 15 }}>{new Date(item.createdAt).toLocaleDateString() + " - " + new Date(item.createdAt).toLocaleTimeString()}</Text>
                                 </View>
                             </View>
                         </View>
@@ -70,27 +88,22 @@ const TestiStyle = StyleSheet.create({
     },
 
     quote: {
-        fontSize: 33,
+        fontSize: 30,
         color: "#fff",
     },
 
     carousel: {
         marginTop: 10,
         flex: 1,
-        paddingHorizontal: 15,
-        paddingVertical: 15,
-        backgroundColor: "#FEA116"
+        padding: 15,
+        backgroundColor: "#FEA116",
+        flexDirection: "column",
+        gap: 15
     },
 
     message: {
         color: "#fff",
-        fontSize: 19,
-        paddingTop: 15
-    },
-
-    fatherAvatar: {
-        paddingTop: 15,
-        borderRadius: 40
+        fontSize: 18,
     },
 
     avatar: {
@@ -103,7 +116,10 @@ const TestiStyle = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        gap: 10
+        gap: 10,
+        position: "absolute",
+        bottom: 15,
+        left: 15
     },
 
     clientName: {

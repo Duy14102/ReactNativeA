@@ -3,8 +3,6 @@ import { lazy, Suspense } from 'react';
 import { ActivityIndicator } from 'react-native';
 import Home from '../pages/Home';
 const bookingLazy = lazy(() => import("../pages/Booking"))
-import { decode } from "base-64";
-global.atob = decode
 
 const HomeStack = createNativeStackNavigator();
 function HomeScreen() {
