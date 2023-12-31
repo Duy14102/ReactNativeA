@@ -1164,8 +1164,8 @@ app.post("/DeleteAcountNative", (req, res) => {
 
             const compare = await bcrypt.compare(req.query.password, user.password)
             if (compare) {
-                const checkOrder = getThisOrder.find({ user: { $elemMatch: { id: req.query.id } } })
-                const checkBooking = GetBooking.find({ "customer.id": req.query.id })
+                const checkOrder = await getThisOrder.find({ user: { $elemMatch: { id: req.query.id } }, status: { $in: [1, 2, 4] } }).exec()
+                const checkBooking = await GetBooking.find({ "customer.id": req.query.id, status: { $in: [1, 2] } }).exec()
                 if (checkOrder.length > 0 || checkBooking.length > 0) {
                     res.status(500).send({ message: "You still have order & booking not complete!" })
                 }
