@@ -6,6 +6,7 @@ import axios from "axios"
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useNavigation } from "@react-navigation/native"
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 function UserDetail({ route }: { route: any }) {
     const { candecode } = route.params
@@ -16,11 +17,16 @@ function UserDetail({ route }: { route: any }) {
     const [success, setSuccess] = useState(false)
     const [reload, setReload] = useState(false)
     const [load, setLoad] = useState(false)
+    const [load2, setLoad2] = useState(false)
     const [refresh, setFresh] = useState(false)
     const navigation = useNavigation<any>()
     const [updateimage, setUpdateImage] = useState<any>("")
     const [updatefullname, setUpdateFullname] = useState("")
     const [updatephone, setUpdatePhone] = useState("")
+    const [passwordDelete, setPasswordDelete] = useState("")
+    const [checkPasswordDelete, setCheckPasswordDelete] = useState(false)
+    const [checkNullPassword, setCheckNullPassword] = useState<any>()
+    const [seePassword, setSeePassword] = useState(false)
 
     const pulldown = () => {
         setFresh(true)
@@ -61,6 +67,37 @@ function UserDetail({ route }: { route: any }) {
             }).catch((er) => {
                 console.log(er);
             })
+    }
+    function DeleteAcount() {
+        const configuration = {
+            method: "post",
+            url: "http://localhost:3000/DeleteAcountNative",
+            params: {
+                id: candecode.userId,
+                password: passwordDelete,
+            }
+        }
+        if (passwordDelete === "") {
+            setCheckPasswordDelete(true)
+            return false
+        }
+        setLoad2(true)
+        setTimeout(() => {
+            axios(configuration)
+                .then(async() => {
+                    setLoad2(false)
+                    setCheckNullPassword(null)
+                    setCheckPasswordDelete(false)
+                    setTest(false)
+                    setPasswordDelete("")
+                    await AsyncStorage.removeItem('TOKEN');
+                    navigation.goBack()
+                }).catch((er) => {
+                    setLoad2(false)
+                    setCheckNullPassword(er.response.data.message)
+                })
+        }, 1000);
+
     }
 
     const updateUser = (id: any, nameHH: any, numberHH: any) => {
@@ -280,7 +317,6 @@ function UserDetail({ route }: { route: any }) {
                                         </View>
                                         <Text style={{ fontWeight: "bold" }}>ᐳ</Text>
                                     </TouchableOpacity>
-
                                 </View>
                             </View>
                             <View style={{ marginVertical: 25 }}>
@@ -294,15 +330,39 @@ function UserDetail({ route }: { route: any }) {
                     )}
                     {test ? (
                         <View style={{ paddingBottom: 15 }}>
-                            <Text style={{ fontSize: 15, textAlign: "center", paddingBottom: 8, fontWeight: "bold" }}>Are you sure?</Text>
+                            <Text style={{ fontSize: 15, textAlign: "center", paddingBottom: 8, fontWeight: "bold" }}>Inout password to delete</Text>
+                            <View style={{ padding: 15 }}>
+                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderWidth: 1, borderBlockColor: "gray", borderRadius: 6 }}>
+                                    <TextInput secureTextEntry={seePassword ? false : true} onChange={(e) => setPasswordDelete(e.nativeEvent.text)} style={{ width: "90%", padding: 10 }} />
+                                    {seePassword ? (
+                                        <TouchableOpacity onPress={() => setSeePassword(false)} style={{ width: "10%", alignItems: "center", }}>
+                                            <Icon size={20} name="eye-slash" />
+                                        </TouchableOpacity>
+                                    ) : (
+                                        <TouchableOpacity onPress={() => setSeePassword(true)} style={{ width: "10%", alignItems: "center", }}>
+                                            <Icon size={20} name="eye" />
+                                        </TouchableOpacity>
+                                    )}
+
+                                </View>
+                                {checkPasswordDelete ? (
+                                    <Text style={{ color: "red" }}>This field can't be blank</Text>
+                                ) : null}
+                                {checkNullPassword ? (
+                                    <Text style={{ color: "red" }}>{checkNullPassword}</Text>
+                                ) : null}
+                            </View>
                             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-evenly", }}>
-                                <TouchableOpacity style={{ paddingVertical: 7, paddingHorizontal: 15, backgroundColor: "#FEA116" }}>
+                                <TouchableOpacity style={{ paddingVertical: 7, paddingHorizontal: 15, backgroundColor: "#FEA116" }} onPress={() => DeleteAcount()}>
                                     <Text style={{ fontWeight: "bold", fontSize: 15, color: "#fff" }}>Yes</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{ paddingVertical: 7, paddingHorizontal: 15, backgroundColor: "lightgray" }} onPress={() => setTest(false)}>
                                     <Text style={{ fontWeight: "bold", fontSize: 15 }}>No</Text>
                                 </TouchableOpacity>
                             </View>
+                            {load2 ? (
+                                <ActivityIndicator size={25} color={"#FEA116"} />
+                            ) : null}
                         </View>
                     ) : null}
                 </View>

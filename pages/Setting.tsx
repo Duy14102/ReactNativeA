@@ -9,12 +9,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import LinearGradient from 'react-native-linear-gradient'
 import config from "../config"
+import { useIsFocused } from "@react-navigation/native"
 
 function Setting({ route, navigation }: { route: any, navigation: any }) {
     GoogleSignin.configure({
         webClientId: config.REACT_APP_googleClientId,
         scopes: ['profile', 'email'],
     });
+    const isfocused = useIsFocused()
     const [candecode, setCandecode] = useState<any>(null)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -50,8 +52,8 @@ function Setting({ route, navigation }: { route: any, navigation: any }) {
     }, [success])
 
     useEffect(() => {
-        getData()
-    }, [])
+        if (isfocused) { getData() }
+    }, [isfocused])
 
     const getData = async () => {
         try {

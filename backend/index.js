@@ -1157,6 +1157,35 @@ app.post("/DenyOrderWaiting", (req, res) => {
     }
 })
 
+//Delete account with order & booking
+app.post("/DeleteAcountNative", (req, res) => {
+    try {
+        User.findOne({ _id: req.query.id }).then(async (user) => {
+
+            const compare = await bcrypt.compare(req.query.password, user.password)
+            if (compare) {
+                const checkOrder = getThisOrder.find({ user: { $elemMatch: { id: req.query.id } } })
+                const checkBooking = GetBooking.find({ "customer.id": req.query.id })
+                if (checkOrder.length > 0 || checkBooking.length > 0) {
+                    res.status(500).send({ message: "You still have order & booking not complete!" })
+                }
+                else {
+                    getUserD.deleteOne({ _id: req.query.id }).then(() => {
+                        res.send({ data: "Succent" })
+                    }).catch(() => {
+                        res.status(501).send()
+                    })
+                }
+            } else {
+                res.status(502).send({ message: "Password invalid!" })
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+
+})
+
 //Cancel Vnpay payment
 app.post("/CancelVnpayPayment", (req, res) => {
     try {
